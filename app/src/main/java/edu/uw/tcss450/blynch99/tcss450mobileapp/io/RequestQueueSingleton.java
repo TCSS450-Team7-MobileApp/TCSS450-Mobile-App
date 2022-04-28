@@ -1,4 +1,4 @@
-package edu.uw.tcss450.blynch99.tcss450mobileapp.auth.io;
+package edu.uw.tcss450.blynch99.tcss450mobileapp.io;
 
 import android.content.Context;
 import android.graphics.Bitmap;

@@ -97,6 +97,7 @@ public class SignInFragment extends Fragment {
     }
 
     private void verifyAuthWithServer() {
+        binding.layoutWait.setVisibility(View.VISIBLE);
         mSignInModel.connect(
                 binding.editEmail.getText().toString(),
                 binding.editPassword.getText().toString());
@@ -115,6 +116,7 @@ public class SignInFragment extends Fragment {
         Navigation.findNavController(getView())
                 .navigate(SignInFragmentDirections
                         .actionLoginFragmentToMainActivity(email, jwt));
+        getActivity().finish();
     }
 
     /**
@@ -147,6 +149,6 @@ public class SignInFragment extends Fragment {
             Log.d("JSON Response", "No Response");
         }
 
-
+        binding.layoutWait.setVisibility(View.GONE);
     }
 }

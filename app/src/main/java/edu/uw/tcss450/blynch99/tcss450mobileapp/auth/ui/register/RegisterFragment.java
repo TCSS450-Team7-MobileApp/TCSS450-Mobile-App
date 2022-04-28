@@ -121,6 +121,7 @@ public class RegisterFragment extends Fragment {
     }
 
     private void verifyAuthWithServer() {
+        binding.layoutWait.setVisibility(View.VISIBLE);
         mRegisterModel.connect(
                 binding.editFirst.getText().toString(),
                 binding.editLast.getText().toString(),
@@ -130,12 +131,11 @@ public class RegisterFragment extends Fragment {
         //result of connect().
     }
 
-    private void navigateToLogin() {
-        RegisterFragmentDirections.ActionRegisterFragmentToLoginFragment directions =
-                RegisterFragmentDirections.actionRegisterFragmentToLoginFragment();
-
-        directions.setEmail(binding.editEmail.getText().toString());
-        directions.setPassword(binding.editPassword1.getText().toString());
+    private void navigateToVerification() {
+        RegisterFragmentDirections.ActionRegisterFragmentToEmailVerificationFragment2 directions =
+                RegisterFragmentDirections.actionRegisterFragmentToEmailVerificationFragment2(
+                        binding.editEmail.getText().toString(),
+                        binding.editPassword1.getText().toString());
 
         Navigation.findNavController(getView()).navigate(directions);
 
@@ -158,11 +158,11 @@ public class RegisterFragment extends Fragment {
                     Log.e("JSON Parse Error", e.getMessage());
                 }
             } else {
-                navigateToLogin();
+                navigateToVerification();
             }
         } else {
             Log.d("JSON Response", "No Response");
         }
-
+        binding.layoutWait.setVisibility(View.GONE);
     }
 }

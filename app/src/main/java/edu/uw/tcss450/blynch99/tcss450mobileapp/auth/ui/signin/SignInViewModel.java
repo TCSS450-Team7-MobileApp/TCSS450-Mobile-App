@@ -23,7 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import edu.uw.tcss450.blynch99.tcss450mobileapp.auth.io.RequestQueueSingleton;
+import edu.uw.tcss450.blynch99.tcss450mobileapp.io.RequestQueueSingleton;
 
 public class SignInViewModel extends AndroidViewModel {
 
@@ -38,6 +38,7 @@ public class SignInViewModel extends AndroidViewModel {
     public void addResponseObserver(@NonNull LifecycleOwner owner,
                                     @NonNull Observer<? super JSONObject> observer) {
         mResponse.observe(owner, observer);
+
     }
 
 

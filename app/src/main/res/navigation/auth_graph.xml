@@ -31,8 +31,8 @@
         android:label="fragment_register"
         tools:layout="@layout/fragment_register" >
         <action
-            android:id="@+id/action_registerFragment_to_loginFragment"
-            app:destination="@id/SignInFragment" />
+            android:id="@+id/action_registerFragment_to_emailVerificationFragment2"
+            app:destination="@id/emailVerificationFragment2" />
     </fragment>
     <activity
         android:id="@+id/mainActivity"
@@ -45,4 +45,19 @@
             android:name="jwt"
             app:argType="string" />
     </activity>
+    <fragment
+        android:id="@+id/emailVerificationFragment2"
+        android:name="edu.uw.tcss450.blynch99.tcss450mobileapp.auth.ui.register.EmailVerificationFragment"
+        android:label="fragment_email_verification"
+        tools:layout="@layout/fragment_email_verification" >
+        <argument
+            android:name="email"
+            app:argType="string" />
+        <argument
+            android:name="password"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_emailVerificationFragment2_to_SignInFragment"
+            app:destination="@id/SignInFragment" />
+    </fragment>
 </navigation>
