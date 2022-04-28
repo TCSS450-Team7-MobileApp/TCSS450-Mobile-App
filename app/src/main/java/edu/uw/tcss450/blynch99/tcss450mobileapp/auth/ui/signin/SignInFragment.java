@@ -76,6 +76,8 @@ public class SignInFragment extends Fragment {
         SignInFragmentArgs args = SignInFragmentArgs.fromBundle(getArguments());
         binding.editEmail.setText(args.getEmail().equals("default") ? "" : args.getEmail());
         binding.editPassword.setText(args.getPassword().equals("default") ? "" : args.getPassword());
+        binding.buttonForForgotPassword.setOnClickListener(button ->
+                navigateToForgotPassword(binding.editEmail.getText().toString()));
     }
 
     private void attemptSignIn(final View button) {
@@ -118,6 +120,17 @@ public class SignInFragment extends Fragment {
                         .actionLoginFragmentToMainActivity(email, jwt));
         getActivity().finish();
     }
+
+    private void navigateToForgotPassword(final String email) {
+        SignInFragmentDirections.ActionSignInFragmentToForgotPasswordFragment directions =
+                SignInFragmentDirections.actionSignInFragmentToForgotPasswordFragment();
+
+        directions.setEmail(email);
+
+        Navigation.findNavController(getView()).navigate(directions);
+
+    }
+
 
     /**
      * An observer on the HTTP Response from the web server. This observer should be

@@ -10,6 +10,8 @@
     <string name="action_forgot_password">Forgot Password?</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="hint_account_creation">Thank you for creating the account!</string>
-    <string name="hint_check_email">Please check your email inbox to confirm your account with us</string>
+    <string name="register_check_email">Please check your email inbox to confirm your account with us</string>
     <string name="action_email_verification_complete">I have verified my email</string>
+    <string name="forgot_check_email">Enter your email, then, go check your inbox for password reset</string>
+    <string name="back_to_signin"> Send and Return to Sign In</string>
 </resources>

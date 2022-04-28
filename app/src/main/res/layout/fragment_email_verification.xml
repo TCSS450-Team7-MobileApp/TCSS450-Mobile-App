@@ -13,7 +13,7 @@
         android:layout_height="107dp"
         android:layout_marginBottom="256dp"
         android:gravity="center"
-        android:text="@string/hint_check_email"
+        android:text="@string/register_check_email"
         android:textAppearance="@style/TextAppearance.AppCompat.Display3"
         android:textSize="25sp"
         app:layout_constraintBottom_toBottomOf="parent"
