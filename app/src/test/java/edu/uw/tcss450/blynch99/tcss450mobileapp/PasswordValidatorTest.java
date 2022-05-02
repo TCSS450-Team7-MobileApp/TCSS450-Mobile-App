@@ -35,4 +35,9 @@ public class PasswordValidatorTest {
     public void testCheckPwdDigit() {
 
     }
+
+    @Test
+    public void testCheckPwdDigitMissing() {
+
+    }
 }

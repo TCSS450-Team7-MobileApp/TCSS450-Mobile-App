@@ -20,6 +20,7 @@ import androidx.test.runner.lifecycle.ApplicationLifecycleCallback;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static org.hamcrest.Matchers.allOf;
 import static org.junit.Assert.*;
 
 import edu.uw.tcss450.blynch99.tcss450mobileapp.auth.ui.register.EmailVerificationFragment;
@@ -34,6 +35,9 @@ import edu.uw.tcss450.blynch99.tcss450mobileapp.auth.ui.signin.SignInFragment;
  */
 @RunWith(AndroidJUnit4.class)
 public class RegisterFragmentTest {
+
+    private final String TEST_EMAIL = "test@example.com";
+    private final String TEST_PWD = "Atest123$$";
 
     @Test
     public void testNavigateToVerificationNoFirstName() {
@@ -72,7 +76,89 @@ public class RegisterFragmentTest {
         });
 
         onView(withId(R.id.edit_first)).perform(replaceText("Firstname"));
+
         onView(withId(R.id.button_register)).perform(click());
         onView(withId(R.id.edit_last)).check(matches(hasErrorText("Please enter a last name.")));
+    }
+
+    @Test
+    public void testNavigateToVerificationNoEmail() {
+        TestNavHostController navController = new TestNavHostController(
+                ApplicationProvider.getApplicationContext());
+
+        Bundle args = new Bundle();
+        args.putString("email", "default");
+        args.putString("password", "default");
+
+        FragmentScenario<RegisterFragment> registerScenario =
+                FragmentScenario.launchInContainer(RegisterFragment.class, args);
+        registerScenario.onFragment(fragment -> {
+            navController.setGraph(R.navigation.auth_graph);
+            Navigation.setViewNavController(fragment.requireView(), navController);
+        });
+
+        onView(withId(R.id.edit_first)).perform(replaceText("Firstname"));
+        onView(withId(R.id.edit_last)).perform(replaceText("Lastname"));
+
+        onView(withId(R.id.button_register)).perform(click());
+        onView(allOf(withId(R.id.edit_email), hasSibling(withId(R.id.edit_first))))
+                .check(matches(hasErrorText("Please enter a valid Email address.")));
+    }
+
+    @Test
+    public void testNavigateToVerificationNoPassword() {
+        TestNavHostController navController = new TestNavHostController(
+                ApplicationProvider.getApplicationContext());
+
+        Bundle args = new Bundle();
+        args.putString("email", "default");
+        args.putString("password", "default");
+
+        FragmentScenario<RegisterFragment> registerScenario =
+                FragmentScenario.launchInContainer(RegisterFragment.class, args);
+        registerScenario.onFragment(fragment -> {
+            navController.setGraph(R.navigation.auth_graph);
+            Navigation.setViewNavController(fragment.requireView(), navController);
+        });
+
+        onView(withId(R.id.edit_first)).perform(replaceText("Firstname"));
+        onView(withId(R.id.edit_last)).perform(replaceText("Lastname"));
+        onView(allOf(withId(R.id.edit_email), hasSibling(withId(R.id.edit_first))))
+                .perform(replaceText(TEST_EMAIL));
+
+        onView(withId(R.id.button_register)).perform(click());
+        onView(withId(R.id.edit_password_1))
+                .check(matches(hasErrorText("Please enter a valid Password.")));
+    }
+
+    @Test
+    public void testNavigateToVerificationPasswordMismatch() {
+        TestNavHostController navController = new TestNavHostController(
+                ApplicationProvider.getApplicationContext());
+
+        Bundle args = new Bundle();
+        args.putString("email", "default");
+        args.putString("password", "default");
+
+        FragmentScenario<RegisterFragment> registerScenario =
+                FragmentScenario.launchInContainer(RegisterFragment.class, args);
+        registerScenario.onFragment(fragment -> {
+            navController.setGraph(R.navigation.auth_graph);
+            Navigation.setViewNavController(fragment.requireView(), navController);
+        });
+
+        onView(withId(R.id.edit_first)).perform(replaceText("Firstname"));
+        onView(withId(R.id.edit_last)).perform(replaceText("Lastname"));
+        onView(allOf(withId(R.id.edit_email), hasSibling(withId(R.id.edit_first))))
+                .perform(replaceText(TEST_EMAIL));
+        onView(withId(R.id.edit_password_1)).perform(replaceText(TEST_PWD));
+
+        onView(withId(R.id.button_register)).perform(click());
+        onView(withId(R.id.edit_password_1))
+                .check(matches(hasErrorText("Passwords must match.")));
+
+        onView(withId(R.id.edit_password_2)).perform(replaceText(TEST_PWD + "$"));
+        onView(withId(R.id.edit_password_1))
+                .check(matches(hasErrorText("Passwords must match.")));
     }
 }

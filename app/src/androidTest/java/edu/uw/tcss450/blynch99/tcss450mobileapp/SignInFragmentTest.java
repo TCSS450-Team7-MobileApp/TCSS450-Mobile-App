@@ -39,12 +39,6 @@ import edu.uw.tcss450.blynch99.tcss450mobileapp.auth.ui.signin.SignInFragment;
  */
 @RunWith(AndroidJUnit4.class)
 public class SignInFragmentTest {
-//    @Test
-//    public void useAppContext() {
-//        // Context of the app under test.
-//        Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-//        assertEquals("edu.uw.tcss450.blynch99.tcss450mobileapp", appContext.getPackageName());
-//    }
 
     @Test
     public void testNavigateToRegister() {
