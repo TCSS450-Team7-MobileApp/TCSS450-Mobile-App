@@ -6,6 +6,7 @@ import static androidx.test.espresso.assertion.ViewAssertions.*;
 import static androidx.test.espresso.matcher.ViewMatchers.*;
 
 import android.content.Context;
+import android.os.Bundle;
 
 import androidx.fragment.app.testing.FragmentScenario;
 import androidx.navigation.Navigation;
@@ -22,6 +23,7 @@ import org.junit.runner.RunWith;
 import static org.junit.Assert.*;
 
 import edu.uw.tcss450.blynch99.tcss450mobileapp.auth.ui.register.EmailVerificationFragment;
+import edu.uw.tcss450.blynch99.tcss450mobileapp.auth.ui.register.RegisterFragment;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.auth.ui.signin.ForgotPasswordFragment;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.auth.ui.signin.SignInFragment;
 
@@ -32,24 +34,45 @@ import edu.uw.tcss450.blynch99.tcss450mobileapp.auth.ui.signin.SignInFragment;
  */
 @RunWith(AndroidJUnit4.class)
 public class RegisterFragmentTest {
-//    @Test
-//    public void useAppContext() {
-//        // Context of the app under test.
-//        Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-//        assertEquals("edu.uw.tcss450.blynch99.tcss450mobileapp", appContext.getPackageName());
-//    }
 
     @Test
-    public void testNavigateToVerification() {
+    public void testNavigateToVerificationNoFirstName() {
         TestNavHostController navController = new TestNavHostController(
                 ApplicationProvider.getApplicationContext());
-        FragmentScenario<EmailVerificationFragment> registerScenario = FragmentScenario.launchInContainer(EmailVerificationFragment.class);
+
+        Bundle args = new Bundle();
+        args.putString("email", "default");
+        args.putString("password", "default");
+
+        FragmentScenario<RegisterFragment> registerScenario =
+                FragmentScenario.launchInContainer(RegisterFragment.class, args);
+        registerScenario.onFragment(fragment -> {
+                    navController.setGraph(R.navigation.auth_graph);
+                    Navigation.setViewNavController(fragment.requireView(), navController);
+                });
+
+        onView(withId(R.id.button_register)).perform(click());
+        onView(withId(R.id.edit_first)).check(matches(hasErrorText("Please enter a first name.")));
+    }
+
+    @Test
+    public void testNavigateToVerificationNoLastName() {
+        TestNavHostController navController = new TestNavHostController(
+                ApplicationProvider.getApplicationContext());
+
+        Bundle args = new Bundle();
+        args.putString("email", "default");
+        args.putString("password", "default");
+
+        FragmentScenario<RegisterFragment> registerScenario =
+                FragmentScenario.launchInContainer(RegisterFragment.class, args);
         registerScenario.onFragment(fragment -> {
             navController.setGraph(R.navigation.auth_graph);
             Navigation.setViewNavController(fragment.requireView(), navController);
         });
 
+        onView(withId(R.id.edit_first)).perform(replaceText("Firstname"));
         onView(withId(R.id.button_register)).perform(click());
-        assertEquals(navController.getCurrentDestination().getId(), R.id.action_loginFragment_to_registerFragment);
+        onView(withId(R.id.edit_last)).check(matches(hasErrorText("Please enter a last name.")));
     }
 }

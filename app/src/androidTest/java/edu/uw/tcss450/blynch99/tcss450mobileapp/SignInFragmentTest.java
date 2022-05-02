@@ -6,10 +6,18 @@ import static androidx.test.espresso.assertion.ViewAssertions.*;
 import static androidx.test.espresso.matcher.ViewMatchers.*;
 
 import android.content.Context;
+import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentFactory;
 import androidx.fragment.app.testing.FragmentScenario;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.Observer;
 import androidx.navigation.Navigation;
 import androidx.navigation.testing.TestNavHostController;
+import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -42,27 +50,38 @@ public class SignInFragmentTest {
     public void testNavigateToRegister() {
         TestNavHostController navController = new TestNavHostController(
                 ApplicationProvider.getApplicationContext());
-        FragmentScenario<SignInFragment> signInScenario = FragmentScenario.launchInContainer(SignInFragment.class);
+
+        Bundle args = new Bundle();
+        args.putString("email", "default");
+        args.putString("password", "default");
+
+        FragmentScenario<SignInFragment> signInScenario =
+                FragmentScenario.launchInContainer(SignInFragment.class, args);
         signInScenario.onFragment(fragment -> {
                     navController.setGraph(R.navigation.auth_graph);
                     Navigation.setViewNavController(fragment.requireView(), navController);
                 });
 
         onView(withId(R.id.button_to_register)).perform(click());
-        assertEquals(navController.getCurrentDestination().getId(), R.id.action_loginFragment_to_registerFragment);
+        assertEquals(navController.getCurrentDestination().getId(), R.id.registerFragment);
     }
 
     @Test
     public void testNavigateToForgotPassword() {
         TestNavHostController navController = new TestNavHostController(
                 ApplicationProvider.getApplicationContext());
-        FragmentScenario<ForgotPasswordFragment> signInScenario = FragmentScenario.launchInContainer(ForgotPasswordFragment.class);
+
+        Bundle args = new Bundle();
+        args.putString("email", "default");
+
+        FragmentScenario<SignInFragment> signInScenario =
+                FragmentScenario.launchInContainer(SignInFragment.class, args);
         signInScenario.onFragment(fragment -> {
-            navController.setGraph(R.navigation.auth_graph);
-            Navigation.setViewNavController(fragment.requireView(), navController);
-        });
+                    navController.setGraph(R.navigation.auth_graph);
+                    Navigation.setViewNavController(fragment.requireView(), navController);
+                });
 
         onView(withId(R.id.button_for_forgot_password)).perform(click());
-        assertEquals(navController.getCurrentDestination().getId(), R.id.action_SignInFragment_to_forgotPasswordFragment);
+        assertEquals(navController.getCurrentDestination().getId(), R.id.forgotPasswordFragment);
     }
 }

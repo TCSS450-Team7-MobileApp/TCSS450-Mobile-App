@@ -6,11 +6,14 @@ import static androidx.test.espresso.assertion.ViewAssertions.*;
 import static androidx.test.espresso.matcher.ViewMatchers.*;
 
 import android.content.Context;
+import android.os.Bundle;
 
 import androidx.fragment.app.testing.FragmentScenario;
 import androidx.navigation.Navigation;
 import androidx.navigation.testing.TestNavHostController;
 import androidx.test.core.app.ApplicationProvider;
+import androidx.test.espresso.IdlingPolicies;
+import androidx.test.espresso.action.ViewActions;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.runner.AndroidJUnitRunner;
@@ -20,6 +23,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static org.junit.Assert.*;
+
+import java.util.concurrent.TimeUnit;
 
 import edu.uw.tcss450.blynch99.tcss450mobileapp.auth.ui.signin.ForgotPasswordFragment;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.auth.ui.signin.SignInFragment;
@@ -31,24 +36,24 @@ import edu.uw.tcss450.blynch99.tcss450mobileapp.auth.ui.signin.SignInFragment;
  */
 @RunWith(AndroidJUnit4.class)
 public class ForgotPasswordFragmentTest {
-//    @Test
-//    public void useAppContext() {
-//        // Context of the app under test.
-//        Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-//        assertEquals("edu.uw.tcss450.blynch99.tcss450mobileapp", appContext.getPackageName());
-//    }
 
     @Test
-    public void testNavigateToSignIn() {
+    public void testNavigateToSignInFromForgotPassword() {
         TestNavHostController navController = new TestNavHostController(
                 ApplicationProvider.getApplicationContext());
-        FragmentScenario<ForgotPasswordFragment> forgotPasswordScenario = FragmentScenario.launchInContainer(ForgotPasswordFragment.class);
+
+        Bundle args = new Bundle();
+        args.putString("email", "default");
+        args.putString("password", "default");
+
+        FragmentScenario<ForgotPasswordFragment> forgotPasswordScenario =
+                FragmentScenario.launchInContainer(ForgotPasswordFragment.class, args);
         forgotPasswordScenario.onFragment(fragment -> {
-            navController.setGraph(R.navigation.auth_graph);
-            Navigation.setViewNavController(fragment.requireView(), navController);
-        });
+                    navController.setGraph(R.navigation.auth_graph);
+                    Navigation.setViewNavController(fragment.requireView(), navController);
+                });
 
         onView(withId(R.id.button_back_to_signin)).perform(click());
-        assertEquals(navController.getCurrentDestination().getId(), R.id.action_forgotPasswordFragment_to_SignInFragment);
+        assertEquals(navController.getCurrentDestination().getId(), R.id.forgotPasswordFragment); // haven't moved
     }
 }

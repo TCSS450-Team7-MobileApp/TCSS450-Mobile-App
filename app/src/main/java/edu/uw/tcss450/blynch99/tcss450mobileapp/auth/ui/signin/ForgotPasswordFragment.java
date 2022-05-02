@@ -1,6 +1,7 @@
 package edu.uw.tcss450.blynch99.tcss450mobileapp.auth.ui.signin;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,6 +41,7 @@ public class ForgotPasswordFragment extends Fragment {
     }
 
     private void navigateToSignIn(final String email){
+        Log.d("CLICK", "Click happened");
         ForgotPasswordFragmentDirections.ActionForgotPasswordFragmentToSignInFragment directions =
                 ForgotPasswordFragmentDirections.actionForgotPasswordFragmentToSignInFragment();
 
