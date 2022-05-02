@@ -3,18 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/auth_graph"
-    app:startDestination="@id/SignInFragment">
+    app:startDestination="@id/signInFragment">
 
     <fragment
-        android:id="@+id/SignInFragment"
+        android:id="@+id/signInFragment"
         android:name="edu.uw.tcss450.blynch99.tcss450mobileapp.auth.ui.signin.SignInFragment"
-        android:label="fragment_login"
+        android:label="fragment_fragment_sign_in"
         tools:layout="@layout/fragment_sign_in" >
         <action
-            android:id="@+id/action_loginFragment_to_registerFragment"
+            android:id="@+id/action_signin_Fragment_to_registerFragment"
             app:destination="@id/registerFragment" />
         <action
-            android:id="@+id/action_loginFragment_to_mainActivity"
+            android:id="@+id/action_signinFragment_to_mainActivity"
             app:destination="@id/mainActivity" />
         <argument
             android:name="email"
@@ -25,7 +25,7 @@
             app:argType="string"
             android:defaultValue="default" />
         <action
-            android:id="@+id/action_SignInFragment_to_forgotPasswordFragment"
+            android:id="@+id/action_signInFragment_to_forgotPasswordFragment"
             app:destination="@id/forgotPasswordFragment" />
     </fragment>
     <fragment
@@ -34,8 +34,8 @@
         android:label="fragment_register"
         tools:layout="@layout/fragment_register" >
         <action
-            android:id="@+id/action_registerFragment_to_emailVerificationFragment2"
-            app:destination="@id/emailVerificationFragment2" />
+            android:id="@+id/action_registerFragment_to_emailVerificationFragment"
+            app:destination="@id/emailVerificationFragment" />
     </fragment>
     <activity
         android:id="@+id/mainActivity"
@@ -49,7 +49,7 @@
             app:argType="string" />
     </activity>
     <fragment
-        android:id="@+id/emailVerificationFragment2"
+        android:id="@+id/emailVerificationFragment"
         android:name="edu.uw.tcss450.blynch99.tcss450mobileapp.auth.ui.register.EmailVerificationFragment"
         android:label="fragment_email_verification"
         tools:layout="@layout/fragment_email_verification" >
@@ -61,7 +61,7 @@
             app:argType="string" />
         <action
             android:id="@+id/action_emailVerificationFragment2_to_SignInFragment"
-            app:destination="@id/SignInFragment" />
+            app:destination="@id/signInFragment" />
     </fragment>
     <fragment
         android:id="@+id/forgotPasswordFragment"
@@ -70,7 +70,7 @@
         tools:layout="@layout/fragment_forgot_password" >
         <action
             android:id="@+id/action_forgotPasswordFragment_to_SignInFragment"
-            app:destination="@id/SignInFragment" />
+            app:destination="@id/signInFragment" />
         <argument
             android:name="email"
             app:argType="string"

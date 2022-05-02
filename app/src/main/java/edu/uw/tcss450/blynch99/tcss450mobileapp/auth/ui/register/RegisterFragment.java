@@ -132,8 +132,8 @@ public class RegisterFragment extends Fragment {
     }
 
     private void navigateToVerification() {
-        RegisterFragmentDirections.ActionRegisterFragmentToEmailVerificationFragment2 directions =
-                RegisterFragmentDirections.actionRegisterFragmentToEmailVerificationFragment2(
+        RegisterFragmentDirections.ActionRegisterFragmentToEmailVerificationFragment directions =
+                RegisterFragmentDirections.actionRegisterFragmentToEmailVerificationFragment(
                         binding.editEmail.getText().toString(),
                         binding.editPassword1.getText().toString());
 
