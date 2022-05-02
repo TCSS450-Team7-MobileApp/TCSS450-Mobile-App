@@ -40,7 +40,7 @@ public class RegisterFragmentTest {
     private final String TEST_PWD = "Atest123$$";
 
     @Test
-    public void testNavigateToVerificationNoFirstName() {
+    public void testRegisterNoFirstName() {
         TestNavHostController navController = new TestNavHostController(
                 ApplicationProvider.getApplicationContext());
 
@@ -60,7 +60,7 @@ public class RegisterFragmentTest {
     }
 
     @Test
-    public void testNavigateToVerificationNoLastName() {
+    public void testRegisterNoLastName() {
         TestNavHostController navController = new TestNavHostController(
                 ApplicationProvider.getApplicationContext());
 
@@ -82,7 +82,7 @@ public class RegisterFragmentTest {
     }
 
     @Test
-    public void testNavigateToVerificationNoEmail() {
+    public void testRegisterNoEmail() {
         TestNavHostController navController = new TestNavHostController(
                 ApplicationProvider.getApplicationContext());
 
@@ -106,7 +106,7 @@ public class RegisterFragmentTest {
     }
 
     @Test
-    public void testNavigateToVerificationNoPassword() {
+    public void testRegisterNoPassword() {
         TestNavHostController navController = new TestNavHostController(
                 ApplicationProvider.getApplicationContext());
 
@@ -132,7 +132,7 @@ public class RegisterFragmentTest {
     }
 
     @Test
-    public void testNavigateToVerificationPasswordMismatch() {
+    public void testRegisterPasswordMismatch() {
         TestNavHostController navController = new TestNavHostController(
                 ApplicationProvider.getApplicationContext());
 
