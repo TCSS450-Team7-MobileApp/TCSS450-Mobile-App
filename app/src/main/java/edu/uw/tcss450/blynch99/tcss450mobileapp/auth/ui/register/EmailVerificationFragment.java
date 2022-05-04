@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
 import org.json.JSONObject;
@@ -23,16 +22,12 @@ public class EmailVerificationFragment extends Fragment {
 
     FragmentEmailVerificationBinding binding;
     EmailVerificationFragmentArgs args;
-    EmailVerificationViewModel mEmailVerificationModel;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentEmailVerificationBinding.inflate(inflater);
         args = EmailVerificationFragmentArgs.fromBundle(getArguments());
-        mEmailVerificationModel = new ViewModelProvider(getActivity())
-                .get(EmailVerificationViewModel.class);
-        mEmailVerificationModel.addResponseObserver(getViewLifecycleOwner(),this::observeResponse);
         return binding.getRoot();
     }
 
@@ -50,7 +45,6 @@ public class EmailVerificationFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-         mEmailVerificationModel.connect(args.getEmail());
         binding.buttonVerified.setOnClickListener(button -> navigateToLogin());
 
 
