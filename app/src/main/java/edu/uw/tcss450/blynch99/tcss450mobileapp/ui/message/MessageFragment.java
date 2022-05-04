@@ -42,11 +42,16 @@ public class MessageFragment extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         navigateToContacts();
         return super.onOptionsItemSelected(item);
+<<<<<<< HEAD
 
     }
 
 
 
+=======
+    }
+
+>>>>>>> 📕Created Contacts
     private void navigateToContacts() {
         Navigation.findNavController(getView())
                 .navigate(MessageFragmentDirections
