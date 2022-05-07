@@ -36,7 +36,7 @@ public class RegisterFragment extends Fragment {
 
     private RegisterViewModel mRegisterModel;
 
-    private PasswordValidator mNameValidator = checkPwdLength(1);
+    private PasswordValidator mNameValidator = checkPwdLength(0);
 
     private PasswordValidator mEmailValidator = checkPwdLength(2)
             .and(checkExcludeWhiteSpace())
@@ -117,7 +117,8 @@ public class RegisterFragment extends Fragment {
         mPassWordValidator.processResult(
                 mPassWordValidator.apply(binding.editPassword1.getText().toString()),
                 this::verifyAuthWithServer,
-                result -> binding.editPassword1.setError("Please enter a valid Password."));
+                result -> binding.editPassword1.setError("Password must be at least 7 characters," +
+                        " contain at least 1 letter, 1 special character, and 1 digit."));
     }
 
     private void verifyAuthWithServer() {
