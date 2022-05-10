@@ -13,7 +13,11 @@
         android:id="@+id/contactsFragment"
         android:name="edu.uw.tcss450.blynch99.tcss450mobileapp.ui.contacts.ContactsFragment"
         android:label="@string/title_contacts"
-        tools:layout="@layout/fragment_contacts" />
+        tools:layout="@layout/fragment_contacts" >
+        <action
+            android:id="@+id/action_contactsFragment_to_friendFragment"
+            app:destination="@id/navigation_friend" />
+    </fragment>
     <fragment
         android:id="@+id/navigation_weather"
         android:name="edu.uw.tcss450.blynch99.tcss450mobileapp.ui.weather.WeatherFragment"
@@ -27,5 +31,20 @@
         <action
             android:id="@+id/action_messageFragment_to_contactsFragment"
             app:destination="@id/contactsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_friend"
+        android:name="edu.uw.tcss450.blynch99.tcss450mobileapp.ui.contacts.FriendFragment"
+        android:label="@string/title_friend"
+        tools:layout="@layout/fragment_friend" >
+        <argument
+            android:name="firstName"
+            app:argType="string" />
+        <argument
+            android:name="lastName"
+            app:argType="string" />
+        <argument
+            android:name="nickname"
+            app:argType="string" />
     </fragment>
 </navigation>

@@ -118,7 +118,6 @@ public class SignInFragment extends Fragment {
         Navigation.findNavController(getView())
                 .navigate(SignInFragmentDirections
                         .actionSigninFragmentToMainActivity(email, jwt));
-        getActivity().finish();
     }
 
     private void navigateToForgotPassword(final String email) {

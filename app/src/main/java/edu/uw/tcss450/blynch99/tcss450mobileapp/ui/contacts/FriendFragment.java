@@ -8,33 +8,32 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
 
-import edu.uw.tcss450.blynch99.tcss450mobileapp.databinding.FragmentContactsBinding;
+import edu.uw.tcss450.blynch99.tcss450mobileapp.databinding.FragmentFriendBinding;
 
 /**
  * create an instance of this fragment.
  */
-public class ContactsFragment extends Fragment {
-    FragmentContactsBinding mBinding;
+public class FriendFragment extends Fragment {
+    FragmentFriendBinding mBinding;
+    FriendFragmentArgs mArgs;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        mBinding = FragmentContactsBinding.inflate(inflater);
+        mBinding = FragmentFriendBinding.inflate(inflater);
+        mArgs = FriendFragmentArgs.fromBundle(getArguments());
+
         return mBinding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mBinding.friendbutton.setOnClickListener(button -> navigateToFriend());
-    }
+        mBinding.textNickname.setText(mArgs.getNickname());
+        mBinding.textName.setText(mArgs.getFirstName() + " " + mArgs.getLastName());
 
-    public void navigateToFriend(){
-        Navigation.findNavController(getView())
-                .navigate(ContactsFragmentDirections
-                        .actionContactsFragmentToFriendFragment("ftest", "ltest", "nicktest"));
+
+
     }
 }
