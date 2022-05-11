@@ -36,7 +36,10 @@ public class RegisterFragment extends Fragment {
 
     private RegisterViewModel mRegisterModel;
 
+    private PasswordValidator mNickValidator = checkPwdLength(1);
+
     private PasswordValidator mNameValidator = checkPwdLength(0);
+
 
     private PasswordValidator mEmailValidator = checkPwdLength(2)
             .and(checkExcludeWhiteSpace())
@@ -78,21 +81,28 @@ public class RegisterFragment extends Fragment {
     }
 
     private void attemptRegister(final View button) {
-        validateFirst();
+        validateNick();
+    }
+
+    private void validateNick() {
+        mNameValidator.processResult(
+                mNickValidator.apply(binding.editNick.getText().toString().trim()),
+                this::validateFirst,
+                result -> binding.editNick.setError("Please enter a nickname with at least 2 characters."));
     }
 
     private void validateFirst() {
         mNameValidator.processResult(
                 mNameValidator.apply(binding.editFirst.getText().toString().trim()),
                 this::validateLast,
-                result -> binding.editFirst.setError("Please enter a first name."));
+                result -> binding.editFirst.setError("Please enter a first name with at least 1 character."));
     }
 
     private void validateLast() {
-        mNameValidator.processResult(
-                mNameValidator.apply(binding.editLast.getText().toString().trim()),
+        mNickValidator.processResult(
+                mNickValidator.apply(binding.editLast.getText().toString().trim()),
                 this::validateEmail,
-                result -> binding.editLast.setError("Please enter a last name."));
+                result -> binding.editLast.setError("Please enter a last name with at least 2 characters."));
     }
 
     private void validateEmail() {

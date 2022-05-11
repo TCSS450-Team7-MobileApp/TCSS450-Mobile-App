@@ -45,6 +45,7 @@ public class SignInFragment extends Fragment {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
+        Log.d("NAV", "data is still saved");
         super.onCreate(savedInstanceState);
         mSignInModel = new ViewModelProvider(getActivity())
                 .get(SignInViewModel.class);
@@ -119,6 +120,7 @@ public class SignInFragment extends Fragment {
                 .navigate(SignInFragmentDirections
                         .actionSigninFragmentToMainActivity(email, jwt));
         getActivity().finish();
+
     }
 
     private void navigateToForgotPassword(final String email) {

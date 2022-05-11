@@ -1,0 +1,32 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory app:title="@string/header_info">
+
+        <EditTextPreference
+            app:key="preference_first_name"
+            app:title="@string/edit_fname"
+            app:useSimpleSummaryProvider="false" />
+        <EditTextPreference
+            app:key="preference_last_name"
+            app:title="@string/edit_lname"
+            app:useSimpleSummaryProvider="false" />
+        <EditTextPreference
+            app:key="preference_nickname"
+            app:title="@string/edit_nname"
+            app:useSimpleSummaryProvider="false" />
+
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/header_account">
+
+        <Preference
+            app:key="preference_delete_account"
+            app:title="@string/button_delete_account" />
+
+        <Preference
+            app:key="preference_logout"
+            app:title="@string/button_logout"/>
+    </PreferenceCategory>
+
+</PreferenceScreen>

@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">ChatterBug</string>
+    <string name="hint_nick">Nickname</string>
     <string name="hint_first">First Name</string>
     <string name="hint_last">Last Name</string>
     <string name="hint_email">Email</string>
@@ -19,6 +20,26 @@
     <string name="title_home">Home</string>
     <string name="title_weather">Weather</string>
     <string name="title_contacts">Contacts</string>
+
+    <string name="action_settings">Settings</string>
+    <!-- Preference Titles -->
+    <string name="header_account">Account</string>
+    <string name="header_info">Information</string>
+
+
+    <!-- Account Preferences -->
+    <string name="edit_fname">Change First Name</string>
+    <string name="edit_lname">Change Last Name</string>
+    <string name="edit_nname">Change Nickname</string>
+
+    <string name="button_delete_account">Delete Account</string>
+    <string name="button_logout">Log Out</string>
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
 
 
 </resources>
