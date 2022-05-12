@@ -45,7 +45,6 @@ public class SignInFragment extends Fragment {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        Log.d("NAV", "data is still saved");
         super.onCreate(savedInstanceState);
         mSignInModel = new ViewModelProvider(getActivity())
                 .get(SignInViewModel.class);
@@ -125,6 +124,7 @@ public class SignInFragment extends Fragment {
     }
 
     private void navigateToForgotPassword(final String email) {
+        mSignInModel.resetResponse();
         SignInFragmentDirections.ActionSignInFragmentToForgotPasswordFragment directions =
                 SignInFragmentDirections.actionSignInFragmentToForgotPasswordFragment();
 
@@ -164,7 +164,6 @@ public class SignInFragment extends Fragment {
         } else {
             Log.d("JSON Response", "No Response");
         }
-
         binding.layoutWait.setVisibility(View.GONE);
     }
 }

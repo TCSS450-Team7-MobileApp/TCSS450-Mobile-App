@@ -35,6 +35,10 @@ public class SignInViewModel extends AndroidViewModel {
         mResponse.setValue(new JSONObject());
     }
 
+    public void resetResponse(){
+        mResponse.setValue(new JSONObject());
+    }
+
     public void addResponseObserver(@NonNull LifecycleOwner owner,
                                     @NonNull Observer<? super JSONObject> observer) {
         mResponse.observe(owner, observer);

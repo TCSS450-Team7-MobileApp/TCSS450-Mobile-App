@@ -35,6 +35,11 @@ public class ContactsFragment extends Fragment {
     public void navigateToFriend(){
         Navigation.findNavController(getView())
                 .navigate(ContactsFragmentDirections
-                        .actionContactsFragmentToFriendFragment("ftest", "ltest", "nicktest"));
+                        .actionContactsFragmentToFriendFragment(
+                                "ftest",
+                                "ltest",
+                                "nicktest",
+                                FriendStatus.SENT_REQUEST,
+                                "gmn"));
     }
 }

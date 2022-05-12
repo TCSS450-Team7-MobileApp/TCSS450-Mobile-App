@@ -15,6 +15,12 @@
     <string name="action_email_verification_complete">I have verified my email</string>
     <string name="forgot_check_email">Enter your email, then, go check your inbox for password reset</string>
     <string name="back_to_signin"> Send and Return to Sign In</string>
+    <string name="action_friend_message">Message</string>
+    <string name="action_friend_remove">Remove</string>
+    <string name="action_friend_send_request">Send Friend Request</string>
+    <string name="action_friend_accept_request">Accept Friend Request</string>
+    <string name="action_friend_unsend_request">Unsend Friend Request</string>
+
 
     <string name="title_message">Message</string>
     <string name="title_home">Home</string>
