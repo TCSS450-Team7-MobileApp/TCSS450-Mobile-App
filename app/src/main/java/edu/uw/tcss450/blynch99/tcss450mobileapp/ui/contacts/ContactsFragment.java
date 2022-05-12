@@ -40,6 +40,7 @@ public class ContactsFragment extends Fragment {
                                 "ltest",
                                 "nicktest",
                                 FriendStatus.SENT_REQUEST,
-                                "gmn"));
+                                "gmn"
+                        ));
     }
 }
