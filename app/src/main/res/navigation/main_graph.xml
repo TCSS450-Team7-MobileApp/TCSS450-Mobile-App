@@ -25,12 +25,15 @@
         tools:layout="@layout/fragment_weather" />
     <fragment
         android:id="@+id/navigation_message"
-        android:name="edu.uw.tcss450.blynch99.tcss450mobileapp.ui.message.MessageFragment"
+        android:name="edu.uw.tcss450.blynch99.tcss450mobileapp.ui.message.ChatListFragment"
         android:label="@string/title_message"
         tools:layout="@layout/fragment_message">
         <action
             android:id="@+id/action_messageFragment_to_contactsFragment"
             app:destination="@id/contactsFragment" />
+        <action
+            android:id="@+id/action_navigation_message_to_chatFragment"
+            app:destination="@id/chatFragment" />
     </fragment>
     <fragment
         android:id="@+id/navigation_friend"
@@ -46,5 +49,14 @@
         <argument
             android:name="nickname"
             app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/chatFragment"
+        android:name="edu.uw.tcss450.blynch99.tcss450mobileapp.ui.message.ChatFragment"
+        android:label="fragment_chat"
+        tools:layout="@layout/fragment_chat" >
+        <argument
+            android:name="chat"
+            app:argType="edu.uw.tcss450.blynch99.tcss450mobileapp.ui.message.Chat" />
     </fragment>
 </navigation>
