@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         }
         new ViewModelProvider(
                 this,
-                new UserInfoViewModel.UserInfoViewModelFactory("email",jwt.getId()))
+                new UserInfoViewModel.UserInfoViewModelFactory(args.getEmail(),jwt.getId()))
                 .get(UserInfoViewModel.class);
 
 

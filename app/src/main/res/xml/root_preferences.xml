@@ -1,32 +1,33 @@
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory app:title="@string/header_info">
+    <PreferenceCategory android:title="@string/header_info">
 
         <EditTextPreference
-            app:key="preference_first_name"
-            app:title="@string/edit_fname"
-            app:useSimpleSummaryProvider="false" />
+            android:key="preference_first_name"
+            android:title="@string/edit_fname" />
         <EditTextPreference
-            app:key="preference_last_name"
-            app:title="@string/edit_lname"
-            app:useSimpleSummaryProvider="false" />
+            android:key="preference_last_name"
+            android:title="@string/edit_lname" />
         <EditTextPreference
-            app:key="preference_nickname"
-            app:title="@string/edit_nname"
-            app:useSimpleSummaryProvider="false" />
+            android:key="preference_nickname"
+            android:title="@string/edit_nname" />
 
 
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="@string/header_account">
+    <PreferenceCategory android:title="@string/header_account">
+
+        <EditTextPreference
+            android:key="preference_delete_account"
+            android:title="@string/edit_delete_account"/>
 
         <Preference
-            app:key="preference_delete_account"
-            app:title="@string/button_delete_account" />
+            android:key="preference_logout"
+            android:title="@string/button_logout"/>
 
         <Preference
-            app:key="preference_logout"
-            app:title="@string/button_logout"/>
+            android:key="preference_change_password"
+            android:title="@string/button_change_password"/>
     </PreferenceCategory>
 
 </PreferenceScreen>
