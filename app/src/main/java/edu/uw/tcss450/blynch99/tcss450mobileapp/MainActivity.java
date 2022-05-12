@@ -1,6 +1,10 @@
 package edu.uw.tcss450.blynch99.tcss450mobileapp;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -13,14 +17,18 @@ import com.auth0.android.jwt.JWT;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import edu.uw.tcss450.blynch99.tcss450mobileapp.auth.model.UserInfoViewModel;
+import edu.uw.tcss450.blynch99.tcss450mobileapp.ui.settings.SettingsActivity;
 
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
+    private static Activity mMainActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mMainActivity = this;
 
 
         MainActivityArgs args = MainActivityArgs.fromBundle(getIntent().getExtras());
@@ -35,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         }
         new ViewModelProvider(
                 this,
-                new UserInfoViewModel.UserInfoViewModelFactory("email",jwt.getId()))
+                new UserInfoViewModel.UserInfoViewModelFactory(args.getEmail(),jwt.getId()))
                 .get(UserInfoViewModel.class);
 
 
@@ -60,5 +68,25 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.toolbar, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    public static Activity getActivity(){
+        return mMainActivity;
     }
 }

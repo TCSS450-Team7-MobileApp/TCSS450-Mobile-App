@@ -45,6 +45,7 @@ public class SignInFragment extends Fragment {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
+        Log.d("NAV", "data is still saved");
         super.onCreate(savedInstanceState);
         mSignInModel = new ViewModelProvider(getActivity())
                 .get(SignInViewModel.class);
@@ -74,8 +75,8 @@ public class SignInFragment extends Fragment {
                 this::observeResponse);
 
         SignInFragmentArgs args = SignInFragmentArgs.fromBundle(getArguments());
-        binding.editEmail.setText(args.getEmail().equals("default") ? "" : args.getEmail());
-        binding.editPassword.setText(args.getPassword().equals("default") ? "" : args.getPassword());
+        binding.editEmail.setText(args.getEmail().equals("default") ? "1@1" : args.getEmail());
+        binding.editPassword.setText(args.getPassword().equals("default") ? "12341234q!" : args.getPassword());
         binding.buttonForForgotPassword.setOnClickListener(button ->
                 navigateToForgotPassword(binding.editEmail.getText().toString()));
     }
@@ -118,6 +119,9 @@ public class SignInFragment extends Fragment {
         Navigation.findNavController(getView())
                 .navigate(SignInFragmentDirections
                         .actionSigninFragmentToMainActivity(email, jwt));
+
+        getActivity().finish();
+
     }
 
     private void navigateToForgotPassword(final String email) {
