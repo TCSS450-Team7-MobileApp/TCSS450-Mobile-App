@@ -39,7 +39,7 @@ public class ContactsFragment extends Fragment {
                                 "ftest",
                                 "ltest",
                                 "nicktest",
-                                FriendStatus.SENT_REQUEST,
+                                FriendStatus.RECEIVED_REQUEST,
                                 "gmn"
                         ));
     }

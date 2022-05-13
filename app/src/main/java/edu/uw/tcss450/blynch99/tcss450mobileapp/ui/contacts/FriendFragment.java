@@ -35,27 +35,34 @@ public class FriendFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         mBinding.textNickname.setText(mArgs.getNickname());
         mBinding.textName.setText(mArgs.getFirstName() + " " + mArgs.getLastName());
+        updateFragment(mArgs.getFriendStatus());
+    }
 
-        switch (mArgs.getFriendStatus()){
+    private void updateFragment(FriendStatus status){
+        mBinding.buttonFriendManager.setVisibility(View.GONE);
+        mBinding.buttonFriendRemove.setVisibility(View.GONE);
+        mBinding.buttonMessage.setVisibility(View.GONE);
+        switch (status){
             case FRIENDS:
                 mBinding.buttonMessage.setVisibility(View.VISIBLE);
                 mBinding.buttonFriendRemove.setVisibility(View.VISIBLE);
+                mBinding.buttonFriendRemove.setOnClickListener(button -> updateFragment(FriendStatus.NOT_FRIENDS));
                 break;
             case NOT_FRIENDS:
                 mBinding.buttonFriendManager.setVisibility(View.VISIBLE);
                 mBinding.buttonFriendManager.setText(getString(R.string.action_friend_send_request));
+                mBinding.buttonFriendManager.setOnClickListener(button -> updateFragment(FriendStatus.SENT_REQUEST));
                 break;
             case SENT_REQUEST:
                 mBinding.buttonFriendManager.setVisibility(View.VISIBLE);
                 mBinding.buttonFriendManager.setText(getString(R.string.action_friend_unsend_request));
+                mBinding.buttonFriendManager.setOnClickListener(button -> updateFragment(FriendStatus.NOT_FRIENDS));
                 break;
             case RECEIVED_REQUEST:
                 mBinding.buttonFriendManager.setVisibility(View.VISIBLE);
                 mBinding.buttonFriendManager.setText(getString(R.string.action_friend_accept_request));
+                mBinding.buttonFriendManager.setOnClickListener(button -> updateFragment(FriendStatus.FRIENDS));
                 break;
         }
-
-
-
     }
 }
