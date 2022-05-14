@@ -33,9 +33,9 @@ public class FriendFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mBinding.textNickname.setText(mArgs.getNickname());
-        mBinding.textName.setText(mArgs.getFirstName() + " " + mArgs.getLastName());
-        updateFragment(mArgs.getFriendStatus());
+        mBinding.textNickname.setText(mArgs.getContact().getNickname());
+        mBinding.textName.setText(mArgs.getContact().getFirstname() + " " + mArgs.getContact().getLastname());
+        updateFragment(mArgs.getContact().getStatus());
     }
 
     private void updateFragment(FriendStatus status){
