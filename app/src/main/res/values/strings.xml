@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">ChatterBug</string>
+    <string name="hint_nick">Nickname</string>
     <string name="hint_first">First Name</string>
     <string name="hint_last">Last Name</string>
     <string name="hint_email">Email</string>
@@ -14,14 +15,31 @@
     <string name="action_email_verification_complete">I have verified my email</string>
     <string name="forgot_check_email">Enter your email, then, go check your inbox for password reset</string>
     <string name="back_to_signin"> Send and Return to Sign In</string>
+    <string name="action_friend_message">Message</string>
+    <string name="action_friend_remove">Remove</string>
+    <string name="action_friend_send_request">Send Friend Request</string>
+    <string name="action_friend_accept_request">Accept Friend Request</string>
+    <string name="action_friend_unsend_request">Unsend Friend Request</string>
+
 
     <string name="title_message">Message</string>
     <string name="title_home">Home</string>
     <string name="title_weather">Weather</string>
     <string name="title_contacts">Contacts</string>
     <string name="title_friend">Friend</string>
-
+    
     <string name="base_url_service">https://tcss450-team7.herokuapp.com/</string>
+    <string name="action_settings">Settings</string>
+    <string name="header_account">Account</string>
+    <string name="header_info">Information</string>
+    <string name="edit_fname">Change First Name</string>
+    <string name="edit_lname">Change Last Name</string>
+    <string name="edit_nname">Change Nickname</string>
+    <string name="edit_delete_account">Delete Account</string>
+    <string name="button_logout">Log Out</string>
+    <string name="button_change_password">Change Password</string>
+
+    <string name="text_delete_account">Enter your email to delete your account</string>
 
 
 </resources>

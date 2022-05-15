@@ -74,8 +74,8 @@ public class SignInFragment extends Fragment {
                 this::observeResponse);
 
         SignInFragmentArgs args = SignInFragmentArgs.fromBundle(getArguments());
-        binding.editEmail.setText(args.getEmail().equals("default") ? "" : args.getEmail());
-        binding.editPassword.setText(args.getPassword().equals("default") ? "" : args.getPassword());
+        binding.editEmail.setText(args.getEmail().equals("default") ? "1@1" : args.getEmail());
+        binding.editPassword.setText(args.getPassword().equals("default") ? "12341234q!" : args.getPassword());
         binding.buttonForForgotPassword.setOnClickListener(button ->
                 navigateToForgotPassword(binding.editEmail.getText().toString()));
     }
@@ -118,9 +118,13 @@ public class SignInFragment extends Fragment {
         Navigation.findNavController(getView())
                 .navigate(SignInFragmentDirections
                         .actionSigninFragmentToMainActivity(email, jwt));
+
+        getActivity().finish();
+
     }
 
     private void navigateToForgotPassword(final String email) {
+        mSignInModel.resetResponse();
         SignInFragmentDirections.ActionSignInFragmentToForgotPasswordFragment directions =
                 SignInFragmentDirections.actionSignInFragmentToForgotPasswordFragment();
 
@@ -160,7 +164,6 @@ public class SignInFragment extends Fragment {
         } else {
             Log.d("JSON Response", "No Response");
         }
-
         binding.layoutWait.setVisibility(View.GONE);
     }
 }

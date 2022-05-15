@@ -10,24 +10,26 @@
     tools:layout_editor_absoluteY="-2dp">
 
     <Button
-        android:id="@+id/button_friend_request2"
+        android:id="@+id/button_message"
         android:layout_width="111dp"
         android:layout_height="77dp"
         android:layout_marginTop="56dp"
         android:layout_marginEnd="70dp"
-        android:text="Message"
+        android:text="@string/action_friend_message"
         app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@+id/text_name" />
 
     <Button
-        android:id="@+id/button_friend_request"
+        android:id="@+id/button_friend_remove"
         android:layout_width="111dp"
         android:layout_height="77dp"
         android:layout_marginStart="70dp"
         android:layout_marginTop="56dp"
         android:layout_marginEnd="50dp"
-        android:text="Remove"
-        app:layout_constraintEnd_toStartOf="@+id/button_friend_request2"
+        android:visibility="gone"
+        android:text="@string/action_friend_remove"
+        app:layout_constraintEnd_toStartOf="@+id/button_message"
         app:layout_constraintHorizontal_bias="0.35"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_name" />
@@ -68,5 +70,15 @@
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/button_friend_manager"
+        android:layout_width="275dp"
+        android:layout_height="83dp"
+        android:layout_marginTop="56dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_name" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

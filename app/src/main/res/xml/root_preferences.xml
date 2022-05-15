@@ -1,0 +1,33 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="@string/header_info">
+
+        <EditTextPreference
+            android:key="preference_first_name"
+            android:title="@string/edit_fname" />
+        <EditTextPreference
+            android:key="preference_last_name"
+            android:title="@string/edit_lname" />
+        <EditTextPreference
+            android:key="preference_nickname"
+            android:title="@string/edit_nname" />
+
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/header_account">
+
+        <EditTextPreference
+            android:key="preference_delete_account"
+            android:title="@string/edit_delete_account"/>
+
+        <Preference
+            android:key="preference_logout"
+            android:title="@string/button_logout"/>
+
+        <Preference
+            android:key="preference_change_password"
+            android:title="@string/button_change_password"/>
+    </PreferenceCategory>
+
+</PreferenceScreen>
