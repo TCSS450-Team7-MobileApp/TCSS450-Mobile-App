@@ -74,8 +74,8 @@ public class SignInFragment extends Fragment {
                 this::observeResponse);
 
         SignInFragmentArgs args = SignInFragmentArgs.fromBundle(getArguments());
-        binding.editEmail.setText(args.getEmail().equals("default") ? "1@1" : args.getEmail());
-        binding.editPassword.setText(args.getPassword().equals("default") ? "12341234q!" : args.getPassword());
+        binding.editEmail.setText(args.getEmail().equals("default") ? "ikozor@uw.edu" : args.getEmail());
+        binding.editPassword.setText(args.getPassword().equals("default") ? "12341234qQ!" : args.getPassword());
         binding.buttonForForgotPassword.setOnClickListener(button ->
                 navigateToForgotPassword(binding.editEmail.getText().toString()));
     }
@@ -114,10 +114,15 @@ public class SignInFragment extends Fragment {
      * @param email users email
      * @param jwt the JSON Web Token supplied by the server
      */
-    private void navigateToSuccess(final String email, final String jwt) {
+    private void navigateToSuccess(final String email,
+                                   final String jwt,
+                                   String first,
+                                   String last,
+                                   String nick,
+                                   int id) {
         Navigation.findNavController(getView())
                 .navigate(SignInFragmentDirections
-                        .actionSigninFragmentToMainActivity(email, jwt));
+                        .actionSigninFragmentToMainActivity(email, jwt, first, last, nick, id));
 
         getActivity().finish();
 
@@ -155,7 +160,11 @@ public class SignInFragment extends Fragment {
                 try {
                     navigateToSuccess(
                             binding.editEmail.getText().toString(),
-                            response.getString("token")
+                            response.getString("token"),
+                            response.getString("firstname"),
+                            response.getString("lastname"),
+                            response.getString("username"),
+                            response.getInt("memberid")
                     );
                 } catch (JSONException e) {
                     Log.e("JSON Parse Error", e.getMessage());

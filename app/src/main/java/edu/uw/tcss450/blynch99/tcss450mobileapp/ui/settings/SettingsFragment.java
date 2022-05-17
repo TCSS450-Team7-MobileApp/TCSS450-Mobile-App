@@ -43,6 +43,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             return true;
         });
         deleteAccount.setOnPreferenceChangeListener(this::promptForPassword);
+
+
     }
 
 
