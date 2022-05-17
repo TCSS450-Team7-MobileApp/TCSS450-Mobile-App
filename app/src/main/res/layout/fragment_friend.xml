@@ -5,7 +5,7 @@
     android:id="@+id/layout_friend_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.contacts.FriendFragment"
+    tools:context=".ui.contacts.friend.FriendFragment"
     tools:layout_editor_absoluteX="0dp"
     tools:layout_editor_absoluteY="-2dp">
 

@@ -1,4 +1,4 @@
-package edu.uw.tcss450.blynch99.tcss450mobileapp.ui.contacts;
+package edu.uw.tcss450.blynch99.tcss450mobileapp.ui.contacts.friend;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 
 import edu.uw.tcss450.blynch99.tcss450mobileapp.R;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.databinding.FragmentFriendBinding;
+import edu.uw.tcss450.blynch99.tcss450mobileapp.ui.contacts.FriendStatus;
 
 /**
  * create an instance of this fragment.

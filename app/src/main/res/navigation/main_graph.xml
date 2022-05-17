@@ -37,7 +37,7 @@
     </fragment>
     <fragment
         android:id="@+id/navigation_friend"
-        android:name="edu.uw.tcss450.blynch99.tcss450mobileapp.ui.contacts.FriendFragment"
+        android:name="edu.uw.tcss450.blynch99.tcss450mobileapp.ui.contacts.friend.FriendFragment"
         android:label="@string/title_friend"
         tools:layout="@layout/fragment_friend" >
         <action
