@@ -20,6 +20,8 @@ public class UserInfoViewModel extends ViewModel {
 
     public String getJwt() { return mJwt; }
 
+    public int getMemberId() { return 3; } // Hard-coded member ID
+
     public static class UserInfoViewModelFactory implements ViewModelProvider.Factory {
 
         private final String email;

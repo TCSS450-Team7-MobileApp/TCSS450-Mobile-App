@@ -36,7 +36,7 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<ChatRecyclerVi
 
     @Override
     public void onBindViewHolder(@NonNull ChatViewHolder holder, int position) {
-        holder.setBlog(mChats.get(position));
+        holder.setChat(mChats.get(position));
     }
 
     @Override
@@ -53,45 +53,27 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<ChatRecyclerVi
             super(view);
             mView = view;
             binding = FragmentChatCardBinding.bind(view);
-            binding.buttonMore.setOnClickListener(this::handleMoreOrLess);
         }
-        /**
-         * When the button is clicked in the more state, expand the card to display
-         * the blog preview and switch the icon to the less state.  When the button
-         * is clicked in the less state, shrink the card and switch the icon to the
-         * more state.
-         * @param button the button that was clicked
-         */
-        private void handleMoreOrLess(final View button) {
-            displayPreview();
-        }
-        /**
-         * Helper used to determine if the preview should be displayed or not.
-         */
-        private void displayPreview() {
-            binding.textPreview.setVisibility(View.GONE);
-            binding.buttonMore.setImageIcon(
-                    Icon.createWithResource(
-                            mView.getContext(),
-                            R.drawable.ic_contacts_white_24));
-        }
-        void setBlog(final Chat chat) {
+
+        void setChat(final Chat chat) {
             mChat = chat;
-            binding.buttonFullPost.setOnClickListener(view -> {
-                Navigation.findNavController(mView).navigate(
-                        ChatListFragmentDirections
-                                .actionNavigationMessageToChatFragment(chat));
-            });
-            binding.textTitle.setText("Title");
-            binding.textPubdate.setText("Date");
+//            binding.buttonFullPost.setOnClickListener(view -> {
+//                Navigation.findNavController(mView).navigate(
+//                        ChatListFragmentDirections
+//                                .actionNavigationMessageToChatFragment(chat));
+//            });
+            final String title = "Title";
+            binding.textTitle.setText(title);
+            final String date = "Date";
+            binding.textPubdate.setText(date);
             //Use methods in the HTML class to format the HTML found in the text
-            final String preview =  Html.fromHtml(
-                    "Teaser",
-                    Html.FROM_HTML_MODE_COMPACT)
-                    .toString().substring(0,100) //just a preview of the teaser
-                    + "...";
+//            final String preview =  Html.fromHtml(
+//                    "Teaser",
+//                    Html.FROM_HTML_MODE_COMPACT)
+//                    .toString().substring(0,100) //just a preview of the teaser
+//                    + "...";
+            final String preview = "Preview...";
             binding.textPreview.setText(preview);
-            displayPreview();
         }
     }
 }

@@ -23,11 +23,11 @@ public class MessageRecyclerViewAdapter extends RecyclerView.Adapter<MessageRecy
 
     private final List<ChatMessage> mMessages;
     private final String mEmail;
+
     public MessageRecyclerViewAdapter(List<ChatMessage> messages, String email) {
         this.mMessages = messages;
         mEmail = email;
     }
-
 
     @NonNull
     @Override

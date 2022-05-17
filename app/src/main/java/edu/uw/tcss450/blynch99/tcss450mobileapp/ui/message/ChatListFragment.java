@@ -14,6 +14,11 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import edu.uw.tcss450.blynch99.tcss450mobileapp.R;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.databinding.FragmentChatListBinding;
@@ -24,12 +29,14 @@ import edu.uw.tcss450.blynch99.tcss450mobileapp.databinding.FragmentChatListBind
 public class ChatListFragment extends Fragment {
 
     private ChatListViewModel mModel;
+    RecyclerView mRecyclerView;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         setHasOptionsMenu(true);
         super.onCreate(savedInstanceState);
         mModel = new ViewModelProvider(getActivity()).get(ChatListViewModel.class);
+        mModel.connectGet();
     }
 
     @Override
@@ -44,13 +51,23 @@ public class ChatListFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         FragmentChatListBinding binding = FragmentChatListBinding.bind(getView());
 
-        mModel.addBlogListObserver(getViewLifecycleOwner(), chat -> {
-            if (!chat.isEmpty()) {
-                binding.listRoot.setAdapter(
-                        new ChatRecyclerViewAdapter(chat)
-                );
-                //binding.layoutWait.setVisibility(View.GONE);
-            }
+//        List<Chat> chatList = new ArrayList<>();
+//
+//        chatList.add(new Chat());
+//        chatList.add(new Chat());
+//        chatList.add(new Chat());
+//        chatList.add(new Chat());
+//        chatList.add(new Chat());
+//        chatList.add(new Chat());
+//        chatList.add(new Chat());
+
+        //binding.listRoot.setAdapter(new ChatRecyclerViewAdapter(chatList));
+        //binding.listRoot.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        mModel.addChatListObserver(getViewLifecycleOwner(), chats -> {
+            binding.listRoot.setAdapter(
+                    new ChatRecyclerViewAdapter(chats)
+            );
         });
     }
 

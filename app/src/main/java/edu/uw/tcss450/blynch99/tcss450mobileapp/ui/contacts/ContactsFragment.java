@@ -42,7 +42,7 @@ public class ContactsFragment extends Fragment {
         }
 
         mRecyclerView = mBinding.listContactsRoot;
-        RecyclerViewAdapter rcAdapter = new RecyclerViewAdapter(getActivity(),contacts);
+        ContactRecyclerViewAdapter rcAdapter = new ContactRecyclerViewAdapter(getActivity(),contacts);
         mRecyclerView.setAdapter(rcAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 

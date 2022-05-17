@@ -8,6 +8,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -26,25 +27,29 @@ import java.util.Map;
 import java.util.function.IntFunction;
 
 import edu.uw.tcss450.blynch99.tcss450mobileapp.R;
+import edu.uw.tcss450.blynch99.tcss450mobileapp.auth.model.UserInfoViewModel;
 
 public class ChatListViewModel extends AndroidViewModel {
 
     private MutableLiveData<List<Chat>> mChatList;
+    UserInfoViewModel mUserModel;
 
     public ChatListViewModel(@NonNull Application application) {
         super(application);
         mChatList = new MutableLiveData<>();
         mChatList.setValue(new ArrayList<>());
+        mUserModel = new ViewModelProvider(getApplication()).get(UserInfoViewModel.class);
     }
 
-    public void addBlogListObserver(@NonNull LifecycleOwner owner,
+    public void addChatListObserver(@NonNull LifecycleOwner owner,
                                     @NonNull Observer<? super List<Chat>> observer) {
         mChatList.observe(owner, observer);
     }
 
     public void connectGet() {
         String url =
-                "https://tcss450-team7.herokuapp.com/"; // TODO Get chat/message route
+                "https://tcss450-team7.herokuapp.com/chats/messages/" +
+                mUserModel.getMemberId();
         Request request = new JsonObjectRequest(
                 Request.Method.GET,
                 url,
@@ -54,8 +59,7 @@ public class ChatListViewModel extends AndroidViewModel {
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
-                // add headers <key,value>
-                headers.put("Authorization", ""); // TODO Get auth key
+                headers.put("Authorization", mUserModel.getJwt());
                 return headers;
             }
         };
@@ -71,6 +75,7 @@ public class ChatListViewModel extends AndroidViewModel {
     }
 
     private void handleResult(final JSONObject result) {
+        IntFunction<String> getString = getApplication().getResources()::getString;
 /*
         IntFunction<String> getString =
                         getApplication().getResources()::getString;
