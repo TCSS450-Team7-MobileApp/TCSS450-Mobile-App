@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         new ViewModelProvider(
                 this,
                 new UserInfoViewModel.UserInfoViewModelFactory(
-                        args.getEmail(),jwt.getId(),args.getFirst(),args.getLast(), args.getNick(), args.getId()))
+                        args.getEmail(), jwt.toString(),args.getFirst(),args.getLast(), args.getNick(), args.getId()))
                 .get(UserInfoViewModel.class);
 
         setContentView(R.layout.activity_main);

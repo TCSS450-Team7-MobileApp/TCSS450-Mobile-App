@@ -57,22 +57,21 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<ChatRecyclerVi
 
         void setChat(final Chat chat) {
             mChat = chat;
-//            binding.buttonFullPost.setOnClickListener(view -> {
-//                Navigation.findNavController(mView).navigate(
-//                        ChatListFragmentDirections
-//                                .actionNavigationMessageToChatFragment(chat));
-//            });
-            final String title = "Title";
-            binding.textTitle.setText(title);
-            final String date = "Date";
-            binding.textPubdate.setText(date);
+            binding.cardRoot.setOnClickListener(view -> {
+                Navigation.findNavController(mView).navigate(
+                        ChatListFragmentDirections
+                                .actionNavigationMessageToChatFragment(chat));
+            });
+            binding.textTitle.setText(chat.getTitle());
+            binding.textPubdate.setText(chat.getDate());
             //Use methods in the HTML class to format the HTML found in the text
 //            final String preview =  Html.fromHtml(
 //                    "Teaser",
 //                    Html.FROM_HTML_MODE_COMPACT)
 //                    .toString().substring(0,100) //just a preview of the teaser
 //                    + "...";
-            final String preview = "Preview...";
+            String latestMessage = chat.getTeaser();
+            final String preview = latestMessage.length() < 20 ? latestMessage : chat.getTeaser().substring(0, 20) + "...";
             binding.textPreview.setText(preview);
         }
     }

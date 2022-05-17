@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.uw.tcss450.blynch99.tcss450mobileapp.R;
+import edu.uw.tcss450.blynch99.tcss450mobileapp.auth.model.UserInfoViewModel;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.databinding.FragmentChatListBinding;
 
 /**
@@ -35,8 +37,10 @@ public class ChatListFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         setHasOptionsMenu(true);
         super.onCreate(savedInstanceState);
-        mModel = new ViewModelProvider(getActivity()).get(ChatListViewModel.class);
-        mModel.connectGet();
+        ViewModelProvider provider =  new ViewModelProvider(getActivity());
+        mModel = provider.get(ChatListViewModel.class);
+        UserInfoViewModel userInfoModel = provider.get(UserInfoViewModel.class);
+        mModel.connectGet(userInfoModel.getId(), userInfoModel.getJwt());
     }
 
     @Override

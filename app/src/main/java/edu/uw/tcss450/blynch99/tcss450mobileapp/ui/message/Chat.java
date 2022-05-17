@@ -10,9 +10,9 @@ import edu.uw.tcss450.blynch99.tcss450mobileapp.ui.contacts.Contact;
 public class Chat implements Serializable {
 
     private final String mChatId, mDate, mTitle, mTeaser;
-    private final List<Contact> mMembers;
+    private final List<String> mMembers;
 
-    public Chat(List<Contact> members, String chatId, String date, String teaser) {
+    public Chat(List<String> members, String chatId, String date, String teaser) {
         mMembers = members;
         mChatId = chatId;
         mDate = date;
@@ -20,10 +20,7 @@ public class Chat implements Serializable {
 
         // Process members for title
         //List<String> memberNames = members.stream().map(Contact::getNickname).collect(Collectors.toList());
-        List<String> memberNames = new ArrayList<>();
-        for (Contact c : members)
-            memberNames.add(c.getNickname());
-        mTitle = join(", ", memberNames);
+        mTitle = join(", ", members);
     }
 
     public String getChatId() { return mChatId; }
@@ -32,7 +29,9 @@ public class Chat implements Serializable {
 
     public String getTeaser() { return mTeaser; }
 
-    public List<Contact> getMembers() { return mMembers; }
+    public String getTitle() { return mTitle; }
+
+    public List<String> getMembers() { return mMembers; }
 
     private static String join(String delimiter, List<String> input) {
         if (input == null || input.size() < 1) return "";
@@ -45,5 +44,16 @@ public class Chat implements Serializable {
             }
         }
         return sb.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this.getClass() != o.getClass()) return false;
+
+        Chat other = (Chat) o;
+        return (this.mChatId.equals(other.getChatId()) &&
+                    this.mDate.equals(other.getDate()) &&
+                    this.mTitle.equals(other.getTitle()) &&
+                    this.mMembers.equals(other.getMembers()));
     }
 }
