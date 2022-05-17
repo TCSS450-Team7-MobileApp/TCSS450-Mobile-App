@@ -96,61 +96,15 @@ public class ChatListViewModel extends AndroidViewModel {
             }
 
         } catch (JSONException e) {
-            e.printStackTrace();
             Log.e("ERROR", e.getMessage());
-        }
-        mChatList.setValue(mChatList.getValue());
-/*
-        IntFunction<String> getString =
-                        getApplication().getResources()::getString;
-        try {
-
-            JSONObject root = result;
-            if (root.has(getString.apply(R.string.keys_json_blogs_response))) {
-                JSONObject response =
-                        root.getJSONObject(getString.apply(
-                                R.string.keys_json_blogs_response));
-                if (response.has(getString.apply(R.string.keys_json_blogs_data))) {
-                    JSONArray data = response.getJSONArray(
-                            getString.apply(R.string.keys_json_blogs_data));
-                    for(int i = 0; i < data.length(); i++) {
-                        JSONObject jsonBlog = data.getJSONObject(i);
-                        BlogPost post = new BlogPost.Builder(
-                                jsonBlog.getString(
-                                        getString.apply(
-                                                R.string.keys_json_blogs_pubdate)),
-                                jsonBlog.getString(
-                                        getString.apply(
-                                                R.string.keys_json_blogs_title)))
-                                .addTeaser(jsonBlog.getString(
-                                        getString.apply(
-                                                R.string.keys_json_blogs_teaser)))
-                                .addUrl(jsonBlog.getString(
-                                        getString.apply(
-                                                R.string.keys_json_blogs_url)))
-                                .build();
-                        if (!mChatList.getValue().contains(post)) {
-                            mChatList.getValue().add(post);
-                        }
-                    }
-                } else {
-                    Log.e("ERROR!", "No data array");
-                }
-            } else {
-                Log.e("ERROR!", "No response");
-            }
-        } catch (JSONException e) {
             e.printStackTrace();
-            Log.e("ERROR!", e.getMessage());
         }
         mChatList.setValue(mChatList.getValue());
- */
     }
 
     private void handleError(final VolleyError error) {
         // you should add much better error handling in a production release.
-        // i.e. YOUR PROJECT
-        //Log.e("CONNECTION ERROR", error.getLocalizedMessage());
+        Log.e("ERROR", error.getLocalizedMessage());
         throw new IllegalStateException(error.getMessage());
     }
 }

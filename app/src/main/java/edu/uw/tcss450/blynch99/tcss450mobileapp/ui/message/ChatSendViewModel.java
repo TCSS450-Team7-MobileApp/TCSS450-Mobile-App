@@ -41,14 +41,12 @@ public class ChatSendViewModel extends AndroidViewModel {
     }
 
     public void sendMessage(final int chatId, final String jwt, final String message) {
-/*
         String url = getApplication().getResources().getString(R.string.base_url_service) +
                 "messages";
-
         JSONObject body = new JSONObject();
         try {
-            body.put("message", message);
             body.put("chatId", chatId);
+            body.put("message", message);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -56,10 +54,9 @@ public class ChatSendViewModel extends AndroidViewModel {
         Request request = new JsonObjectRequest(
                 Request.Method.POST,
                 url,
-                body, //push token found in the JSONObject body
-                mResponse::setValue, // we get a response but do nothing with it
+                body,
+                mResponse::setValue,
                 this::handleError) {
-
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
@@ -76,7 +73,6 @@ public class ChatSendViewModel extends AndroidViewModel {
         //Instantiate the RequestQueue and add the request to the queue
         RequestQueueSingleton.getInstance(getApplication().getApplicationContext())
                 .addToRequestQueue(request);
-*/
     }
 
     private void handleError(final VolleyError error) {
