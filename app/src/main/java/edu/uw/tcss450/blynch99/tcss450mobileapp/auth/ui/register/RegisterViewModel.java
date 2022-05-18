@@ -21,6 +21,8 @@ import org.json.JSONObject;
 import java.nio.charset.Charset;
 import java.util.Objects;
 
+import edu.uw.tcss450.blynch99.tcss450mobileapp.R;
+
 public class RegisterViewModel extends AndroidViewModel {
 
     private MutableLiveData<JSONObject> mResponse;
@@ -64,7 +66,8 @@ public class RegisterViewModel extends AndroidViewModel {
                         final String last,
                         final String email,
                         final String password) {
-        String url = "https://tcss450-team7.herokuapp.com/register";
+        String url = getApplication().getResources().getString(R.string.base_url_service) +
+                "register";
         // https://tcss450-team7.herokuapp.com/register
         // https://cfb3-tcss450-labs-2021sp.herokuapp.com/auth
         JSONObject body = new JSONObject();

@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import edu.uw.tcss450.blynch99.tcss450mobileapp.R;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.io.RequestQueueSingleton;
 
 public class SignInViewModel extends AndroidViewModel {
@@ -32,6 +33,10 @@ public class SignInViewModel extends AndroidViewModel {
     public SignInViewModel(@NonNull Application application) {
         super(application);
         mResponse = new MutableLiveData<>();
+        mResponse.setValue(new JSONObject());
+    }
+
+    public void resetResponse(){
         mResponse.setValue(new JSONObject());
     }
 
@@ -70,9 +75,11 @@ public class SignInViewModel extends AndroidViewModel {
     }
 
     public void connect(final String email, final String password) {
-        String url = "https://tcss450-team7.herokuapp.com/signin";
+        String url = getApplication().getResources().getString(R.string.base_url_service) +
+                "signin";
         // https://tcss450-team7.herokuapp.com/signin
         // https://cfb3-tcss450-labs-2021sp.herokuapp.com/auth
+
         Request request = new JsonObjectRequest(
                 Request.Method.GET,
                 url,
