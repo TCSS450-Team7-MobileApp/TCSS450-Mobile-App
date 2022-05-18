@@ -59,7 +59,7 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<ChatRecyclerVi
         public final View mView;
         public FragmentChatCardBinding binding;
         private Chat mChat;
-        private final int MAX_PREVIEW_LENGTH = 25;
+        private final int MAX_PREVIEW_LENGTH = 35;
 
         public ChatViewHolder(View view) {
             super(view);
@@ -104,6 +104,7 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<ChatRecyclerVi
                         new ViewModelProvider((ViewModelStoreOwner) MainActivity.getActivity())
                                 .get(UserInfoViewModel.class);
                 connectDelete(chat.getChatId(), userInfo.getEmail(), userInfo.getJwt());
+                dialog.dismiss();
             });
             dialog.findViewById(R.id.button_cancel).setOnClickListener(button -> dialog.dismiss());
             dialog.show();
@@ -114,7 +115,7 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<ChatRecyclerVi
 
         public void connectDelete(final String chatId, final String email, String jwt) {
             String url = MainActivity.getActivity().getString(R.string.base_url_service) +
-                    chatId + "/" + email;
+                    "chats/" + chatId + "/" + email;
 
             Request request = new JsonObjectRequest(
                     Request.Method.DELETE,
@@ -131,8 +132,8 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<ChatRecyclerVi
             };
 
             // Instantiate the RequestQueue and add the request to the queue
-//            Volley.newRequestQueue(MainActivity.getActivity().getApplicationContext())
-//                    .add(request);
+            Volley.newRequestQueue(MainActivity.getActivity().getApplicationContext())
+                    .add(request);
             Log.d("ARCHIVE", request.toString());
         }
 

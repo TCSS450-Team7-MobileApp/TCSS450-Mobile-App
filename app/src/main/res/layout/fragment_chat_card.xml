@@ -43,7 +43,7 @@
             android:paddingBottom="4dp"
             android:text="Title"
             android:textAppearance="?attr/textAppearanceListItem"
-            android:textColor="@color/coral"
+            android:textColor="@color/coralAccent"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/text_preview"
             app:layout_constraintEnd_toStartOf="@+id/button_archive"

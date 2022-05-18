@@ -215,14 +215,6 @@ public class SignInFragment extends Fragment {
 
                             )).get(UserInfoViewModel.class);
                     sendPushyToken();
-                    navigateToSuccess(
-                            binding.editEmail.getText().toString(),
-                            response.getString("token"),
-                            response.getString("firstname"),
-                            response.getString("lastname"),
-                            response.getString("username"),
-                            response.getInt("memberid")
-                    );
                 } catch (JSONException e) {
                     Log.e("JSON Parse Error", e.getMessage());
                 }

@@ -80,23 +80,25 @@ public class ChatListViewModel extends AndroidViewModel {
 
     private void handleResult(final JSONObject result) {
         Log.d("SUCCESS", "chats GET request successful");
-        try {
-            JSONArray chats = result.getJSONArray("rows");
-            for (int i = 0; i < chats.length(); i++) {
-                JSONObject chat = chats.getJSONObject(i);
-                Chat chatInfo = new Chat(
-                        new ArrayList<String>(Arrays.asList(chat.getString("username"))),
-                        chat.getInt("chatid") + "",
-                        chat.getString("timestamp"),
-                        chat.getString("message"));
-                if (!mChatList.getValue().contains(chatInfo)) {
-                    mChatList.getValue().add(chatInfo);
+        if (!result.has("message")) {
+            try {
+                JSONArray chats = result.getJSONArray("rows");
+                for (int i = 0; i < chats.length(); i++) {
+                    JSONObject chat = chats.getJSONObject(i);
+                    Chat chatInfo = new Chat(
+                            new ArrayList<String>(Arrays.asList(chat.getString("username"))),
+                            chat.getInt("chatid") + "",
+                            chat.getString("timestamp"),
+                            chat.getString("message"));
+                    if (!mChatList.getValue().contains(chatInfo)) {
+                        mChatList.getValue().add(chatInfo);
+                    }
                 }
-            }
 
-        } catch (JSONException e) {
-            Log.e("ERROR", e.getMessage());
-            e.printStackTrace();
+            } catch (JSONException e) {
+                Log.e("ERROR", e.getMessage());
+                e.printStackTrace();
+            }
         }
         mChatList.setValue(mChatList.getValue());
     }

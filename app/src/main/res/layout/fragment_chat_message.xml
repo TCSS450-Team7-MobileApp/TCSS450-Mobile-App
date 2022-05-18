@@ -19,6 +19,7 @@
         android:layout_margin="@dimen/chat_margin"
         app:cardCornerRadius="5dp"
         app:cardElevation="0dp"
+        app:cardForegroundColor="#11012a3d"
         android:layout_gravity="end">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -35,7 +36,7 @@
                 android:padding="8dp"
                 android:textAppearance="?attr/textAppearanceListItem"
                 android:textStyle="bold"
-                android:background="@color/grey_2"
+
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
