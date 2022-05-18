@@ -60,8 +60,8 @@
 
     <TextView
         android:id="@+id/text_nickname"
-        android:layout_width="166dp"
-        android:layout_height="55dp"
+        android:layout_width="402dp"
+        android:layout_height="59dp"
         android:layout_marginTop="52dp"
         android:gravity="center"
         android:text="nickname"

@@ -75,7 +75,7 @@ public class ContactListViewModel extends AndroidViewModel {
         String url = "https://tcss450-team7.herokuapp.com/friendsList/";
         Request request = new JsonObjectRequest(
                 Request.Method.GET,
-                url + "65",     //for now everyone will see the friends provided by this account
+                url + "2",     //for now everyone will see the friends provided by this account
                 null,
                 this::handleResult,
                 this::handleError) {
