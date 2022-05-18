@@ -8,7 +8,7 @@ public class UserInfoViewModel extends ViewModel {
 
     private final String mEmail;
     private final String mJwt;
-    private final int mID;
+    private final int mId;
     private String mFirst;
     private String mLast;
     private String mNick;
@@ -20,16 +20,16 @@ public class UserInfoViewModel extends ViewModel {
         mFirst = first;
         mLast = last;
         mNick = nick;
-        mID = id;
+        mId = id;
     }
 
     public String getEmail() {
         return mEmail;
     }
 
-    public String getmJwt() {
-        return mJwt;
-    }
+    public String getJwt() { return mJwt; }
+
+    public int getId() { return mId; } // Hard-coded member ID
 
     public static class UserInfoViewModelFactory implements ViewModelProvider.Factory {
 

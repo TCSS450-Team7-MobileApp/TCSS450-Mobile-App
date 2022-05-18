@@ -45,8 +45,11 @@ public class ContactsFragment extends Fragment {
 
         mRecyclerView = mBinding.listContactsRoot;
 
+        //ContactRecyclerViewAdapter rcAdapter = new ContactRecyclerViewAdapter(getActivity(),contacts);
+        //mRecyclerView.setAdapter(rcAdapter);
+
         mModel.addContactListObserver(getViewLifecycleOwner(),contacts -> {
-            mRecyclerView.setAdapter(new RecyclerViewAdapter(getActivity(),
+            mRecyclerView.setAdapter(new ContactRecyclerViewAdapter(getActivity(),
                     contacts.toArray(new Contact[0])));
         });
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));

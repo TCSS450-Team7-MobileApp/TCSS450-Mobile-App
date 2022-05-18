@@ -13,12 +13,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import edu.uw.tcss450.blynch99.tcss450mobileapp.R;
 
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.myViewHolder> {
+public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecyclerViewAdapter.myViewHolder> {
 
     Contact[] mContacts;
     Context mContext;
 
-    public RecyclerViewAdapter(Context context, Contact[] contacts){
+    public ContactRecyclerViewAdapter(Context context, Contact[] contacts){
 
         mContacts = contacts;
         mContext = context;
