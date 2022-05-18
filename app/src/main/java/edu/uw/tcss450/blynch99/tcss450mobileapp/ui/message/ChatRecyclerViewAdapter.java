@@ -1,7 +1,6 @@
 package edu.uw.tcss450.blynch99.tcss450mobileapp.ui.message;
 
-import android.graphics.drawable.Icon;
-import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,10 +10,8 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
+import edu.uw.tcss450.blynch99.tcss450mobileapp.MainActivity;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.R;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.databinding.FragmentChatCardBinding;
 
@@ -77,6 +74,14 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<ChatRecyclerVi
                     :
                     chat.getTeaser().substring(0, MAX_PREVIEW_LENGTH-3) + "...";
             binding.textPreview.setText(preview);
+
+            binding.buttonArchive.setOnClickListener(button -> {
+                // Confirmation pop-up
+                ArchiveChatDialogFragment archiveDialog = new ArchiveChatDialogFragment(chat);
+                
+                // TODO debug getChildFragmentManager exception
+                //archiveDialog.show(archiveDialog.getChildFragmentManager(), ArchiveChatDialogFragment.TAG);
+            });
         }
     }
 }

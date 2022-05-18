@@ -79,7 +79,6 @@ public class ChatListViewModel extends AndroidViewModel {
     }
 
     private void handleResult(final JSONObject result) {
-        IntFunction<String> getString = getApplication().getResources()::getString;
         Log.d("SUCCESS", "chats GET request successful");
         try {
             JSONArray chats = result.getJSONArray("rows");

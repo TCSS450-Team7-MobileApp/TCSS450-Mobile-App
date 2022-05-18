@@ -8,9 +8,12 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.Objects;
 
 import edu.uw.tcss450.blynch99.tcss450mobileapp.R;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.auth.model.UserInfoViewModel;
@@ -61,6 +64,9 @@ public class ChatFragment extends Fragment {
         //SetRefreshing shows the internal Swiper view progress bar. Show this until messages load
         binding.swipeContainer.setRefreshing(true);
 
+        Objects.requireNonNull(((AppCompatActivity) requireActivity())
+                .getSupportActionBar())
+                .setTitle(mArgs.getChat().getTitle());
 
         final RecyclerView rv = binding.recyclerMessages;
         int chatId = Integer.parseInt(mArgs.getChat().getChatId());
