@@ -1,3 +1,7 @@
+/*
+ * NOTE: THIS IS AN EXPERIMENT NOT CURRENTLY IN USE
+ */
+
 package edu.uw.tcss450.blynch99.tcss450mobileapp.ui.message;
 
 import android.app.Application;

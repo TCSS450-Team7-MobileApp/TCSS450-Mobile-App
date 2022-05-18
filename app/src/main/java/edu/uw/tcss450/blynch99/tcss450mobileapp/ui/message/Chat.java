@@ -75,9 +75,6 @@ public class Chat implements Serializable {
         if (this.getClass() != o.getClass()) return false;
 
         Chat other = (Chat) o;
-        return (this.mChatId.equals(other.getChatId()) &&
-                    this.mDate.equals(other.getDate()) &&
-                    this.mTitle.equals(other.getTitle()) &&
-                    this.mMembers.equals(other.getMembers()));
+        return this.mChatId.equals(other.getChatId());
     }
 }

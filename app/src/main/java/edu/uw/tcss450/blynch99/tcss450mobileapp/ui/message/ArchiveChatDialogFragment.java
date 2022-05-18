@@ -1,3 +1,7 @@
+/*
+ * NOTE: THIS IS AN EXPERIMENT NOT CURRENTLY IN USE
+ */
+
 package edu.uw.tcss450.blynch99.tcss450mobileapp.ui.message;
 
 import android.app.AlertDialog;
@@ -35,6 +39,7 @@ public class ArchiveChatDialogFragment extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+        Log.d("ARCHIVE", "Creating Dialog");
         mModel = new ViewModelProvider(getActivity()).get(ArchiveChatDialogViewModel.class);
         // Use the Builder class for convenient dialog construction
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
