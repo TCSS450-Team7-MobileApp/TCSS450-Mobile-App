@@ -63,7 +63,7 @@ public class WeatherViewModel extends AndroidViewModel {
         mResponse.setValue(new JSONObject());
     }
 
-    public void connectGet() {
+    public void connectGet(final String jwt) {
         // 47.246950, -122.436277
         String tempCoords = "?lat=47.246950&lng=-122.436277";
         String url = "https://tcss450-team7.herokuapp.com/weather" + tempCoords;
@@ -79,18 +79,7 @@ public class WeatherViewModel extends AndroidViewModel {
             public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
                 // add headers <key,value>
-//                headers.put("Authorization", theJwt);
-
-                // Production
-                headers.put("Authorization", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9." +
-                        "eyJlbWFpbCI6Imlrb3pvckB1dy5lZHUiLCJtZW1iZXJpZCI6NjUsImlhdCI6MTY1" +
-                        "MjczNzYwOCwiZXhwIjoxNjUzOTQ3MjA4fQ.xeTps5EgqSNR2oyt3erLXXixcGUWg" +
-                        "jghHiU_ogGqfrw");
-
-                // Local
-//                headers.put("Authorization",
-//                        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InBva29qNjMxMDdAaGJlaHMuY29tIiwibWVtYmVyaWQiOjcyLCJpYXQiOjE2NTI3NzAxNjIsImV4cCI6MTY1Mzk3OTc2Mn0.IucfTLvXFJwzFI1D1aJcImuGAbVrnGmgsIvlgGdBHeE"
-//                );
+                headers.put("Authorization", jwt);
                 return headers;
             }
         };
