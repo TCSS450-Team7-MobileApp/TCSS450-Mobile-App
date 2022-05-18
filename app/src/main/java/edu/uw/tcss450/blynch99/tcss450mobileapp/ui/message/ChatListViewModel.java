@@ -53,7 +53,7 @@ public class ChatListViewModel extends AndroidViewModel {
         Log.d("CONNECT", "JWT: " + jwt);
         String url =
                 getApplication().getResources().getString(R.string.base_url_service)
-                        + "chats/messages/" + memberId;
+                        + "chats/" + memberId;
         Request request = new JsonObjectRequest(
                 Request.Method.GET,
                 url,

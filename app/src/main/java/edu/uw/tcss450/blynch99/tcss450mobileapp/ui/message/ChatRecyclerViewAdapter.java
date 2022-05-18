@@ -48,6 +48,7 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<ChatRecyclerVi
         public final View mView;
         public FragmentChatCardBinding binding;
         private Chat mChat;
+        private final int MAX_PREVIEW_LENGTH = 25;
 
         public ChatViewHolder(View view) {
             super(view);
@@ -63,7 +64,7 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<ChatRecyclerVi
                                 .actionNavigationMessageToChatFragment(chat));
             });
             binding.textTitle.setText(chat.getTitle());
-            binding.textPubdate.setText(chat.getDate());
+            binding.textPubdate.setText(chat.getFormattedDate());
             //Use methods in the HTML class to format the HTML found in the text
 //            final String preview =  Html.fromHtml(
 //                    "Teaser",
@@ -71,7 +72,10 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<ChatRecyclerVi
 //                    .toString().substring(0,100) //just a preview of the teaser
 //                    + "...";
             String latestMessage = chat.getTeaser();
-            final String preview = latestMessage.length() < 20 ? latestMessage : chat.getTeaser().substring(0, 20) + "...";
+            final String preview = latestMessage.length() < MAX_PREVIEW_LENGTH ?
+                    latestMessage
+                    :
+                    chat.getTeaser().substring(0, MAX_PREVIEW_LENGTH-3) + "...";
             binding.textPreview.setText(preview);
         }
     }

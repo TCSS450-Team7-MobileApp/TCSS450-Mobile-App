@@ -1,7 +1,15 @@
 package edu.uw.tcss450.blynch99.tcss450mobileapp.ui.message;
 
+import android.util.Log;
+
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,6 +34,22 @@ public class Chat implements Serializable {
     public String getChatId() { return mChatId; }
 
     public String getDate() { return mDate; }
+
+    public String getFormattedDate() {
+        String formattedDate = "";
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date msgDate = dateFormat.parse(mDate.split(" ")[0]);
+            formattedDate += msgDate.toString().split(" ")[0] + " ";
+        } catch (ParseException e) {
+            e.printStackTrace();
+            Log.e("ERROR", "Error with date: " + mDate);
+        }
+        String time = mDate.split(" ")[1];
+        String[] times = time.split(":");
+        Log.d("TIME", Arrays.toString(times));
+        return formattedDate + times[0] + ":" + times[1];
+    }
 
     public String getTeaser() { return mTeaser; }
 
