@@ -15,6 +15,7 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import edu.uw.tcss450.blynch99.tcss450mobileapp.auth.model.UserInfoViewModel;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.databinding.FragmentContactsBinding;
 
 /**
@@ -28,8 +29,10 @@ public class ContactsFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mModel = new ViewModelProvider(getActivity()).get(ContactListViewModel.class);
-        mModel.connect();
+        ViewModelProvider provider = new ViewModelProvider(getActivity());
+        mModel = provider.get(ContactListViewModel.class);
+        UserInfoViewModel userInfoViewModel = provider.get(UserInfoViewModel.class);
+        mModel.connect(userInfoViewModel.getId(), userInfoViewModel.getJwt());
     }
 
     @Override

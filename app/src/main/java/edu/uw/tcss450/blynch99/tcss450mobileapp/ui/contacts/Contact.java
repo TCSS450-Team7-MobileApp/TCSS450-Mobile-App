@@ -2,6 +2,8 @@ package edu.uw.tcss450.blynch99.tcss450mobileapp.ui.contacts;
 
 import java.io.Serializable;
 
+import edu.uw.tcss450.blynch99.tcss450mobileapp.ui.message.Chat;
+
 public class Contact implements Serializable {
 
     private final String mNickname, mFirstname, mLastname, mEmail;
@@ -33,5 +35,13 @@ public class Contact implements Serializable {
 
     public FriendStatus getStatus() {
         return mStatus;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this.getClass() != o.getClass()) return false;
+
+        Contact other = (Contact) o;
+        return this.mEmail.equals(other.getEmail());
     }
 }

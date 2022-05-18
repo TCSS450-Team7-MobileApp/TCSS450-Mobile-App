@@ -25,6 +25,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import edu.uw.tcss450.blynch99.tcss450mobileapp.R;
+
 
 public class ContactListViewModel extends AndroidViewModel {
     private MutableLiveData<List<Contact>> mContactList;
@@ -71,11 +73,13 @@ public class ContactListViewModel extends AndroidViewModel {
         mContactList.setValue(mContactList.getValue());
     }
 
-    public void connect() {
-        String url = "https://tcss450-team7.herokuapp.com/friendsList/";
+    public void connect(int memberId, String jwt) {
+        String url =
+                getApplication().getResources().getString(R.string.base_url_service)
+                        + "friendsList/" + memberId;
         Request request = new JsonObjectRequest(
                 Request.Method.GET,
-                url + "2",     //for now everyone will see the friends provided by this account
+                url,
                 null,
                 this::handleResult,
                 this::handleError) {
@@ -84,10 +88,7 @@ public class ContactListViewModel extends AndroidViewModel {
                 Map<String, String> headers = new HashMap<>();
                 // add headers <key,value>
                 // anything works for the jwt for now
-                headers.put("Authorization", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9." +
-                        "eyJlbWFpbCI6Imlrb3pvckB1dy5lZHUiLCJtZW1iZXJpZCI6NjUsImlhdCI6MTY1" +
-                        "MjczNzYwOCwiZXhwIjoxNjUzOTQ3MjA4fQ.xeTps5EgqSNR2oyt3erLXXixcGUWg" +
-                        "jghHiU_ogGqfrw");
+                headers.put("Authorization", jwt);
                 return headers;
             }
         };
