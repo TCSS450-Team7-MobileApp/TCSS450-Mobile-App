@@ -9,7 +9,11 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import edu.uw.tcss450.blynch99.tcss450mobileapp.databinding.FragmentForgotPasswordBinding;
 
@@ -18,15 +22,23 @@ import edu.uw.tcss450.blynch99.tcss450mobileapp.databinding.FragmentForgotPasswo
  */
 public class ForgotPasswordFragment extends Fragment {
 
-    FragmentForgotPasswordBinding binding;
+    private FragmentForgotPasswordBinding mBinding;
+
+    private ForgotPasswordViewModel mModel;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mModel = new ViewModelProvider(getActivity()).get(ForgotPasswordViewModel.class);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        binding = FragmentForgotPasswordBinding.inflate(inflater);
+        mBinding = FragmentForgotPasswordBinding.inflate(inflater);
 
-        return binding.getRoot();
+        return mBinding.getRoot();
     }
 
     @Override
@@ -35,8 +47,15 @@ public class ForgotPasswordFragment extends Fragment {
 
         ForgotPasswordFragmentArgs args = ForgotPasswordFragmentArgs.fromBundle(getArguments());
 
-        binding.editEmail.setText(args.getEmail().equals("default") ? "" : args.getEmail());
-        binding.buttonBackToSignin.setOnClickListener(button -> navigateToSignIn(binding.editEmail.getText().toString()));
+        mModel.addResponseObserver(getViewLifecycleOwner(),
+                this::observeResponse);
+
+        mBinding.editEmail.setText(args.getEmail().equals("default") ? "" : args.getEmail());
+        mBinding.buttonBackToSignin.setOnClickListener(button -> {
+            mModel.connect(
+                    mBinding.editEmail.getText().toString());
+            navigateToSignIn(mBinding.editEmail.getText().toString());
+        });
 
     }
 
@@ -49,5 +68,23 @@ public class ForgotPasswordFragment extends Fragment {
 
         Navigation.findNavController(getView()).navigate(directions);
 
+    }
+
+    private void observeResponse(final JSONObject response) {
+        if (response.length() > 0) {
+            if (response.has("code")) {
+                try {
+                    mBinding.editEmail.setError(
+                            "Error Authenticating: " +
+                                    response.getJSONObject("data").getString("message"));
+                } catch (JSONException e) {
+                    Log.e("JSON Parse Error", e.getMessage());
+                }
+            } else {
+                navigateToSignIn(mBinding.editEmail.getText().toString());
+            }
+        } else {
+            Log.d("JSON Response", "No Response");
+        }
     }
 }

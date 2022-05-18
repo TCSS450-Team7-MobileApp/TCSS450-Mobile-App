@@ -17,6 +17,9 @@
         <action
             android:id="@+id/action_contactsFragment_to_navigation_friend"
             app:destination="@id/navigation_friend" />
+        <action
+            android:id="@+id/action_contactsFragment_to_addFriendsFragment"
+            app:destination="@id/addFriendsFragment" />
     </fragment>
     <fragment
         android:id="@+id/navigation_weather"
@@ -50,4 +53,9 @@
             android:name="contact"
             app:argType="edu.uw.tcss450.blynch99.tcss450mobileapp.ui.contacts.Contact" />
     </fragment>
+    <fragment
+        android:id="@+id/addFriendsFragment"
+        android:name="edu.uw.tcss450.blynch99.tcss450mobileapp.ui.contacts.AddFriendsFragment"
+        android:label="fragment_add_friends"
+        tools:layout="@layout/fragment_add_friends" />
 </navigation>
