@@ -10,11 +10,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.RecyclerView;
 
 import org.json.JSONObject;
 
-import edu.uw.tcss450.blynch99.tcss450mobileapp.R;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.auth.model.UserInfoViewModel;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.databinding.FragmentWeatherBinding;
 
@@ -23,7 +21,7 @@ import edu.uw.tcss450.blynch99.tcss450mobileapp.databinding.FragmentWeatherBindi
  */
 public class WeatherFragment extends Fragment {
 
-    private static final String degreeFarenheit = "°F";
+    private static final String degreeFahrenheit = "°F";
 
     private WeatherViewModel mModel;
     private UserInfoViewModel mUserModel;
@@ -66,12 +64,12 @@ public class WeatherFragment extends Fragment {
         }
     }
     private void setViewComponents() {
-        mBinding.currentTemp.setText(mModel.getmCurrentWeatherData().getmTemperature() + degreeFarenheit);
-        mBinding.weatherDescription.setText(mModel.getmCurrentWeatherData().getmDescription());
-        mBinding.feelsLike.setText("Feels like: " + mModel.getmCurrentWeatherData().getmFeelsLike() + degreeFarenheit);
-        mBinding.minTemp.setText("Min: " + mModel.getmCurrentWeatherData().getmMinTemperature() + degreeFarenheit);
-        mBinding.maxTemp.setText("Max: " + mModel.getmCurrentWeatherData().getmMaxTemperature() + degreeFarenheit);
-        mBinding.hourlyList.setAdapter(new WeatherHourlyRecyclerViewAdapter(mModel.getmHourlyForecast()));
-        mBinding.dailyList.setAdapter(new WeatherDailyRecyclerViewAdapter(mModel.getmDailyForecast()));
+        mBinding.currentTemp.setText(mModel.getCurrentWeatherData().getmTemperature() + degreeFahrenheit);
+        mBinding.weatherDescription.setText(mModel.getCurrentWeatherData().getmDescription());
+        mBinding.feelsLike.setText("Feels like: " + mModel.getCurrentWeatherData().getmFeelsLike() + degreeFahrenheit);
+        mBinding.minTemp.setText("Min: " + mModel.getCurrentWeatherData().getmMinTemperature() + degreeFahrenheit);
+        mBinding.maxTemp.setText("Max: " + mModel.getCurrentWeatherData().getmMaxTemperature() + degreeFahrenheit);
+        mBinding.hourlyList.setAdapter(new WeatherHourlyRecyclerViewAdapter(mModel.getHourlyForecast()));
+        mBinding.dailyList.setAdapter(new WeatherDailyRecyclerViewAdapter(mModel.getDailyForecast()));
     }
 }

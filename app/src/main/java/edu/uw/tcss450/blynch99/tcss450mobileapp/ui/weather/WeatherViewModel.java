@@ -25,6 +25,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import edu.uw.tcss450.blynch99.tcss450mobileapp.R;
+
 public class WeatherViewModel extends AndroidViewModel {
 
     private final MutableLiveData<JSONObject> mResponse;
@@ -47,15 +49,15 @@ public class WeatherViewModel extends AndroidViewModel {
         mResponse.observe(theOwner, theObserver);
     }
 
-    public WeatherCurrent getmCurrentWeatherData() {
+    public WeatherCurrent getCurrentWeatherData() {
         return mCurrentWeatherData;
     }
 
-    public List<Weather> getmHourlyForecast() {
+    public List<Weather> getHourlyForecast() {
         return mHourlyForecast;
     }
 
-    public List<Weather> getmDailyForecast() {
+    public List<Weather> getDailyForecast() {
         return mDailyForecast;
     }
 
@@ -66,8 +68,10 @@ public class WeatherViewModel extends AndroidViewModel {
     public void connectGet(final String jwt) {
         // 47.246950, -122.436277
         String tempCoords = "?lat=47.246950&lng=-122.436277";
-        String url = "https://tcss450-team7.herokuapp.com/weather" + tempCoords;
+        //String url = "https://tcss450-team7.herokuapp.com/weather" + tempCoords;
 //        String url = "http://192.168.0.13:5000/weather" + tempCoords;
+        String url = getApplication().getResources().getString(R.string.base_url_service) +
+                "weather/" + tempCoords;
 
         Request request = new JsonObjectRequest(
                 Request.Method.GET,
