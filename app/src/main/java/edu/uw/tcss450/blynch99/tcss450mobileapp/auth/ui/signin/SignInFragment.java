@@ -80,8 +80,8 @@ public class SignInFragment extends Fragment {
                 this::observeResponse);
 
         SignInFragmentArgs args = SignInFragmentArgs.fromBundle(getArguments());
-        binding.editEmail.setText(args.getEmail().equals("default") ? "ikozor@uw.edu" : args.getEmail());
-        binding.editPassword.setText(args.getPassword().equals("default") ? "12341234qQ!" : args.getPassword());
+        binding.editEmail.setText(args.getEmail().equals("default") ? "" : args.getEmail());
+        binding.editPassword.setText(args.getPassword().equals("default") ? "" : args.getPassword());
         binding.buttonForForgotPassword.setOnClickListener(button ->
                 navigateToForgotPassword(binding.editEmail.getText().toString()));
 

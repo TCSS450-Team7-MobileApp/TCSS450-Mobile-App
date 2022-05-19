@@ -19,11 +19,11 @@
         <argument
             android:name="email"
             app:argType="string"
-            android:defaultValue="bralyn99@gmail.com" />
+            android:defaultValue="default" />
         <argument
             android:name="password"
             app:argType="string"
-            android:defaultValue="Atest123!" />
+            android:defaultValue="default" />
         <action
             android:id="@+id/action_signInFragment_to_forgotPasswordFragment"
             app:destination="@id/forgotPasswordFragment" />
