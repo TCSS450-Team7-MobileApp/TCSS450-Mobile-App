@@ -86,10 +86,10 @@ public class ChatListViewModel extends AndroidViewModel {
                 for (int i = 0; i < chats.length(); i++) {
                     JSONObject chat = chats.getJSONObject(i);
                     Chat chatInfo = new Chat(
-                            new ArrayList<String>(Arrays.asList(chat.getString("username"))),
+                            new ArrayList<>(Arrays.asList(chat.getString("username"))),
                             chat.getInt("chatid") + "",
                             chat.getString("timestamp"),
-                            chat.getString("message"));
+                            chat.getString("message").trim());
                     if (!mChatList.getValue().contains(chatInfo)) {
                         mChatList.getValue().add(chatInfo);
                     }

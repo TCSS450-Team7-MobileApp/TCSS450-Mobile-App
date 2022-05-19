@@ -41,12 +41,14 @@ public class ChatSendViewModel extends AndroidViewModel {
     }
 
     public void sendMessage(final int chatId, final String jwt, final String message) {
+        if (message.trim().isEmpty()) return;
+
         String url = getApplication().getResources().getString(R.string.base_url_service) +
                 "messages";
         JSONObject body = new JSONObject();
         try {
             body.put("chatId", chatId);
-            body.put("message", message);
+            body.put("message", message.trim());
         } catch (JSONException e) {
             e.printStackTrace();
         }
