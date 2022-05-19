@@ -13,7 +13,14 @@
         android:id="@+id/contactsFragment"
         android:name="edu.uw.tcss450.blynch99.tcss450mobileapp.ui.contacts.ContactsFragment"
         android:label="@string/title_contacts"
-        tools:layout="@layout/fragment_contacts" />
+        tools:layout="@layout/fragment_contacts" >
+        <action
+            android:id="@+id/action_contactsFragment_to_navigation_friend"
+            app:destination="@id/navigation_friend" />
+        <action
+            android:id="@+id/action_contactsFragment_to_addFriendsFragment"
+            app:destination="@id/addFriendsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/navigation_weather"
         android:name="edu.uw.tcss450.blynch99.tcss450mobileapp.ui.weather.WeatherFragment"
@@ -21,11 +28,47 @@
         tools:layout="@layout/fragment_weather" />
     <fragment
         android:id="@+id/navigation_message"
-        android:name="edu.uw.tcss450.blynch99.tcss450mobileapp.ui.message.MessageFragment"
+        android:name="edu.uw.tcss450.blynch99.tcss450mobileapp.ui.message.ChatListFragment"
         android:label="@string/title_message"
         tools:layout="@layout/fragment_message">
         <action
             android:id="@+id/action_messageFragment_to_contactsFragment"
             app:destination="@id/contactsFragment" />
+        <action
+            android:id="@+id/action_navigation_message_to_chatFragment"
+            app:destination="@id/chatFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_friend"
+        android:name="edu.uw.tcss450.blynch99.tcss450mobileapp.ui.contacts.friend.FriendFragment"
+        android:label="@string/title_friend"
+        tools:layout="@layout/fragment_friend" >
+        <action
+            android:id="@+id/action_navigation_friend_to_navigation_message"
+            app:destination="@id/navigation_message" />
+        <action
+            android:id="@+id/action_navigation_friend_self"
+            app:destination="@id/navigation_friend" />
+        <action
+            android:id="@+id/action_navigation_friend_self2"
+            app:destination="@id/navigation_friend" />
+        <argument
+            android:name="contact"
+            app:argType="edu.uw.tcss450.blynch99.tcss450mobileapp.ui.contacts.Contact" />
+    </fragment>
+    <fragment
+        android:id="@+id/chatFragment"
+        android:name="edu.uw.tcss450.blynch99.tcss450mobileapp.ui.message.ChatFragment"
+        android:label="fragment_chat"
+        tools:layout="@layout/fragment_chat" >
+        <argument
+            android:name="chat"
+            app:argType="edu.uw.tcss450.blynch99.tcss450mobileapp.ui.message.Chat" />
+    </fragment>
+    <fragment
+        android:id="@+id/addFriendsFragment"
+        android:name="edu.uw.tcss450.blynch99.tcss450mobileapp.ui.contacts.AddFriendsFragment"
+        android:label="fragment_add_friends"
+        tools:layout="@layout/fragment_add_friends" >
     </fragment>
 </navigation>
