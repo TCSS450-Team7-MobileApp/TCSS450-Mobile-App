@@ -166,6 +166,7 @@ public class SignInFragment extends Fragment {
                                    String last,
                                    String nick,
                                    int id) {
+        Log.d("JWT", jwt);
         Navigation.findNavController(getView())
                 .navigate(SignInFragmentDirections
                         .actionSigninFragmentToMainActivity(email, jwt, first, last, nick, id));
