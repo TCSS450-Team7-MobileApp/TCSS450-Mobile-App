@@ -28,19 +28,19 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
         EditTextPreference fname = findPreference("preference_first_name");
         assert fname != null;
-        fname.setOnPreferenceChangeListener((preference, newValue) -> true);
+        fname.setOnPreferenceChangeListener(this::changeName);
         fname.setText(model.getFirst());
         fname.setSummary(model.getFirst());
 
         EditTextPreference lname = findPreference("preference_last_name");
         assert lname != null;
-        lname.setOnPreferenceChangeListener((preference, newValue) -> true);
+        lname.setOnPreferenceChangeListener(this::changeName);
         lname.setText(model.getLast());
         lname.setSummary(model.getLast());
 
         EditTextPreference nname = findPreference("preference_nickname");
         assert nname != null;
-        nname.setOnPreferenceChangeListener((preference, newValue) -> true);
+        nname.setOnPreferenceChangeListener(this::changeName);
         nname.setText(model.getNick());
         nname.setSummary(model.getNick());
 
@@ -61,7 +61,13 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
     }
 
-
+    private boolean changeName(Preference preference, Object object){
+        ChangeNameViewModel change = new ViewModelProvider(getActivity())
+                .get(ChangeNameViewModel.class);
+        String str = (String) object;
+        change.connect(str, preference.getTitle().toString());
+        return true;
+    }
 
     private boolean navigateToLogout(Preference preference){
         startActivity(new Intent(getActivity(), AuthActivity.class));
