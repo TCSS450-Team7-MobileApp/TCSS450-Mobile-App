@@ -1,7 +1,6 @@
 package edu.uw.tcss450.blynch99.tcss450mobileapp.ui.contacts;
 
 
-
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,10 +10,15 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.HashMap;
+import java.util.List;
+
+import edu.uw.tcss450.blynch99.tcss450mobileapp.MainActivity;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.auth.model.UserInfoViewModel;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.databinding.FragmentContactsBinding;
 
@@ -24,16 +28,7 @@ import edu.uw.tcss450.blynch99.tcss450mobileapp.databinding.FragmentContactsBind
 public class ContactsFragment extends Fragment {
     private FragmentContactsBinding mBinding;
     private RecyclerView mRecyclerView;
-    private ContactListViewModel mModel;
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        ViewModelProvider provider = new ViewModelProvider(getActivity());
-        mModel = provider.get(ContactListViewModel.class);
-        UserInfoViewModel userInfoViewModel = provider.get(UserInfoViewModel.class);
-        mModel.connect(userInfoViewModel.getId(), userInfoViewModel.getJwt());
-    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -49,23 +44,32 @@ public class ContactsFragment extends Fragment {
 
         mRecyclerView = mBinding.listContactsRoot;
 
-        //ContactRecyclerViewAdapter rcAdapter = new ContactRecyclerViewAdapter(getActivity(),contacts);
-        //mRecyclerView.setAdapter(rcAdapter);
+        ContactListViewModel model = new ViewModelProvider((ViewModelStoreOwner)
+                MainActivity.getActivity()).get(ContactListViewModel.class);
+        UserInfoViewModel user = new ViewModelProvider((ViewModelStoreOwner)
+                MainActivity.getActivity()).get(UserInfoViewModel.class);
+        model.resetContacts();
+        model.connect(user.getId(),user.getJwt());
 
-        mModel.addContactListObserver(getViewLifecycleOwner(),contacts -> {
-            mRecyclerView.setAdapter(new ContactRecyclerViewAdapter(getActivity(),
-                    contacts.toArray(new Contact[0])));
-        });
+        model.addContactListObserver(getViewLifecycleOwner(), this::setAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         mBinding.fabAddContact.setOnClickListener(button -> navigateToAddNewFriends());
 
     }
 
-    private void navigateToAddNewFriends(){
+    private void setAdapter(List<Contact> contacts) {
+        HashMap<Integer, Contact> contactMap = new HashMap<>();
+        for (Contact contact : contacts){
+            contactMap.put(contacts.indexOf(contact), contact);
+
+        }
+        mRecyclerView.setAdapter(new ContactRecyclerViewAdapter(getActivity(), contactMap));
+    }
+
+    private void navigateToAddNewFriends() {
         Navigation.findNavController(getView())
                 .navigate(ContactsFragmentDirections
                         .actionContactsFragmentToAddFriendsFragment());
     }
-
 }

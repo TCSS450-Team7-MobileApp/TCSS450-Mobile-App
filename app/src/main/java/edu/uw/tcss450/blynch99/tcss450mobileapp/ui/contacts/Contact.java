@@ -2,19 +2,22 @@ package edu.uw.tcss450.blynch99.tcss450mobileapp.ui.contacts;
 
 import java.io.Serializable;
 
-import edu.uw.tcss450.blynch99.tcss450mobileapp.ui.message.Chat;
-
 public class Contact implements Serializable {
 
-    private final String mNickname, mFirstname, mLastname, mEmail;
+    private final String mId, mNickname, mFirstname, mLastname, mEmail;
     private FriendStatus mStatus;
 
-    public Contact(String nickname, String firstname, String lastname, String email, FriendStatus status){
+    public Contact(String id, String nickname, String firstname, String lastname, String email, FriendStatus status){
+        this.mId = id;
         this.mNickname = nickname;
         this.mFirstname = firstname;
         this.mLastname = lastname;
         this.mEmail = email;
         this.mStatus = status;
+    }
+
+    public String getId() {
+        return mId;
     }
 
     public String getNickname() {

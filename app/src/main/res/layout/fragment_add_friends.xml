@@ -24,9 +24,8 @@
         android:id="@+id/list_received_requests"
         android:name="edu.uw.tcss450.uiandnavigationlab.ui.blog.BlogFragment"
         android:layout_width="407dp"
-        android:layout_height="141dp"
+        android:layout_height="230dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         android:orientation="vertical"
         app:layoutManager="LinearLayoutManager"
@@ -40,7 +39,7 @@
         android:id="@+id/textView3"
         android:layout_width="375dp"
         android:layout_height="46dp"
-        android:layout_marginTop="36dp"
+        android:layout_marginTop="15dp"
         android:text="Requests Recieved"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         app:layout_constraintEnd_toEndOf="parent"
@@ -52,7 +51,6 @@
         android:id="@+id/textView6"
         android:layout_width="375dp"
         android:layout_height="46dp"
-        android:layout_marginTop="12dp"
         android:text="Search People"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         app:layout_constraintEnd_toEndOf="parent"
@@ -62,16 +60,28 @@
 
     <EditText
         android:id="@+id/edit_search_users"
-        android:layout_width="389dp"
-        android:layout_height="53dp"
-        android:layout_marginTop="14dp"
+        android:layout_width="269dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="8dp"
         android:autofillHints=""
         android:ems="10"
-        android:hint="@string/hint_nick"
 
+        android:hint="@string/hint_nick"
         android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView6" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginStart="12dp"
+        android:text="Search"
+        app:layout_constraintBottom_toTopOf="@+id/list_search_people"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.428"
+        app:layout_constraintStart_toEndOf="@+id/edit_search_users"
+        app:layout_constraintTop_toBottomOf="@+id/textView6"
+        app:layout_constraintVertical_bias="1.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
