@@ -47,6 +47,18 @@
         <argument
             android:name="jwt"
             app:argType="string" />
+        <argument
+            android:name="first"
+            app:argType="string" />
+        <argument
+            android:name="last"
+            app:argType="string" />
+        <argument
+            android:name="nick"
+            app:argType="string" />
+        <argument
+            android:name="id"
+            app:argType="integer" />
     </activity>
     <fragment
         android:id="@+id/emailVerificationFragment"

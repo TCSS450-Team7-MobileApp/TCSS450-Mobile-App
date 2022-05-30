@@ -16,38 +16,29 @@ import edu.uw.tcss450.blynch99.tcss450mobileapp.databinding.FragmentEmailVerific
  * create an instance of this fragment.
  */
 public class EmailVerificationFragment extends Fragment {
-    FragmentEmailVerificationBinding binding;
-    EmailVerificationFragmentArgs args;
+
+    FragmentEmailVerificationBinding mBinding;
+    EmailVerificationFragmentArgs mArgs;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        binding = FragmentEmailVerificationBinding.inflate(inflater);
-        args = EmailVerificationFragmentArgs.fromBundle(getArguments());
-        return binding.getRoot();
+        mBinding = FragmentEmailVerificationBinding.inflate(inflater);
+        mArgs = EmailVerificationFragmentArgs.fromBundle(getArguments());
+        return mBinding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        binding.buttonVerified.setOnClickListener(button -> navigateToLogin());
-
-
-
-
+        mBinding.buttonVerified.setOnClickListener(button -> navigateToLogin());
     }
 
     private void navigateToLogin() {
         EmailVerificationFragmentDirections.ActionEmailVerificationFragment2ToSignInFragment directions =
                 EmailVerificationFragmentDirections.actionEmailVerificationFragment2ToSignInFragment();
-
-        directions.setEmail(args.getEmail());
-        directions.setPassword(args.getPassword());
-
+        directions.setEmail(mArgs.getEmail());
+        directions.setPassword(mArgs.getPassword());
         Navigation.findNavController(getView()).navigate(directions);
-
-
     }
 }
