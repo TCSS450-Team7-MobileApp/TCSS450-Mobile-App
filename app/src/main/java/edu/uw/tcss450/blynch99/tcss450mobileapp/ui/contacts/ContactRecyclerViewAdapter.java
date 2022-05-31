@@ -23,8 +23,8 @@ import edu.uw.tcss450.blynch99.tcss450mobileapp.R;
 
 public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecyclerViewAdapter.myViewHolder> {
 
-    private HashMap<Integer,Contact> mContacts;
-    private Context mContext;
+    private final HashMap<Integer,Contact> mContacts;
+    private final Context mContext;
     private ManagerFriendViewModel mManage;
 
     public ContactRecyclerViewAdapter(Context context, HashMap<Integer,Contact> contacts){
@@ -68,20 +68,25 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecy
 
     private void showButtons(FriendStatus status, myViewHolder holder){
         if (status == FriendStatus.FRIENDS) {
-            if (holder.message.getVisibility() == View.VISIBLE) {
-                holder.message.setVisibility(View.GONE);
+            if (holder.manager.getVisibility() == View.VISIBLE) {
                 holder.remove.setVisibility(View.GONE);
+                holder.manager.setVisibility(View.GONE);
             } else {
-                holder.message.setVisibility(View.VISIBLE);
+                holder.manager.setText("Message");
+                holder.manager.setVisibility(View.VISIBLE);
                 holder.remove.setVisibility(View.VISIBLE);
             }
         }
         else if (status == FriendStatus.RECEIVED_REQUEST){
-            if (holder.manager.getVisibility() == View.VISIBLE)
+            if (holder.manager.getVisibility() == View.VISIBLE) {
                 holder.manager.setVisibility(View.GONE);
-            else
+                holder.remove.setVisibility(View.GONE);
+            }
+            else {
                 holder.manager.setText("Accept Request");
                 holder.manager.setVisibility(View.VISIBLE);
+                holder.remove.setVisibility(View.VISIBLE);
+            }
         }
     }
 
@@ -123,7 +128,7 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecy
     public class myViewHolder extends RecyclerView.ViewHolder{
         TextView nickname, fullName;
         ConstraintLayout cardLayout;
-        Button manager, message, remove;
+        Button manager, remove;
         View view;
         public myViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -131,7 +136,6 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecy
             fullName = itemView.findViewById(R.id.text_full_name);
             cardLayout = itemView.findViewById(R.id.layout_card);
             manager = itemView.findViewById(R.id.button_friend_manager);
-            message = itemView.findViewById(R.id.button_message);
             remove = itemView.findViewById(R.id.button_friend_remove);
             view = itemView.getRootView();
         }

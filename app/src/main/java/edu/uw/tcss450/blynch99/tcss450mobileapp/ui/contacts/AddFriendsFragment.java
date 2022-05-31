@@ -41,6 +41,8 @@ public class AddFriendsFragment extends Fragment {
 
         mRecyclerView = mBinding.listReceivedRequests;
 
+        
+
         ContactListViewModel model = new ViewModelProvider(
                 (ViewModelStoreOwner) MainActivity.getActivity()).get(ContactListViewModel.class);
         UserInfoViewModel user = new ViewModelProvider(
