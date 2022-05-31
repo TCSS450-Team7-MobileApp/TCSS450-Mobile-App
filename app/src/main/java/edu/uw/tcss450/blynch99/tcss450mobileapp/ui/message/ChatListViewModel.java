@@ -48,6 +48,12 @@ public class ChatListViewModel extends AndroidViewModel {
         mChatList.observe(owner, observer);
     }
 
+    public void addChat(Chat chat) {
+        if (!mChatList.getValue().contains(chat)) {
+            mChatList.getValue().add(chat);
+        }
+    }
+
     public void connectGet(int memberId, String jwt) {
         Log.d("CONNECT", "" + memberId);
         Log.d("CONNECT", "JWT: " + jwt);
@@ -80,13 +86,22 @@ public class ChatListViewModel extends AndroidViewModel {
 
     private void handleResult(final JSONObject result) {
         Log.d("SUCCESS", "chats GET request successful");
+        Log.d("CHAT", result.toString());
         if (!result.has("message")) {
             try {
-                JSONArray chats = result.getJSONArray("rows");
+                JSONArray chats = result.getJSONArray("chats");
                 for (int i = 0; i < chats.length(); i++) {
                     JSONObject chat = chats.getJSONObject(i);
+
+                    List<String> members = new ArrayList<>();
+                    JSONArray usernames = chat.getJSONArray("usernames");
+                    for (int j = 0; j < usernames.length(); j++) {
+                        members.add(usernames.getString(j));
+                    }
+
                     Chat chatInfo = new Chat(
-                            new ArrayList<>(Arrays.asList(chat.getString("username"))),
+                            members,
+                            chat.getString("name"),
                             chat.getInt("chatid") + "",
                             chat.getString("timestamp"),
                             chat.getString("message").trim());

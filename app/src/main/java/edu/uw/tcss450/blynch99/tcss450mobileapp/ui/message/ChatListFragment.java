@@ -31,7 +31,6 @@ import edu.uw.tcss450.blynch99.tcss450mobileapp.databinding.FragmentChatListBind
 public class ChatListFragment extends Fragment {
 
     private ChatListViewModel mModel;
-    RecyclerView mRecyclerView;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

@@ -43,6 +43,7 @@
         android:name="edu.uw.tcss450.blynch99.tcss450mobileapp.ui.contacts.friend.FriendFragment"
         android:label="@string/title_friend"
         tools:layout="@layout/fragment_friend" >
+        <!--
         <action
             android:id="@+id/action_navigation_friend_to_navigation_message"
             app:destination="@id/navigation_message" />
@@ -52,6 +53,7 @@
         <action
             android:id="@+id/action_navigation_friend_self2"
             app:destination="@id/navigation_friend" />
+            -->
         <argument
             android:name="contact"
             app:argType="edu.uw.tcss450.blynch99.tcss450mobileapp.ui.contacts.Contact" />
@@ -59,7 +61,7 @@
     <fragment
         android:id="@+id/chatFragment"
         android:name="edu.uw.tcss450.blynch99.tcss450mobileapp.ui.message.ChatFragment"
-        android:label="fragment_chat"
+        android:label="@string/title_chat"
         tools:layout="@layout/fragment_chat" >
         <argument
             android:name="chat"

@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -64,9 +65,13 @@ public class ChatFragment extends Fragment {
         //SetRefreshing shows the internal Swiper view progress bar. Show this until messages load
         binding.swipeContainer.setRefreshing(true);
 
+//        Toast.makeText(getActivity().getApplicationContext(),
+//                String.format(getString(R.string.title_chat), mArgs.getChat().getTitle()),
+//                Toast.LENGTH_SHORT).show();
+        
         Objects.requireNonNull(((AppCompatActivity) requireActivity())
                 .getSupportActionBar())
-                .setTitle(mArgs.getChat().getTitle());
+                .setTitle(String.format(getString(R.string.title_chat), mArgs.getChat().getTitle()));
 
         final RecyclerView rv = binding.recyclerMessages;
         int chatId = Integer.parseInt(mArgs.getChat().getChatId());
