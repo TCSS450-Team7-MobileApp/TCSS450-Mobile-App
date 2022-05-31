@@ -65,7 +65,22 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         ChangeNameViewModel change = new ViewModelProvider(getActivity())
                 .get(ChangeNameViewModel.class);
         String str = (String) object;
-        change.connect(str, preference.getTitle().toString());
+        change.connect(str, preference.getTitle().toString(), model.getJwt(), model.getId());
+        preference.setSummary(str);
+
+        switch (preference.getTitle().toString()){
+            case "Change First Name":
+                model.setFirst(str);
+                break;
+            case "Change Last Name":
+                model.setLast(str);
+                break;
+            case "Change Nickname":
+                model.setNick(str);
+                break;
+
+        }
+
         return true;
     }
 
@@ -80,7 +95,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         if (model.getEmail().equals(str)){
             DeleteAccountViewModel delete = new ViewModelProvider(
                     getActivity()).get(DeleteAccountViewModel.class);
-            delete.connect(model.getEmail());
+            delete.connect(model.getEmail(), model.getJwt());
             navigateToLogout(preference);
         }
         else{

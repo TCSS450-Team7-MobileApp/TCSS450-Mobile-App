@@ -17,7 +17,6 @@ import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.HashMap;
-import java.util.Objects;
 
 import edu.uw.tcss450.blynch99.tcss450mobileapp.MainActivity;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.R;
@@ -50,10 +49,13 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecy
             return;
         holder.nickname.setText(mContacts.get(position).getNickname());
         holder.fullName.setText(mContacts.get(position).getFirstname() + " " + mContacts.get(position).getLastname());
-        holder.manager.setText(Objects.requireNonNull(mContacts.get(position)).getStatus().toString());
+        holder.manager.setText(mContacts.get(position).getStatus().toString());
         holder.view.setOnClickListener(button -> showButtons(mContacts.get(position).getStatus(), holder));
 
-
+        holder.manager.setOnClickListener(button-> {
+            if (holder.manager.getText() == "Accept Request")
+                acceptRequest(mContacts.get(position), position);
+        });
 
         holder.remove.setOnClickListener(button ->
             showRemoveDialog(mContacts.get(position),holder.view, position));
@@ -69,10 +71,11 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecy
                 holder.remove.setVisibility(View.VISIBLE);
             }
         }
-        else{
+        else if (status == FriendStatus.RECEIVED_REQUEST){
             if (holder.manager.getVisibility() == View.VISIBLE)
                 holder.manager.setVisibility(View.GONE);
             else
+                holder.manager.setText("Accept Request");
                 holder.manager.setVisibility(View.VISIBLE);
         }
     }
@@ -85,18 +88,25 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecy
         dialog.findViewById(R.id.button_ok).setOnClickListener(button -> {
             Log.d("ARCHIVE", "CLICK OK");
             dialog.dismiss();
-            RemoveFriendViewModel remove = new ViewModelProvider(
-                    (ViewModelStoreOwner) MainActivity.getActivity()).get(RemoveFriendViewModel.class);
+            ManagerFriendViewModel remove = new ViewModelProvider(
+                    (ViewModelStoreOwner) MainActivity.getActivity()).get(ManagerFriendViewModel.class);
             remove.connect(contact.getId());
 
-            mContacts.remove(position);
-            notifyItemRemoved(position);
-            notifyItemChanged(position, mContacts.size());
-
-
+            removeFromView(position);
         });
         dialog.findViewById(R.id.button_cancel).setOnClickListener(button -> dialog.dismiss());
         dialog.show();
+    }
+
+    private void acceptRequest(Contact contact, int position){
+
+        removeFromView(position);
+    }
+
+    private void removeFromView(int position){
+        mContacts.remove(position);
+        notifyItemRemoved(position);
+        notifyItemChanged(position, mContacts.size());
     }
 
     @Override

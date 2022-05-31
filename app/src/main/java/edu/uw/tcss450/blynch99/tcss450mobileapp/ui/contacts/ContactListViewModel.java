@@ -46,9 +46,13 @@ public class ContactListViewModel extends AndroidViewModel {
         throw new IllegalStateException(error.getMessage());
     }
 
-    private void handleResult(final JSONObject result) {
+    private void handleResult(final JSONObject result, String type) {
         try {
             JSONObject response = result;
+            FriendStatus status = FriendStatus.FRIENDS;
+            if (type.equals("requests"))
+                status = FriendStatus.RECEIVED_REQUEST;
+
                 if (response.has("rows")) {
                     JSONArray rows = response.getJSONArray("rows");
                     for (int i = 0; i< rows.length(); i++){
@@ -59,7 +63,8 @@ public class ContactListViewModel extends AndroidViewModel {
                                 jsonContact.getString("firstname"),
                                 jsonContact.getString("lastname"),
                                 jsonContact.getString("email"),
-                                FriendStatus.FRIENDS
+                                status
+
                         );
 
                         if(!mContactList.getValue().contains(contact))
@@ -79,15 +84,20 @@ public class ContactListViewModel extends AndroidViewModel {
         mContactList.setValue(new ArrayList<>());
     }
 
-    public void connect(int memberId, String jwt) {
+    public void connectContacts(int memberId, String jwt, String type) {
         String url =
                 getApplication().getResources().getString(R.string.base_url_service)
-                        + "friendsList/" + memberId;
+                        + "friendsList/" + memberId + "/";
+        if (type.equals("requests"))
+            url += 0;
+        else
+            url += 1;
+
         Request request = new JsonObjectRequest(
                 Request.Method.GET,
                 url,
                 null,
-                this::handleResult,
+                result -> handleResult(result, type ),
                 this::handleError) {
             @Override
             public Map<String, String> getHeaders() {
@@ -106,4 +116,6 @@ public class ContactListViewModel extends AndroidViewModel {
         Volley.newRequestQueue(getApplication().getApplicationContext())
                 .add(request);
     }
+
+
 }
