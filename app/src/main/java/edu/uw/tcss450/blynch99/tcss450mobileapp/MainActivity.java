@@ -111,6 +111,30 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
 
+        mNewMessageModel = new ViewModelProvider(this).get(NewMessageCountViewModel.class);
+
+        navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
+            if (destination.getId() == R.id.navigation_message) {
+                //When the user navigates to the chats page, reset the new message count.
+                //This will need some extra logic for your project as it should have
+                //multiple chat rooms.
+                mNewMessageModel.reset();
+            }
+        });
+        mNewMessageModel.addMessageCountObserver(this, count -> {
+            BadgeDrawable badge = binding.navView.getOrCreateBadge(R.id.navigation_message);
+            badge.setMaxCharacterCount(2);
+            if (count > 0) {
+                //new messages! update and show the notification badge.
+                badge.setNumber(count);
+                badge.setVisible(true);
+            } else {
+                //user did some action to clear the new messages, remove the badge
+                badge.clearNumber();
+                badge.setVisible(false);
+            }
+        });
+
         mWeatherViewModel = new ViewModelProvider(this).get(WeatherViewModel.class);
         // Lab 6 - Location
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
@@ -219,29 +243,6 @@ public class MainActivity extends AppCompatActivity {
         // application will never receive updates faster than this value.
         mLocationRequest.setFastestInterval(FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        mNewMessageModel = new ViewModelProvider(this).get(NewMessageCountViewModel.class);
-
-        navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
-            if (destination.getId() == R.id.navigation_message) {
-                //When the user navigates to the chats page, reset the new message count.
-                //This will need some extra logic for your project as it should have
-                //multiple chat rooms.
-                mNewMessageModel.reset();
-            }
-        });
-        mNewMessageModel.addMessageCountObserver(this, count -> {
-            BadgeDrawable badge = binding.navView.getOrCreateBadge(R.id.navigation_message);
-            badge.setMaxCharacterCount(2);
-            if (count > 0) {
-                //new messages! update and show the notification badge.
-                badge.setNumber(count);
-                badge.setVisible(true);
-            } else {
-                //user did some action to clear the new messages, remove the badge
-                badge.clearNumber();
-                badge.setVisible(false);
-            }
-        });
     }
 
     @Override
