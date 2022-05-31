@@ -10,11 +10,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.json.JSONObject;
 
 import edu.uw.tcss450.blynch99.tcss450mobileapp.R;
+import edu.uw.tcss450.blynch99.tcss450mobileapp.auth.model.LocationViewModel;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.auth.model.UserInfoViewModel;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.databinding.FragmentWeatherBinding;
 
@@ -28,6 +30,7 @@ public class WeatherFragment extends Fragment {
     private WeatherViewModel mModel;
     private UserInfoViewModel mUserModel;
     private FragmentWeatherBinding mBinding;
+    private LocationViewModel mLocationModel;
 
     public WeatherFragment() {}
 
@@ -36,7 +39,8 @@ public class WeatherFragment extends Fragment {
         super.onCreate(savedInstanceState);
         mModel = new ViewModelProvider(getActivity()).get(WeatherViewModel.class);
         mUserModel = new ViewModelProvider(getActivity()).get(UserInfoViewModel.class);
-        mModel.connectGet(mUserModel.getJwt());
+        mLocationModel = new ViewModelProvider(getActivity()).get(LocationViewModel.class);
+//        mModel.connectGet(mUserModel.getJwt());
     }
 
     @Override
@@ -53,6 +57,11 @@ public class WeatherFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         Fragment parent = getParentFragment();
         mBinding = FragmentWeatherBinding.bind(getView());
+
+        mBinding.locationSearchButton.setOnClickListener(text -> {
+            Navigation.findNavController(getView()).navigate(WeatherFragmentDirections.actionNavigationWeatherToLocationFragment());
+        });
+
         mModel.addResponseObserver(getViewLifecycleOwner(), this::observeResponse);
     }
 
@@ -66,11 +75,13 @@ public class WeatherFragment extends Fragment {
         }
     }
     private void setViewComponents() {
+        mBinding.locationTitle.setText(mLocationModel.getCity());
         mBinding.currentTemp.setText(mModel.getmCurrentWeatherData().getmTemperature() + degreeFarenheit);
+        mBinding.currentWeatherIcon.setImageResource(WeatherIcons.getInstance().getIcon(mModel.getmCurrentWeatherData().getmIcon()));
         mBinding.weatherDescription.setText(mModel.getmCurrentWeatherData().getmDescription());
         mBinding.feelsLike.setText("Feels like: " + mModel.getmCurrentWeatherData().getmFeelsLike() + degreeFarenheit);
-        mBinding.minTemp.setText("Min: " + mModel.getmCurrentWeatherData().getmMinTemperature() + degreeFarenheit);
-        mBinding.maxTemp.setText("Max: " + mModel.getmCurrentWeatherData().getmMaxTemperature() + degreeFarenheit);
+        mBinding.minTemp.setText("L: " + mModel.getmCurrentWeatherData().getmMinTemperature() + degreeFarenheit);
+        mBinding.maxTemp.setText("H: " + mModel.getmCurrentWeatherData().getmMaxTemperature() + degreeFarenheit);
         mBinding.hourlyList.setAdapter(new WeatherHourlyRecyclerViewAdapter(mModel.getmHourlyForecast()));
         mBinding.dailyList.setAdapter(new WeatherDailyRecyclerViewAdapter(mModel.getmDailyForecast()));
     }

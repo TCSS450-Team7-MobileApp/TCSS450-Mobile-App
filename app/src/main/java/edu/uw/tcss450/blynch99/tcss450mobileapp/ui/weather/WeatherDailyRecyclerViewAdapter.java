@@ -54,6 +54,7 @@ public class WeatherDailyRecyclerViewAdapter extends RecyclerView.Adapter<Weathe
 
         private void display() {
             mBinding.titleDay.setText(mData.getmDayHour());
+            mBinding.dailyIcon.setImageResource(WeatherIcons.getInstance().getIcon(mData.getmIcon()));
             mBinding.dayTemp.setText(mData.getmTemperature() + "°F");
         }
     }
