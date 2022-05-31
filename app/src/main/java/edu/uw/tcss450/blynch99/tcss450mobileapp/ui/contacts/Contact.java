@@ -4,15 +4,20 @@ import java.io.Serializable;
 
 public class Contact implements Serializable {
 
-    private final String mNickname, mFirstname, mLastname, mEmail;
+    private final String mId, mNickname, mFirstname, mLastname, mEmail;
     private FriendStatus mStatus;
 
-    public Contact(String nickname, String firstname, String lastname, String email, FriendStatus status){
+    public Contact(String id, String nickname, String firstname, String lastname, String email, FriendStatus status){
+        this.mId = id;
         this.mNickname = nickname;
         this.mFirstname = firstname;
         this.mLastname = lastname;
         this.mEmail = email;
         this.mStatus = status;
+    }
+
+    public String getId() {
+        return mId;
     }
 
     public String getNickname() {
@@ -33,5 +38,13 @@ public class Contact implements Serializable {
 
     public FriendStatus getStatus() {
         return mStatus;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this.getClass() != o.getClass()) return false;
+
+        Contact other = (Contact) o;
+        return this.mEmail.equals(other.getEmail());
     }
 }

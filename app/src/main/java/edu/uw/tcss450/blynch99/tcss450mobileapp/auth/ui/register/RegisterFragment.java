@@ -136,6 +136,7 @@ public class RegisterFragment extends Fragment {
     private void verifyAuthWithServer() {
         binding.layoutWait.setVisibility(View.VISIBLE);
         mRegisterModel.connect(
+                binding.editNick.getText().toString(),
                 binding.editFirst.getText().toString(),
                 binding.editLast.getText().toString(),
                 binding.editEmail.getText().toString(),

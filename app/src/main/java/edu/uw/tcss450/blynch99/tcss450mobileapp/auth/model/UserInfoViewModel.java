@@ -29,7 +29,13 @@ public class UserInfoViewModel extends ViewModel {
 
     public String getJwt() { return mJwt; }
 
-    public int getId() { return mId; } // Hard-coded member ID
+    public int getId() { return mId; }
+
+    public String getFirst() { return mFirst; }
+
+    public String getLast() { return mLast; }
+
+    public String getNick() { return mNick; }
 
     public static class UserInfoViewModelFactory implements ViewModelProvider.Factory {
 

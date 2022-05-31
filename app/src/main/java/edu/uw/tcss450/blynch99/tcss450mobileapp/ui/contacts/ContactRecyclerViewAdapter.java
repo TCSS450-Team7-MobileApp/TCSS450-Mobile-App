@@ -1,24 +1,33 @@
 package edu.uw.tcss450.blynch99.tcss450mobileapp.ui.contacts;
 
+import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.navigation.Navigation;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.HashMap;
+import java.util.Objects;
+
+import edu.uw.tcss450.blynch99.tcss450mobileapp.MainActivity;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.R;
 
 public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecyclerViewAdapter.myViewHolder> {
 
-    Contact[] mContacts;
-    Context mContext;
+    private HashMap<Integer,Contact> mContacts;
+    private Context mContext;
 
-    public ContactRecyclerViewAdapter(Context context, Contact[] contacts){
+    public ContactRecyclerViewAdapter(Context context, HashMap<Integer,Contact> contacts){
 
         mContacts = contacts;
         mContext = context;
@@ -34,36 +43,80 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecy
         return new myViewHolder(view);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull myViewHolder holder, int position) {
-        holder.nickname.setText(mContacts[position].getNickname());
-        holder.fullName.setText(mContacts[position].getFirstname() + " " + mContacts[position].getLastname());
+        if (mContacts.get(position) == null)
+            return;
+        holder.nickname.setText(mContacts.get(position).getNickname());
+        holder.fullName.setText(mContacts.get(position).getFirstname() + " " + mContacts.get(position).getLastname());
+        holder.manager.setText(Objects.requireNonNull(mContacts.get(position)).getStatus().toString());
+        holder.view.setOnClickListener(button -> showButtons(mContacts.get(position).getStatus(), holder));
 
-        holder.cardLayout.setOnClickListener(button -> navigateToFriend( holder.view, mContacts[position]));
 
 
+        holder.remove.setOnClickListener(button ->
+            showRemoveDialog(mContacts.get(position),holder.view, position));
     }
 
-    private void navigateToFriend(View view, Contact contact){
-        Navigation.findNavController(view)
-                .navigate(ContactsFragmentDirections.
-                        actionContactsFragmentToNavigationFriend(contact));
+    private void showButtons(FriendStatus status, myViewHolder holder){
+        if (status == FriendStatus.FRIENDS) {
+            if (holder.message.getVisibility() == View.VISIBLE) {
+                holder.message.setVisibility(View.GONE);
+                holder.remove.setVisibility(View.GONE);
+            } else {
+                holder.message.setVisibility(View.VISIBLE);
+                holder.remove.setVisibility(View.VISIBLE);
+            }
+        }
+        else{
+            if (holder.manager.getVisibility() == View.VISIBLE)
+                holder.manager.setVisibility(View.GONE);
+            else
+                holder.manager.setVisibility(View.VISIBLE);
+        }
+    }
+
+    void showRemoveDialog(Contact contact, View view, int position) {
+        Dialog dialog = new Dialog(view.getContext());
+        dialog.setCancelable(true);
+
+        dialog.setContentView(R.layout.dialog_remove);
+        dialog.findViewById(R.id.button_ok).setOnClickListener(button -> {
+            Log.d("ARCHIVE", "CLICK OK");
+            dialog.dismiss();
+            RemoveFriendViewModel remove = new ViewModelProvider(
+                    (ViewModelStoreOwner) MainActivity.getActivity()).get(RemoveFriendViewModel.class);
+            remove.connect(contact.getId());
+
+            mContacts.remove(position);
+            notifyItemRemoved(position);
+            notifyItemChanged(position, mContacts.size());
+
+
+        });
+        dialog.findViewById(R.id.button_cancel).setOnClickListener(button -> dialog.dismiss());
+        dialog.show();
     }
 
     @Override
     public int getItemCount() {
-        return mContacts.length;
+        return mContacts.size();
     }
 
     public class myViewHolder extends RecyclerView.ViewHolder{
         TextView nickname, fullName;
         ConstraintLayout cardLayout;
+        Button manager, message, remove;
         View view;
         public myViewHolder(@NonNull View itemView) {
             super(itemView);
             nickname = itemView.findViewById(R.id.text_nickname);
             fullName = itemView.findViewById(R.id.text_full_name);
             cardLayout = itemView.findViewById(R.id.layout_card);
+            manager = itemView.findViewById(R.id.button_friend_manager);
+            message = itemView.findViewById(R.id.button_message);
+            remove = itemView.findViewById(R.id.button_friend_remove);
             view = itemView.getRootView();
         }
     }

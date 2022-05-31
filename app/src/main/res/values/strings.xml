@@ -43,5 +43,9 @@
     <string name="text_delete_account">Enter your email to delete your account</string>
     <string name="title_activity_maps">MapsActivity</string>
 
+    <string name="dialog_archive_chat">Archive chat?</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+
 
 </resources>
