@@ -25,6 +25,7 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecy
 
     private HashMap<Integer,Contact> mContacts;
     private Context mContext;
+    private ManagerFriendViewModel mManage;
 
     public ContactRecyclerViewAdapter(Context context, HashMap<Integer,Contact> contacts){
 
@@ -39,6 +40,10 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecy
     public myViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(mContext);
         View view = inflater.inflate(R.layout.fragment_contact_card,parent,false);
+
+        mManage = new ViewModelProvider(
+                (ViewModelStoreOwner) MainActivity.getActivity()).get(ManagerFriendViewModel.class);
+
         return new myViewHolder(view);
     }
 
@@ -88,9 +93,7 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecy
         dialog.findViewById(R.id.button_ok).setOnClickListener(button -> {
             Log.d("ARCHIVE", "CLICK OK");
             dialog.dismiss();
-            ManagerFriendViewModel remove = new ViewModelProvider(
-                    (ViewModelStoreOwner) MainActivity.getActivity()).get(ManagerFriendViewModel.class);
-            remove.connect(contact.getId());
+            mManage.connectRemoveFriend(contact.getId());
 
             removeFromView(position);
         });
@@ -99,6 +102,9 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecy
     }
 
     private void acceptRequest(Contact contact, int position){
+        mManage.connectAcceptRequest(contact.getId());
+
+
 
         removeFromView(position);
     }
