@@ -1,7 +1,9 @@
 package edu.uw.tcss450.blynch99.tcss450mobileapp.ui.settings;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.lifecycle.ViewModelProvider;
@@ -87,6 +89,13 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     private boolean navigateToLogout(Preference preference){
         startActivity(new Intent(getActivity(), AuthActivity.class));
         MainActivity.getActivity().finish();
+
+        SharedPreferences prefs =
+                MainActivity.getActivity().getSharedPreferences(
+                        getString(R.string.keys_shared_prefs),
+                        Context.MODE_PRIVATE);
+        prefs.edit().remove(getString(R.string.keys_prefs_jwt)).apply();
+
         getActivity().finish();
         return true;
     }

@@ -4,6 +4,8 @@ import static edu.uw.tcss450.blynch99.tcss450mobileapp.auth.utils.PasswordValida
 import static edu.uw.tcss450.blynch99.tcss450mobileapp.auth.utils.PasswordValidator.checkPwdLength;
 import static edu.uw.tcss450.blynch99.tcss450mobileapp.auth.utils.PasswordValidator.checkPwdSpecialChar;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,9 +18,12 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
+import com.auth0.android.jwt.JWT;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import edu.uw.tcss450.blynch99.tcss450mobileapp.R;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.auth.model.UserInfoViewModel;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.auth.utils.PasswordValidator;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.databinding.FragmentSignInBinding;
@@ -35,6 +40,7 @@ public class SignInFragment extends Fragment {
     private SignInViewModel mSignInModel;
     private PushyTokenViewModel mPushyTokenViewModel;
     private UserInfoViewModel mUserViewModel;
+    GetInfoViewModel mGetInfo;
 
     private PasswordValidator mEmailValidator = checkPwdLength(2)
             .and(checkExcludeWhiteSpace())
@@ -54,6 +60,8 @@ public class SignInFragment extends Fragment {
                 .get(SignInViewModel.class);
         mPushyTokenViewModel = new ViewModelProvider(getActivity())
                 .get(PushyTokenViewModel.class);
+        mGetInfo = new ViewModelProvider(getActivity())
+                .get(GetInfoViewModel.class);
     }
 
     @Override
@@ -78,6 +86,12 @@ public class SignInFragment extends Fragment {
         mSignInModel.addResponseObserver(
                 getViewLifecycleOwner(),
                 this::observeResponse);
+
+        mGetInfo.addResponseObserver(
+                getViewLifecycleOwner(),
+                this::observeResponse);
+
+
 
         SignInFragmentArgs args = SignInFragmentArgs.fromBundle(getArguments());
         binding.editEmail.setText(args.getEmail().equals("default") ? "" : args.getEmail());
@@ -155,6 +169,33 @@ public class SignInFragment extends Fragment {
 
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        SharedPreferences prefs =
+                getActivity().getSharedPreferences(
+                        getString(R.string.keys_shared_prefs),
+                        Context.MODE_PRIVATE);
+        if (prefs.contains(getString(R.string.keys_prefs_jwt))) {
+            String token = prefs.getString(getString(R.string.keys_prefs_jwt), "");
+            Log.d("TTT", token);
+            JWT jwt = new JWT(token);
+            // Check to see if the web token is still valid or not. To make a JWT expire after a
+            // longer or shorter time period, change the expiration time when the JWT is
+            // created on the web service.
+
+            Log.d("TTT", Boolean.toString(jwt.isExpired(0)));
+            if(!jwt.isExpired(0)) {
+                String email = jwt.getClaim("email").asString();
+                mGetInfo.connect(email,token);
+            }
+        }
+    }
+
+
+
+
+
     /**
      * Helper to abstract the navigation to the Activity past Authentication.
      * @param email users email
@@ -166,7 +207,17 @@ public class SignInFragment extends Fragment {
                                    String last,
                                    String nick,
                                    int id) {
-        Log.d("JWT", jwt);
+
+        if (binding.switchSignin.isChecked()) {
+
+            SharedPreferences prefs =
+                    getActivity().getSharedPreferences(
+                            getString(R.string.keys_shared_prefs),
+                            Context.MODE_PRIVATE);
+            //Store the credentials in SharedPrefs
+            prefs.edit().putString(getString(R.string.keys_prefs_jwt), jwt).apply();
+        }
+
         Navigation.findNavController(getView())
                 .navigate(SignInFragmentDirections
                         .actionSigninFragmentToMainActivity(email, jwt, first, last, nick, id));
@@ -207,7 +258,7 @@ public class SignInFragment extends Fragment {
                 try {
                     mUserViewModel = new ViewModelProvider(getActivity(),
                             new UserInfoViewModel.UserInfoViewModelFactory(
-                                    binding.editEmail.getText().toString(),
+                                    response.getString("email"),
                                     response.getString("token"),
                                     response.getString("firstname"),
                                     response.getString("lastname"),
