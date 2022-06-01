@@ -15,9 +15,6 @@
         android:label="@string/title_contacts"
         tools:layout="@layout/fragment_contacts" >
         <action
-            android:id="@+id/action_contactsFragment_to_navigation_friend"
-            app:destination="@id/navigation_friend" />
-        <action
             android:id="@+id/action_contactsFragment_to_addFriendsFragment"
             app:destination="@id/addFriendsFragment" />
     </fragment>
@@ -41,24 +38,6 @@
         <action
             android:id="@+id/action_navigation_message_to_chatFragment"
             app:destination="@id/chatFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/navigation_friend"
-        android:name="edu.uw.tcss450.blynch99.tcss450mobileapp.ui.contacts.friend.FriendFragment"
-        android:label="@string/title_friend"
-        tools:layout="@layout/fragment_friend" >
-        <action
-            android:id="@+id/action_navigation_friend_to_navigation_message"
-            app:destination="@id/navigation_message" />
-        <action
-            android:id="@+id/action_navigation_friend_self"
-            app:destination="@id/navigation_friend" />
-        <action
-            android:id="@+id/action_navigation_friend_self2"
-            app:destination="@id/navigation_friend" />
-        <argument
-            android:name="contact"
-            app:argType="edu.uw.tcss450.blynch99.tcss450mobileapp.ui.contacts.Contact" />
     </fragment>
     <fragment
         android:id="@+id/chatFragment"

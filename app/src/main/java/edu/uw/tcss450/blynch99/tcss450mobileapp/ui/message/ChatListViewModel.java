@@ -8,8 +8,6 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelStoreOwner;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -26,12 +24,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.IntFunction;
 
-import edu.uw.tcss450.blynch99.tcss450mobileapp.MainActivity;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.R;
-import edu.uw.tcss450.blynch99.tcss450mobileapp.auth.model.UserInfoViewModel;
-import edu.uw.tcss450.blynch99.tcss450mobileapp.ui.contacts.Contact;
 
 public class ChatListViewModel extends AndroidViewModel {
 
@@ -105,7 +99,7 @@ public class ChatListViewModel extends AndroidViewModel {
 
     private void handleError(final VolleyError error) {
         // you should add much better error handling in a production release.
-        Log.e("ERROR", error.getLocalizedMessage());
+        //Log.e("ERROR", error.getLocalizedMessage());
         throw new IllegalStateException(error.getMessage());
     }
 }

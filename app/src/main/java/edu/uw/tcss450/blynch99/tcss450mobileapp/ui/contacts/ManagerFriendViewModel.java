@@ -27,12 +27,12 @@ import edu.uw.tcss450.blynch99.tcss450mobileapp.MainActivity;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.R;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.auth.model.UserInfoViewModel;
 
-public class RemoveFriendViewModel extends AndroidViewModel {
+public class ManagerFriendViewModel extends AndroidViewModel {
 
     private MutableLiveData<JSONObject> mResponse;
     private UserInfoViewModel mUser;
 
-    public RemoveFriendViewModel(@NonNull Application application) {
+    public ManagerFriendViewModel(@NonNull Application application) {
         super(application);
         mResponse = new MutableLiveData<>();
         mResponse.setValue(new JSONObject());

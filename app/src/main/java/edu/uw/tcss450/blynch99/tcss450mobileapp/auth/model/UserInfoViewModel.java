@@ -23,6 +23,19 @@ public class UserInfoViewModel extends ViewModel {
         mId = id;
     }
 
+    public void setFirst(String mFirst) {
+        this.mFirst = mFirst;
+    }
+
+    public void setLast(String mLast) {
+        this.mLast = mLast;
+    }
+
+    public void setNick(String mNick) {
+        this.mNick = mNick;
+    }
+
+
     public String getEmail() {
         return mEmail;
     }

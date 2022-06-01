@@ -6,8 +6,6 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelStoreOwner;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -18,11 +16,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.nio.charset.Charset;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
-import edu.uw.tcss450.blynch99.tcss450mobileapp.MainActivity;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.R;
-import edu.uw.tcss450.blynch99.tcss450mobileapp.auth.model.UserInfoViewModel;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.io.RequestQueueSingleton;
 
 public class ChangeNameViewModel extends AndroidViewModel {
@@ -58,11 +56,9 @@ public class ChangeNameViewModel extends AndroidViewModel {
         }
     }
 
-    public void connect(final String change, final String nameType) {
-        UserInfoViewModel user = new ViewModelProvider(
-                (ViewModelStoreOwner) MainActivity.getActivity()).get(UserInfoViewModel.class);
+    public void connect(final String change, final String nameType, final String jwt, final int id) {
         String url = getApplication().getResources().getString(R.string.base_url_service) +
-                "account/change/" + user.getId() + "/";
+                "account/change/" + id + "/";
         switch (nameType){
             case "Change First Name":
                 url += "first/";
@@ -75,15 +71,21 @@ public class ChangeNameViewModel extends AndroidViewModel {
                 break;
         }
         url += change;
-        // https://tcss450-team7.herokuapp.com/signin
-        // https://cfb3-tcss450-labs-2021sp.herokuapp.com/auth
 
         Request request = new JsonObjectRequest(
                 Request.Method.PUT,
                 url,
                 null, //no body for this get request
                 mResponse::setValue,
-                this::handleError);
+                this::handleError){
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                // add headers <key,value>
+                headers.put("Authorization", jwt);
+                return headers;
+            }
+        };
 
         request.setRetryPolicy(new DefaultRetryPolicy(
                 10_000,

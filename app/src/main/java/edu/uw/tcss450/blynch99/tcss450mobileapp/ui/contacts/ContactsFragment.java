@@ -49,7 +49,7 @@ public class ContactsFragment extends Fragment {
         UserInfoViewModel user = new ViewModelProvider((ViewModelStoreOwner)
                 MainActivity.getActivity()).get(UserInfoViewModel.class);
         model.resetContacts();
-        model.connect(user.getId(),user.getJwt());
+        model.connectContacts(user.getId(),user.getJwt(), "current");
 
         model.addContactListObserver(getViewLifecycleOwner(), this::setAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
