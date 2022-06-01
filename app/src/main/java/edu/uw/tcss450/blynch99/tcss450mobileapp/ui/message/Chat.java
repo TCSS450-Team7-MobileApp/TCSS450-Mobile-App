@@ -19,8 +19,11 @@ import edu.uw.tcss450.blynch99.tcss450mobileapp.ui.contacts.Contact;
 
 public class Chat implements Serializable {
 
-    private final String mChatId, mDate, mTitle, mTeaser;
-    private final List<String> mMembers;
+    private final String mChatId;
+    private String mDate;
+    private final String mTitle;
+    private String mTeaser;
+    private List<String> mMembers;
 
     public Chat(List<String> members, String title, String chatId, String date, String teaser) {
         mMembers = members;
@@ -32,6 +35,18 @@ public class Chat implements Serializable {
         //List<String> memberNames = members.stream().map(Contact::getNickname).collect(Collectors.toList());
         //mTitle = join(", ", members);
         mTitle = title;
+    }
+
+    public void setMembers(List<String> members) {
+        mMembers = members;
+    }
+
+    public void setTeaser(String teaser) {
+        mTeaser = teaser;
+    }
+
+    public void setDate(String date) {
+        mDate = date;
     }
 
     public String getChatId() { return mChatId; }

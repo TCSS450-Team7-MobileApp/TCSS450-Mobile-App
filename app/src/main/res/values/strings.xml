@@ -28,6 +28,10 @@
     <string name="title_contacts">Contacts</string>
     <string name="title_friend">Friend</string>
     <string name="title_chat">%1$s</string>
+    <string name="title_create_chat_members">Add People to Chat</string>
+    <string name="title_create_chat_name">Chat Name</string>
+    <string name="button_create_chat">Create</string>
+    <string name="button_add_to_chat">Add People</string>
 
     <string name="base_url_service">https://tcss450-team7.herokuapp.com/</string>
     <string name="action_settings">Settings</string>

@@ -166,57 +166,80 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * A BroadcastReceiver that listens for messages sent from PushReceiver
+     * A BroadcastReceiver that listens for messages, chats, and friend requests sent from PushReceiver
      */
     private class MainPushReceiver extends BroadcastReceiver {
-        private ChatViewModel mChatModel =
+        private final ChatViewModel mChatModel =
                 new ViewModelProvider(MainActivity.this)
                         .get(ChatViewModel.class);
-        private ChatListViewModel mChatListModel =
+        private final ChatListViewModel mChatListModel =
                 new ViewModelProvider(MainActivity.this)
                         .get(ChatListViewModel.class);
         @Override
         public void onReceive(Context context, Intent intent) {
+            if (intent.hasExtra("type")) {
+                switch(intent.getStringExtra("type")) {
+                    case "chat":
+                        processNewChat(intent);
+                        break;
+                    case "msg":
+                        processNewMessage(intent);
+                        break;
+                    case "friend_request":
+                        processNewFriendRequest(intent);
+                        break;
+                }
+            }
+        }
+
+        private void processNewChat(Intent intent) {
+            List<String> members = new ArrayList<>();
+            JSONArray usernames = (JSONArray) intent.getSerializableExtra("usernames");
+            for (int j = 0; j < usernames.length(); j++) {
+                try {
+                    members.add(usernames.getString(j));
+                } catch (JSONException e) {
+                    Log.d("JSON ERROR", e.getMessage());
+                }
+            }
+
+            mChatListModel.addChat(
+                    new Chat(
+                            members,
+                            intent.getStringExtra("name"),
+                            intent.getStringExtra("chatId"),
+                            intent.getStringExtra("timestamp"),
+                            intent.getStringExtra("recent_message")
+                    )
+            );
+        }
+
+        private void processNewMessage(Intent intent) {
             NavController nc =
                     Navigation.findNavController(
                             MainActivity.this, R.id.nav_host_fragment);
             NavDestination nd = nc.getCurrentDestination();
 
-            if (intent.hasExtra("type")
-                    && intent.getSerializableExtra("type").equals("chat")) {
-
-                List<String> members = new ArrayList<>();
-                JSONArray usernames = (JSONArray) intent.getSerializableExtra("usernames");
-                for (int j = 0; j < usernames.length(); j++) {
-                    try {
-                        members.add(usernames.getString(j));
-                    } catch (JSONException e) {
-                        Log.d("JSON ERROR", e.getMessage());
-                    }
-                }
-
-                mChatListModel.addChat(
-                                new Chat(
-                                        members,
-                                        (String) intent.getSerializableExtra("name"),
-                                        (String) intent.getSerializableExtra("chatid"),
-                                        (String) intent.getSerializableExtra("timestamp"),
-                                        (String) intent.getSerializableExtra("recent_message")
-                                )
-                );
-            }
-
             if (intent.hasExtra("chatMessage")) {
+                //Log.d("CHAT", intent.toString());
+                //Log.d("CHAT", intent.getSerializableExtra("message").toString());
                 ChatMessage cm = (ChatMessage) intent.getSerializableExtra("chatMessage");
                 //If the user is not on the chat screen, update the
                 // NewMessageCountView Model
                 if (nd.getId() != R.id.navigation_message && nd.getId() != R.id.chatFragment) {
-                    mNewMessageModel.increment((String) intent.getSerializableExtra("chatid"));
+                    mNewMessageModel.increment(intent.getStringExtra("chatId"));
                 }
                 //Inform the view model holding chatroom messages of the new
                 //message.
-                mChatModel.addMessage(intent.getIntExtra("chatid", -1), cm);
+                // TODO: standardize string vs int for chatId
+                int chatId = intent.getIntExtra("chatId", -1);
+                mChatModel.addMessage(chatId, cm);
+                mChatListModel.updateChat(cm);
             }
+        }
+
+        private void processNewFriendRequest(Intent intent) {
+
         }
     }
 }

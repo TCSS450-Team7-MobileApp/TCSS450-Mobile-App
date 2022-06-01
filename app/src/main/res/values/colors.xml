@@ -12,5 +12,6 @@
     <color name="coralAccent">#4C9DDB</color>
     <color name="grey_1">#DFDAD9</color>
     <color name="grey_2">#F3F2ED</color>
+    <color name="grey_3">#11012a3d</color>
     <color name="white">#FFFFFFFF</color>
 </resources>

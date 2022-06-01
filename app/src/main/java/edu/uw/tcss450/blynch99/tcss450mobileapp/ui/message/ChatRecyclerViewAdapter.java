@@ -72,7 +72,7 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<ChatRecyclerVi
             binding.cardRoot.setOnClickListener(view -> {
                 Navigation.findNavController(mView).navigate(
                         ChatListFragmentDirections
-                                .actionNavigationMessageToChatFragment(chat));
+                                .actionNavigationMessageToChatFragment(chat.getTitle(), chat));
             });
             binding.textTitle.setText(chat.getTitle());
             binding.textPubdate.setText(chat.getFormattedDate());

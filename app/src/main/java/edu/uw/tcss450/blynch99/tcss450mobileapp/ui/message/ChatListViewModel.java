@@ -48,10 +48,43 @@ public class ChatListViewModel extends AndroidViewModel {
         mChatList.observe(owner, observer);
     }
 
+    public void updateChat(ChatMessage chatMessage) {
+        Chat target = null;
+        for (Chat existing : mChatList.getValue()) {
+            if (existing.getChatId().equals(chatMessage.getMessage())) {
+                target = existing;
+            }
+        }
+        if (target != null) {
+            mChatList.getValue().remove(target);
+            if (!chatMessage.getMessage().isEmpty())
+                target.setTeaser(chatMessage.getMessage());
+            target.setDate(chatMessage.getTimeStamp());
+            mChatList.getValue().add(0, target);
+        }
+        mChatList.setValue(mChatList.getValue());
+    }
+
     public void addChat(Chat chat) {
         if (!mChatList.getValue().contains(chat)) {
-            mChatList.getValue().add(chat);
+            mChatList.getValue().add(0, chat);
+        } else {
+            // If the chat already exists, update the members list and recent message
+            Chat target = null;
+            for (Chat existing : mChatList.getValue()) {
+                if (existing.equals(chat)) {
+                    target = existing;
+                }
+            }
+            if (target != null) {
+                mChatList.getValue().remove(target);
+                target.setMembers(chat.getMembers());
+                if (!chat.getTeaser().isEmpty())
+                    target.setTeaser(chat.getTeaser());
+                mChatList.getValue().add(0, target);
+            }
         }
+        mChatList.setValue(mChatList.getValue());
     }
 
     public void connectGet(int memberId, String jwt) {

@@ -19,7 +19,7 @@
         android:layout_margin="@dimen/chat_margin"
         app:cardCornerRadius="5dp"
         app:cardElevation="0dp"
-        app:cardForegroundColor="#11012a3d"
+        app:cardForegroundColor="@color/grey_3"
         android:layout_gravity="end">
 
         <androidx.constraintlayout.widget.ConstraintLayout
