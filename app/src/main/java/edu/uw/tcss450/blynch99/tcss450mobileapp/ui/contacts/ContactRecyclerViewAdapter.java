@@ -22,9 +22,10 @@ import edu.uw.tcss450.blynch99.tcss450mobileapp.MainActivity;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.R;
 
 public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecyclerViewAdapter.myViewHolder> {
-
+    
     private final HashMap<Integer,Contact> mContacts;
     private final Context mContext;
+
     private ManagerFriendViewModel mManage;
 
     public ContactRecyclerViewAdapter(Context context, HashMap<Integer,Contact> contacts){
