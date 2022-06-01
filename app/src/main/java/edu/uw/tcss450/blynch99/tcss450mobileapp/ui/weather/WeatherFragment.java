@@ -1,5 +1,6 @@
 package edu.uw.tcss450.blynch99.tcss450mobileapp.ui.weather;
 
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,12 +12,13 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
-import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONObject;
 
 import edu.uw.tcss450.blynch99.tcss450mobileapp.R;
-import edu.uw.tcss450.blynch99.tcss450mobileapp.auth.model.LocationViewModel;
+import edu.uw.tcss450.blynch99.tcss450mobileapp.model.LocationViewModel;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.auth.model.UserInfoViewModel;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.databinding.FragmentWeatherBinding;
 
@@ -40,16 +42,13 @@ public class WeatherFragment extends Fragment {
         mModel = new ViewModelProvider(getActivity()).get(WeatherViewModel.class);
         mUserModel = new ViewModelProvider(getActivity()).get(UserInfoViewModel.class);
         mLocationModel = new ViewModelProvider(getActivity()).get(LocationViewModel.class);
-//        mModel.connectGet(mUserModel.getJwt());
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-//        return inflater.inflate(R.layout.fragment_weather, container, false);
-        mBinding = FragmentWeatherBinding.inflate(inflater);
-        return mBinding.getRoot();
+//         Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_weather, container, false);
     }
 
     @Override
@@ -63,6 +62,12 @@ public class WeatherFragment extends Fragment {
         });
 
         mModel.addResponseObserver(getViewLifecycleOwner(), this::observeResponse);
+
+        mLocationModel.addLocationObserver(getViewLifecycleOwner(), location -> {
+            if (location != null) {
+                mModel.connectGet(mUserModel.getJwt(), String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()));
+            }
+        });
     }
 
     private void observeResponse(final JSONObject response) {

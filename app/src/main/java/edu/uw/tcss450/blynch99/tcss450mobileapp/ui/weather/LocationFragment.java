@@ -34,7 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.uw.tcss450.blynch99.tcss450mobileapp.R;
-import edu.uw.tcss450.blynch99.tcss450mobileapp.auth.model.LocationViewModel;
+import edu.uw.tcss450.blynch99.tcss450mobileapp.model.LocationViewModel;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.auth.model.UserInfoViewModel;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.databinding.FragmentLocationBinding;
 
@@ -128,17 +128,16 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Go
     @Override
     public void onMapClick(@NonNull LatLng latLng) {
         setLocationViewModel(latLng);
+        placeNewMarker(latLng);
         // Get weather info
         mWeatherViewModel.connectGet(
                 mUserInfoViewModel.getJwt(),
                 String.valueOf(latLng.latitude),
                 String.valueOf(latLng.longitude));
 
-        placeNewMarker(latLng);
-
         mMap.animateCamera(
                 CameraUpdateFactory.newLatLngZoom(
-                        latLng, mMap.getCameraPosition().zoom));
+                        latLng, 10.0f));
 
         mBinding.locationSearchbar.clearFocus();
     }

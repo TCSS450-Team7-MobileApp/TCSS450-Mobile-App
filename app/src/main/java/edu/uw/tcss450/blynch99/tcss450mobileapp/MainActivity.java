@@ -34,7 +34,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import edu.uw.tcss450.blynch99.tcss450mobileapp.auth.model.LocationViewModel;
+import edu.uw.tcss450.blynch99.tcss450mobileapp.model.LocationViewModel;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.auth.model.UserInfoViewModel;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.databinding.ActivityMainBinding;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.model.NewMessageCountViewModel;
@@ -175,7 +175,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
             case MY_PERMISSIONS_LOCATIONS: {
                 // If request is cancelled, the result arrays are empty.
@@ -192,7 +191,7 @@ public class MainActivity extends AppCompatActivity {
                     //know why the app is shutting down...maybe ask for permission again?
                     finishAndRemoveTask();
                 }
-                return;
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
             }
             // other 'case' lines to check for other
             // permissions this app might request
@@ -213,16 +212,11 @@ public class MainActivity extends AppCompatActivity {
                         public void onSuccess(Location location) {
                         // Got last known location. In some rare situations this can be null.
                             if (location != null) {
-                                Log.d("LOCATION_MAIN_ACC", location.getLongitude() + " : " + location.getLatitude());
                                 if (mLocationModel == null) {
                                     mLocationModel = new ViewModelProvider(MainActivity.this)
                                             .get(LocationViewModel.class);
                                 }
                                 mLocationModel.setLocation(location, MainActivity.this);
-                                mWeatherViewModel.connectGet(
-                                        mUserInfoViewModel.getJwt(),
-                                        String.valueOf(location.getLatitude()),
-                                        String.valueOf(location.getLongitude()));
                             }
                         }
                     });
@@ -317,6 +311,7 @@ public class MainActivity extends AppCompatActivity {
         if (mPushMessageReceiver != null){
             unregisterReceiver(mPushMessageReceiver);
         }
+        stopLocationUpdates();
     }
 
     /**

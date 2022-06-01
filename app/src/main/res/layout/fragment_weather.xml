@@ -15,7 +15,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/overview_layout"
@@ -91,6 +91,18 @@
                     </LinearLayout>
 
                 </LinearLayout>
+
+                <ImageButton
+                    android:id="@+id/location_search_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/location_search_button"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_weather_map_black_24dp"
+                    app:layout_constraintLeft_toRightOf="@id/main_temp"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <LinearLayout
                     android:id="@+id/current_details"
@@ -180,17 +192,5 @@
 
         </LinearLayout>
     </ScrollView>
-
-    <ImageButton
-        android:id="@+id/location_search_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="10dp"
-        android:background="@drawable/location_searchbar_style"
-        android:padding="10dp"
-        android:src="?android:attr/actionModeWebSearchDrawable"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

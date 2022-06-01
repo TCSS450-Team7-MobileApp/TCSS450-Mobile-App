@@ -9,12 +9,14 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import org.json.JSONObject;
 
 import edu.uw.tcss450.blynch99.tcss450mobileapp.R;
-import edu.uw.tcss450.blynch99.tcss450mobileapp.auth.model.LocationViewModel;
+import edu.uw.tcss450.blynch99.tcss450mobileapp.auth.model.UserInfoViewModel;
+import edu.uw.tcss450.blynch99.tcss450mobileapp.model.LocationViewModel;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.databinding.FragmentHomeBinding;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.ui.weather.WeatherHourlyRecyclerViewAdapter;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.ui.weather.WeatherIcons;
@@ -28,10 +30,12 @@ public class HomeFragment extends Fragment {
     private FragmentHomeBinding mBinding;
     private WeatherViewModel mWeatherViewModel;
     private LocationViewModel mLocationModel;
+    private UserInfoViewModel mUserInfoViewModel;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mUserInfoViewModel = new ViewModelProvider(getActivity()).get(UserInfoViewModel.class);
         mWeatherViewModel = new ViewModelProvider(getActivity()).get(WeatherViewModel.class);
         mLocationModel = new ViewModelProvider(getActivity()).get(LocationViewModel.class);
     }
@@ -49,12 +53,19 @@ public class HomeFragment extends Fragment {
         Fragment parent = getParentFragment();
         mBinding = FragmentHomeBinding.bind(getView());
 
+        mLocationModel.addLocationObserver(getViewLifecycleOwner(), location -> {
+            if (location != null) {
+                mWeatherViewModel.connectGet(mUserInfoViewModel.getJwt(), String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()));
+            }
+        });
+
         mWeatherViewModel.addResponseObserver(getViewLifecycleOwner(), this::observeResponse);
     }
 
     private void observeResponse(final JSONObject response) {
         if (response.has("code")) {
             Log.e("WEATHER REQUEST ERROR", response.toString());
+            mWeatherViewModel.clearResponse();
         } else if (response.length() != 0) {
             setViewComponents();
         } else {
@@ -67,5 +78,6 @@ public class HomeFragment extends Fragment {
         mBinding.locationTitle.setText(mLocationModel.getCity());
         mBinding.currentTemp.setText(mWeatherViewModel.getmCurrentWeatherData().getmTemperature() + "°F");
         mBinding.homeWeatherIcon.setImageResource(WeatherIcons.getInstance().getIcon(mWeatherViewModel.getmCurrentWeatherData().getmIcon()));
+        mBinding.homeWeatherDesc.setText(mWeatherViewModel.getmCurrentWeatherData().getmDescription());
     }
 }

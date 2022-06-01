@@ -1,4 +1,4 @@
-package edu.uw.tcss450.blynch99.tcss450mobileapp.auth.model;
+package edu.uw.tcss450.blynch99.tcss450mobileapp.model;
 
 import android.content.Context;
 import android.location.Address;
