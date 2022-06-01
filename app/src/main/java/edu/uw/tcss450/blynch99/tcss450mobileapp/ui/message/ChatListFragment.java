@@ -54,19 +54,6 @@ public class ChatListFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         FragmentChatListBinding binding = FragmentChatListBinding.bind(getView());
 
-//        List<Chat> chatList = new ArrayList<>();
-//
-//        chatList.add(new Chat());
-//        chatList.add(new Chat());
-//        chatList.add(new Chat());
-//        chatList.add(new Chat());
-//        chatList.add(new Chat());
-//        chatList.add(new Chat());
-//        chatList.add(new Chat());
-
-        //binding.listRoot.setAdapter(new ChatRecyclerViewAdapter(chatList));
-        //binding.listRoot.setLayoutManager(new LinearLayoutManager(getActivity()));
-
         mModel.addChatListObserver(getViewLifecycleOwner(), chats -> {
             binding.listRoot.setAdapter(
                     new ChatRecyclerViewAdapter(chats)
