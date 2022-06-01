@@ -25,8 +25,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import edu.uw.tcss450.blynch99.tcss450mobileapp.R;
-
 public class WeatherViewModel extends AndroidViewModel {
 
     private final MutableLiveData<JSONObject> mResponse;
@@ -49,15 +47,15 @@ public class WeatherViewModel extends AndroidViewModel {
         mResponse.observe(theOwner, theObserver);
     }
 
-    public WeatherCurrent getCurrentWeatherData() {
+    public WeatherCurrent getmCurrentWeatherData() {
         return mCurrentWeatherData;
     }
 
-    public List<Weather> getHourlyForecast() {
+    public List<Weather> getmHourlyForecast() {
         return mHourlyForecast;
     }
 
-    public List<Weather> getDailyForecast() {
+    public List<Weather> getmDailyForecast() {
         return mDailyForecast;
     }
 
@@ -65,13 +63,11 @@ public class WeatherViewModel extends AndroidViewModel {
         mResponse.setValue(new JSONObject());
     }
 
-    public void connectGet(final String jwt) {
-        // 47.246950, -122.436277
-        String tempCoords = "?lat=47.246950&lng=-122.436277";
-        //String url = "https://tcss450-team7.herokuapp.com/weather" + tempCoords;
+    public void connectGet(final String jwt, final String latitude, final String longitude) {
+//        String tempCoords = "?lat=47.246950&lng=-122.436277";
+        String coordinates = String.format("?lat=%s&lng=%s", latitude, longitude);
+        String url = "https://tcss450-team7.herokuapp.com/weather" + coordinates;
 //        String url = "http://192.168.0.13:5000/weather" + tempCoords;
-        String url = getApplication().getResources().getString(R.string.base_url_service) +
-                "weather/" + tempCoords;
 
         Request request = new JsonObjectRequest(
                 Request.Method.GET,
@@ -97,6 +93,7 @@ public class WeatherViewModel extends AndroidViewModel {
     }
 
     private void handleResult(final JSONObject theResult) {
+        Log.d("WEATHER_API", "Handling result " + theResult.toString());
         WeatherCurrent currentWeatherData = null;
         List<Weather> hourlyData = new ArrayList<>();
         List<Weather> dailyData = new ArrayList<>();
@@ -108,7 +105,8 @@ public class WeatherViewModel extends AndroidViewModel {
                     curr.getInt("minTemp"),
                     curr.getInt("maxTemp"),
                     curr.getInt("humidity"),
-                    curr.getInt("feels_like"));
+                    curr.getInt("feels_like"),
+                    curr.getString("icon"));
 
             JSONArray hourRes = theResult.getJSONArray("hourlyData");
             for (int i = 0; i < hourRes.length(); i++) {
@@ -117,7 +115,8 @@ public class WeatherViewModel extends AndroidViewModel {
                 Weather newData = new Weather(
                         i == 0 ? "Now" :
                                 (hour % 12 == 0 ? 12 : hour % 12) + (hour < 12 ? "AM" : "PM"),
-                        hourData.getInt("temp"));
+                        hourData.getInt("temp"),
+                        hourData.getString("icon"));
                 hourlyData.add(newData);
             }
 
@@ -126,7 +125,8 @@ public class WeatherViewModel extends AndroidViewModel {
                 JSONObject dayData = (JSONObject) dailyRes.get(i);
                 Weather newData = new Weather(
                         i == 0 ? "Today" : dayData.getString("day"),
-                        dayData.getInt("temp"));
+                        dayData.getInt("temp"),
+                        dayData.getString("icon"));
                 dailyData.add(newData);
             }
 

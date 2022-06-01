@@ -25,7 +25,11 @@
         android:id="@+id/navigation_weather"
         android:name="edu.uw.tcss450.blynch99.tcss450mobileapp.ui.weather.WeatherFragment"
         android:label="@string/title_weather"
-        tools:layout="@layout/fragment_weather" />
+        tools:layout="@layout/fragment_weather" >
+        <action
+            android:id="@+id/action_navigation_weather_to_locationFragment"
+            app:destination="@id/locationFragment" />
+    </fragment>
     <fragment
         android:id="@+id/navigation_message"
         android:name="edu.uw.tcss450.blynch99.tcss450mobileapp.ui.message.ChatListFragment"
@@ -71,4 +75,9 @@
         android:label="fragment_add_friends"
         tools:layout="@layout/fragment_add_friends" >
     </fragment>
+    <fragment
+        android:id="@+id/locationFragment"
+        android:name="edu.uw.tcss450.blynch99.tcss450mobileapp.ui.weather.LocationFragment"
+        android:label="@string/title_location"
+        tools:layout="@layout/fragment_location" />
 </navigation>

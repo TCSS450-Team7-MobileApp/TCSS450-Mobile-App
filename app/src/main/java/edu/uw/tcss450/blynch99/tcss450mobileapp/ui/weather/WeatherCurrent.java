@@ -7,19 +7,22 @@ public class WeatherCurrent {
     private final int mMaxTemperature;
     private final int mFeelsLike;
     private final int mHumidity;
+    private final String mIcon;
 
     public WeatherCurrent(final int temp,
                           final String description,
                           final int minTemperature,
                           final int maxTemperature,
                           final int feelsLike,
-                          final int humid) {
+                          final int humid,
+                          final String icon) {
         mTemperature = temp;
         mFeelsLike = feelsLike;
         mHumidity = humid;
         mDescription = description;
         mMinTemperature = minTemperature;
         mMaxTemperature = maxTemperature;
+        mIcon = icon;
     }
 
     public int getmTemperature() {
@@ -44,5 +47,9 @@ public class WeatherCurrent {
 
     public int getmHumidity() {
         return mHumidity;
+    }
+
+    public String getmIcon() {
+        return mIcon;
     }
 }

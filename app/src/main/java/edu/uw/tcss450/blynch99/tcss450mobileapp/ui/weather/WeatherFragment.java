@@ -1,5 +1,6 @@
 package edu.uw.tcss450.blynch99.tcss450mobileapp.ui.weather;
 
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,9 +11,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
+
+import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONObject;
 
+import edu.uw.tcss450.blynch99.tcss450mobileapp.R;
+import edu.uw.tcss450.blynch99.tcss450mobileapp.model.LocationViewModel;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.auth.model.UserInfoViewModel;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.databinding.FragmentWeatherBinding;
 
@@ -21,11 +27,12 @@ import edu.uw.tcss450.blynch99.tcss450mobileapp.databinding.FragmentWeatherBindi
  */
 public class WeatherFragment extends Fragment {
 
-    private static final String degreeFahrenheit = "°F";
+    private static final String degreeFarenheit = "°F";
 
     private WeatherViewModel mModel;
     private UserInfoViewModel mUserModel;
     private FragmentWeatherBinding mBinding;
+    private LocationViewModel mLocationModel;
 
     public WeatherFragment() {}
 
@@ -34,16 +41,14 @@ public class WeatherFragment extends Fragment {
         super.onCreate(savedInstanceState);
         mModel = new ViewModelProvider(getActivity()).get(WeatherViewModel.class);
         mUserModel = new ViewModelProvider(getActivity()).get(UserInfoViewModel.class);
-        mModel.connectGet(mUserModel.getJwt());
+        mLocationModel = new ViewModelProvider(getActivity()).get(LocationViewModel.class);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-//        return inflater.inflate(R.layout.fragment_weather, container, false);
-        mBinding = FragmentWeatherBinding.inflate(inflater);
-        return mBinding.getRoot();
+//         Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_weather, container, false);
     }
 
     @Override
@@ -51,7 +56,18 @@ public class WeatherFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         Fragment parent = getParentFragment();
         mBinding = FragmentWeatherBinding.bind(getView());
+
+        mBinding.locationSearchButton.setOnClickListener(text -> {
+            Navigation.findNavController(getView()).navigate(WeatherFragmentDirections.actionNavigationWeatherToLocationFragment());
+        });
+
         mModel.addResponseObserver(getViewLifecycleOwner(), this::observeResponse);
+
+        mLocationModel.addLocationObserver(getViewLifecycleOwner(), location -> {
+            if (location != null) {
+                mModel.connectGet(mUserModel.getJwt(), String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()));
+            }
+        });
     }
 
     private void observeResponse(final JSONObject response) {
@@ -64,12 +80,14 @@ public class WeatherFragment extends Fragment {
         }
     }
     private void setViewComponents() {
-        mBinding.currentTemp.setText(mModel.getCurrentWeatherData().getmTemperature() + degreeFahrenheit);
-        mBinding.weatherDescription.setText(mModel.getCurrentWeatherData().getmDescription());
-        mBinding.feelsLike.setText("Feels like: " + mModel.getCurrentWeatherData().getmFeelsLike() + degreeFahrenheit);
-        mBinding.minTemp.setText("Min: " + mModel.getCurrentWeatherData().getmMinTemperature() + degreeFahrenheit);
-        mBinding.maxTemp.setText("Max: " + mModel.getCurrentWeatherData().getmMaxTemperature() + degreeFahrenheit);
-        mBinding.hourlyList.setAdapter(new WeatherHourlyRecyclerViewAdapter(mModel.getHourlyForecast()));
-        mBinding.dailyList.setAdapter(new WeatherDailyRecyclerViewAdapter(mModel.getDailyForecast()));
+        mBinding.locationTitle.setText(mLocationModel.getCity());
+        mBinding.currentTemp.setText(mModel.getmCurrentWeatherData().getmTemperature() + degreeFarenheit);
+        mBinding.currentWeatherIcon.setImageResource(WeatherIcons.getInstance().getIcon(mModel.getmCurrentWeatherData().getmIcon()));
+        mBinding.weatherDescription.setText(mModel.getmCurrentWeatherData().getmDescription());
+        mBinding.feelsLike.setText("Feels like: " + mModel.getmCurrentWeatherData().getmFeelsLike() + degreeFarenheit);
+        mBinding.minTemp.setText("L: " + mModel.getmCurrentWeatherData().getmMinTemperature() + degreeFarenheit);
+        mBinding.maxTemp.setText("H: " + mModel.getmCurrentWeatherData().getmMaxTemperature() + degreeFarenheit);
+        mBinding.hourlyList.setAdapter(new WeatherHourlyRecyclerViewAdapter(mModel.getmHourlyForecast()));
+        mBinding.dailyList.setAdapter(new WeatherDailyRecyclerViewAdapter(mModel.getmDailyForecast()));
     }
 }

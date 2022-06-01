@@ -6,8 +6,11 @@ public class Weather {
 
     private final int mTemperature;
 
-    public Weather(final String dayHour, final int temp) {
+    private final String mIcon;
+
+    public Weather(final String dayHour, final int temp, final String icon) {
         mDayHour = dayHour;
+        mIcon = icon;
         mTemperature = temp;
     }
 
@@ -17,5 +20,9 @@ public class Weather {
 
     public int getmTemperature() {
         return mTemperature;
+    }
+
+    public String getmIcon() {
+        return mIcon;
     }
 }
