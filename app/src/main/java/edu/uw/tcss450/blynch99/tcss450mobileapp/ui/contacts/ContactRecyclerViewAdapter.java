@@ -25,7 +25,6 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecy
     
     private final HashMap<Integer,Contact> mContacts;
     private final Context mContext;
-
     private ManagerFriendViewModel mManage;
 
     public ContactRecyclerViewAdapter(Context context, HashMap<Integer,Contact> contacts){
