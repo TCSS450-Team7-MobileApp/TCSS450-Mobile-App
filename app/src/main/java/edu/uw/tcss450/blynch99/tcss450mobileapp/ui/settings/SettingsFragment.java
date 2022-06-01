@@ -26,9 +26,23 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         model = new ViewModelProvider((ViewModelStoreOwner) MainActivity.getActivity())
                 .get(UserInfoViewModel.class);
 
-        Preference fname = findPreference("preference_first_name");
+        EditTextPreference fname = findPreference("preference_first_name");
         assert fname != null;
-        fname.setOnPreferenceChangeListener((preference, newValue) -> true);
+        fname.setOnPreferenceChangeListener(this::changeName);
+        fname.setText(model.getFirst());
+        fname.setSummary(model.getFirst());
+
+        EditTextPreference lname = findPreference("preference_last_name");
+        assert lname != null;
+        lname.setOnPreferenceChangeListener(this::changeName);
+        lname.setText(model.getLast());
+        lname.setSummary(model.getLast());
+
+        EditTextPreference nname = findPreference("preference_nickname");
+        assert nname != null;
+        nname.setOnPreferenceChangeListener(this::changeName);
+        nname.setText(model.getNick());
+        nname.setSummary(model.getNick());
 
         findPreference("preference_logout").
                 setOnPreferenceClickListener(this::navigateToLogout);
@@ -47,7 +61,13 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
     }
 
-
+    private boolean changeName(Preference preference, Object object){
+        ChangeNameViewModel change = new ViewModelProvider(getActivity())
+                .get(ChangeNameViewModel.class);
+        String str = (String) object;
+        change.connect(str, preference.getTitle().toString());
+        return true;
+    }
 
     private boolean navigateToLogout(Preference preference){
         startActivity(new Intent(getActivity(), AuthActivity.class));
@@ -58,6 +78,9 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
     private boolean promptForPassword(Preference preference, Object str){
         if (model.getEmail().equals(str)){
+            DeleteAccountViewModel delete = new ViewModelProvider(
+                    getActivity()).get(DeleteAccountViewModel.class);
+            delete.connect(model.getEmail());
             navigateToLogout(preference);
         }
         else{
@@ -66,5 +89,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
         return true;
     }
+
 
 }

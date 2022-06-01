@@ -53,7 +53,9 @@ public class ContactListViewModel extends AndroidViewModel {
                     JSONArray rows = response.getJSONArray("rows");
                     for (int i = 0; i< rows.length(); i++){
                         JSONObject jsonContact = rows.getJSONObject(i);
-                        Contact contact = new Contact(jsonContact.getString("username"),
+                        Contact contact = new Contact(
+                                jsonContact.getString("id"),
+                                jsonContact.getString("username"),
                                 jsonContact.getString("firstname"),
                                 jsonContact.getString("lastname"),
                                 jsonContact.getString("email"),
@@ -71,6 +73,10 @@ public class ContactListViewModel extends AndroidViewModel {
             Log.e("ERROR",e.getMessage());
         }
         mContactList.setValue(mContactList.getValue());
+    }
+
+    public void resetContacts(){
+        mContactList.setValue(new ArrayList<>());
     }
 
     public void connect(int memberId, String jwt) {

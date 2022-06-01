@@ -1,13 +1,13 @@
-package edu.uw.tcss450.blynch99.tcss450mobileapp.auth.ui.register;
+package edu.uw.tcss450.blynch99.tcss450mobileapp.ui.contacts;
 
 import android.app.Application;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStoreOwner;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -19,23 +19,26 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.nio.charset.Charset;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
+import edu.uw.tcss450.blynch99.tcss450mobileapp.MainActivity;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.R;
+import edu.uw.tcss450.blynch99.tcss450mobileapp.auth.model.UserInfoViewModel;
 
-public class RegisterViewModel extends AndroidViewModel {
+public class RemoveFriendViewModel extends AndroidViewModel {
 
     private MutableLiveData<JSONObject> mResponse;
+    private UserInfoViewModel mUser;
 
-    public RegisterViewModel(@NonNull Application application) {
+    public RemoveFriendViewModel(@NonNull Application application) {
         super(application);
         mResponse = new MutableLiveData<>();
         mResponse.setValue(new JSONObject());
-    }
 
-    public void addResponseObserver(@NonNull LifecycleOwner owner,
-                                    @NonNull Observer<? super JSONObject> observer) {
-        mResponse.observe(owner, observer);
+        mUser = new ViewModelProvider((ViewModelStoreOwner) MainActivity.getActivity())
+                .get(UserInfoViewModel.class);
     }
 
     private void handleError(final VolleyError error) {
@@ -62,31 +65,24 @@ public class RegisterViewModel extends AndroidViewModel {
         }
     }
 
-    public void connect(final String nickname,
-                        final String first,
-                        final String last,
-                        final String email,
-                        final String password) {
+    public void connect(String friendId) {
         String url = getApplication().getResources().getString(R.string.base_url_service) +
-                "register";
-        // https://tcss450-team7.herokuapp.com/register
-        // https://cfb3-tcss450-labs-2021sp.herokuapp.com/auth
-        JSONObject body = new JSONObject();
-        try {
-            body.put("username",nickname);
-            body.put("first", first);
-            body.put("last", last);
-            body.put("email", email);
-            body.put("password", password);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+                "friendsList/delete/" + mUser.getId() + "/" + friendId;
         Request request = new JsonObjectRequest(
-                Request.Method.POST,
+                Request.Method.DELETE,
                 url,
-                body,
+                null,
                 mResponse::setValue,
-                this::handleError);
+                this::handleError){
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                // add headers <key,value>
+                // anything works for the jwt for now
+                headers.put("Authorization", mUser.getJwt());
+                return headers;
+            }
+        };
         request.setRetryPolicy(new DefaultRetryPolicy(
                 10_000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
@@ -95,5 +91,4 @@ public class RegisterViewModel extends AndroidViewModel {
         Volley.newRequestQueue(getApplication().getApplicationContext())
                 .add(request);
     }
-
 }
