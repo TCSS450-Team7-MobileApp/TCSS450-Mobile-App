@@ -16,6 +16,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.nio.charset.Charset;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 import edu.uw.tcss450.blynch99.tcss450mobileapp.R;
@@ -55,7 +57,7 @@ public class DeleteAccountViewModel extends AndroidViewModel {
         }
     }
 
-    public void connect(final String email) {
+    public void connect(final String email, final String jwt) {
         String url = getApplication().getResources().getString(R.string.base_url_service) +
                 "account/delete/" + email;
         // https://tcss450-team7.herokuapp.com/signin
@@ -66,7 +68,16 @@ public class DeleteAccountViewModel extends AndroidViewModel {
                 url,
                 null, //no body for this get request
                 mResponse::setValue,
-                this::handleError);
+                this::handleError){
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                // add headers <key,value>
+                // anything works for the jwt for now
+                headers.put("Authorization", jwt);
+                return headers;
+            }
+        };
 
         request.setRetryPolicy(new DefaultRetryPolicy(
                 10_000,

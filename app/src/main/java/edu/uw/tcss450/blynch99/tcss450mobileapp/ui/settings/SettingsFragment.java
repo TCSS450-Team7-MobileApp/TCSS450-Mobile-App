@@ -1,7 +1,9 @@
 package edu.uw.tcss450.blynch99.tcss450mobileapp.ui.settings;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.lifecycle.ViewModelProvider;
@@ -65,13 +67,35 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         ChangeNameViewModel change = new ViewModelProvider(getActivity())
                 .get(ChangeNameViewModel.class);
         String str = (String) object;
-        change.connect(str, preference.getTitle().toString());
+        change.connect(str, preference.getTitle().toString(), model.getJwt(), model.getId());
+        preference.setSummary(str);
+
+        switch (preference.getTitle().toString()){
+            case "Change First Name":
+                model.setFirst(str);
+                break;
+            case "Change Last Name":
+                model.setLast(str);
+                break;
+            case "Change Nickname":
+                model.setNick(str);
+                break;
+
+        }
+
         return true;
     }
 
     private boolean navigateToLogout(Preference preference){
         startActivity(new Intent(getActivity(), AuthActivity.class));
         MainActivity.getActivity().finish();
+
+        SharedPreferences prefs =
+                MainActivity.getActivity().getSharedPreferences(
+                        getString(R.string.keys_shared_prefs),
+                        Context.MODE_PRIVATE);
+        prefs.edit().remove(getString(R.string.keys_prefs_jwt)).apply();
+
         getActivity().finish();
         return true;
     }
@@ -80,7 +104,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         if (model.getEmail().equals(str)){
             DeleteAccountViewModel delete = new ViewModelProvider(
                     getActivity()).get(DeleteAccountViewModel.class);
-            delete.connect(model.getEmail());
+            delete.connect(model.getEmail(), model.getJwt());
             navigateToLogout(preference);
         }
         else{

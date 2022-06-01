@@ -76,7 +76,6 @@
     <fragment
         android:id="@+id/addFriendsFragment"
         android:name="edu.uw.tcss450.blynch99.tcss450mobileapp.ui.contacts.AddFriendsFragment"
-        android:label="fragment_add_friends"
-        tools:layout="@layout/fragment_add_friends" >
-    </fragment>
+        android:label="@string/title_add_friend"
+        tools:layout="@layout/fragment_add_friends"></fragment>
 </navigation>

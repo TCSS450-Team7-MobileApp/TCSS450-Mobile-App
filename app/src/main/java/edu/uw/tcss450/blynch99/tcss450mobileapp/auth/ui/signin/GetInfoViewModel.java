@@ -1,11 +1,13 @@
-package edu.uw.tcss450.blynch99.tcss450mobileapp.ui.settings;
+package edu.uw.tcss450.blynch99.tcss450mobileapp.auth.ui.signin;
 
 import android.app.Application;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -23,13 +25,19 @@ import java.util.Objects;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.R;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.io.RequestQueueSingleton;
 
-public class ChangeNameViewModel extends AndroidViewModel {
-    MutableLiveData<JSONObject> mResponse;
+public class GetInfoViewModel extends AndroidViewModel {
+    private MutableLiveData<JSONObject> mResponse;
 
-    public ChangeNameViewModel(@NonNull Application application) {
+    public GetInfoViewModel(@NonNull Application application) {
         super(application);
         mResponse = new MutableLiveData<>();
         mResponse.setValue(new JSONObject());
+
+    }
+
+    public void addResponseObserver(@NonNull LifecycleOwner owner,
+                                    @NonNull Observer<? super JSONObject> observer) {
+        mResponse.observe(owner, observer);
     }
 
     private void handleError(final VolleyError error) {
@@ -56,37 +64,25 @@ public class ChangeNameViewModel extends AndroidViewModel {
         }
     }
 
-    public void connect(final String change, final String nameType, final String jwt, final int id) {
-        String url = getApplication().getResources().getString(R.string.base_url_service) +
-                "account/change/" + id + "/";
-        switch (nameType){
-            case "Change First Name":
-                url += "first/";
-                break;
-            case "Change Last Name":
-                url += "last/";
-                break;
-            case "Change Nickname":
-                url += "user/";
-                break;
-        }
-        url += change;
+
+    public void connect(final String email, final String jwt) {
+        String url = getApplication().getResources().getString(R.string.base_url_service) + "account";
 
         Request request = new JsonObjectRequest(
-                Request.Method.PUT,
+                Request.Method.GET,
                 url,
                 null, //no body for this get request
                 mResponse::setValue,
-                this::handleError){
+                this::handleError) {
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
                 // add headers <key,value>
+                // anything works for the jwt for now
                 headers.put("Authorization", jwt);
                 return headers;
             }
         };
-
         request.setRetryPolicy(new DefaultRetryPolicy(
                 10_000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
