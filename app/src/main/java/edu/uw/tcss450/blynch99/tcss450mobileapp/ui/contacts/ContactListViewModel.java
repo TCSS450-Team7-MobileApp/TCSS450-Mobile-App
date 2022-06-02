@@ -67,7 +67,6 @@ public class ContactListViewModel extends AndroidViewModel {
                             jsonContact.getString("lastname"),
                             jsonContact.getString("email"),
                             status
-
                     );
 
                     if(!mContactList.getValue().contains(contact))

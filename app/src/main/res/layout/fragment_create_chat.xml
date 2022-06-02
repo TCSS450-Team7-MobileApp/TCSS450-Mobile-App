@@ -6,24 +6,17 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/text_chat_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/title_create_chat_name"
-        app:layout_constraintBottom_toTopOf="@+id/edit_chat_name"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.26"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
         android:id="@+id/text_add_people_create"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="2dp"
         android:text="@string/title_create_chat_members"
         app:layout_constraintBottom_toTopOf="@+id/list_contacts_create"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.017"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_add_people" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list_contacts_create"
@@ -32,39 +25,53 @@
         android:layout_height="341dp"
         android:layout_marginStart="5dp"
         android:layout_marginEnd="5dp"
-        android:layout_marginBottom="176dp"
         android:orientation="vertical"
         app:layoutManager="LinearLayoutManager"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         tools:context="edu.uw.tcss450.blynch99.tcss450mobileapp.ui.contacts.ContactsFragment"
+        tools:layout_editor_absoluteY="213dp"
         tools:listitem="@layout/fragment_contact_card" />
 
     <EditText
         android:id="@+id/edit_chat_name"
         android:layout_width="234dp"
         android:layout_height="61dp"
-        android:layout_marginBottom="64dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="24dp"
         android:ems="10"
+        android:hint="@string/hint_chat_name"
         android:inputType="textPersonName"
-        android:text="Name"
         app:layout_constraintBottom_toTopOf="@+id/list_contacts_create"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.209" />
 
     <Button
         android:id="@+id/button_add_people"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginTop="2dp"
         android:text="@string/button_create_chat"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/list_contacts_create"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/list_contacts_create"
-        app:layout_constraintVertical_bias="0.083" />
+        app:layout_constraintHorizontal_bias="0.878"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edit_chat_name"
+        app:layout_constraintVertical_bias="0.028" />
+
+    <TextView
+        android:id="@+id/text_current_members"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TEXT"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/text_add_people_create"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

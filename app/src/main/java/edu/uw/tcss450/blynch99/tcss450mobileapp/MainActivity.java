@@ -401,7 +401,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         private void processNewFriendRequest(Intent intent) {
-
+            // Add request to pending requests
         }
     }
 }
