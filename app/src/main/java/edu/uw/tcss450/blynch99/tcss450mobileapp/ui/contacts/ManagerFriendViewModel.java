@@ -157,4 +157,5 @@ public class ManagerFriendViewModel extends AndroidViewModel {
         Volley.newRequestQueue(getApplication().getApplicationContext())
                 .add(request);
     }
+
 }

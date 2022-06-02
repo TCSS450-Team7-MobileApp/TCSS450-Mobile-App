@@ -31,11 +31,6 @@ public class SearchViewModel extends ContactListViewModel {
         mContactList.setValue(new ArrayList<>());
     }
 
-    public void addSearchObserver(@NonNull LifecycleOwner owner,
-                                       @Nullable Observer<?super List<Contact>> observer){
-        mContactList.observe(owner,observer);
-    }
-
 
     public void connectSearch(String jwt, String searched) {
         String url =
