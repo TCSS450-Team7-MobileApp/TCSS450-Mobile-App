@@ -36,6 +36,8 @@ public class CreateChatViewModel  extends AndroidViewModel {
 
     public CreateChatViewModel(@NonNull Application application) {
         super(application);
+        mContacts = new MutableLiveData<>();
+        mContacts.setValue(new HashMap<>());
     }
 
     public void addContactListObserver(@NonNull LifecycleOwner owner,

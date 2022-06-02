@@ -63,5 +63,7 @@ public class CreateChatFragment extends Fragment {
                     contactViewAdapter
             );
         });
+
+        //binding.buttonAddPeople.setOnClickListener(button -> mModel.connectPostChat());
     }
 }
