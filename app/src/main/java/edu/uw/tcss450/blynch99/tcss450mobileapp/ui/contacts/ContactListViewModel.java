@@ -50,6 +50,15 @@ public class ContactListViewModel extends AndroidViewModel {
         mPendingList.observe(owner,observer);
     }
 
+    public void resetContacts(){
+        mContactList.setValue(new ArrayList<>());
+    }
+
+    public void resetRequests() {
+        mPendingList.setValue(new ArrayList<>());
+    }
+
+
     public void addToContactList(Contact contact) {
         mContactList.getValue().add(contact);
         mContactList.setValue(mContactList.getValue());
