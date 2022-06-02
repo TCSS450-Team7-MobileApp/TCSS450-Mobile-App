@@ -89,6 +89,13 @@ public class ChatListViewModel extends AndroidViewModel {
         mChatList.setValue(mChatList.getValue());
     }
 
+    public void removeChat(Chat chat) {
+        if (mChatList.getValue().contains(chat)) {
+            mChatList.getValue().remove(chat);
+        }
+        mChatList.setValue(mChatList.getValue());
+    }
+
     public void connectGet(int memberId, String jwt) {
         Log.d("CONNECT", "" + memberId);
         Log.d("CONNECT", "JWT: " + jwt);

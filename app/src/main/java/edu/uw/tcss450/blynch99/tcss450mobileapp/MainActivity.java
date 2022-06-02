@@ -48,6 +48,9 @@ import edu.uw.tcss450.blynch99.tcss450mobileapp.auth.model.UserInfoViewModel;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.databinding.ActivityMainBinding;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.model.NewMessageCountViewModel;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.services.PushReceiver;
+import edu.uw.tcss450.blynch99.tcss450mobileapp.ui.contacts.Contact;
+import edu.uw.tcss450.blynch99.tcss450mobileapp.ui.contacts.ContactListViewModel;
+import edu.uw.tcss450.blynch99.tcss450mobileapp.ui.contacts.FriendStatus;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.ui.message.Chat;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.ui.message.ChatListViewModel;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.ui.message.ChatMessage;
@@ -336,6 +339,9 @@ public class MainActivity extends AppCompatActivity {
         private final ChatListViewModel mChatListModel =
                 new ViewModelProvider(MainActivity.this)
                         .get(ChatListViewModel.class);
+        private final ContactListViewModel mContactListModel =
+                new ViewModelProvider(MainActivity.this)
+                        .get(ContactListViewModel.class);
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.hasExtra("type")) {
@@ -392,7 +398,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 //Inform the view model holding chatroom messages of the new
                 //message.
-                // TODO: standardize string vs int for chatId
+
                 int chatId = intent.getIntExtra("chatId", -1);
 
                 mChatModel.addMessage(chatId, cm);
@@ -401,7 +407,15 @@ public class MainActivity extends AppCompatActivity {
         }
 
         private void processNewFriendRequest(Intent intent) {
-            // Add request to pending requests
+
+            mContactListModel.addToPendingList(new Contact(
+                    intent.getStringExtra("id"),
+                    intent.getStringExtra("username"),
+                    intent.getStringExtra("firstname"),
+                    intent.getStringExtra("lastname"),
+                    intent.getStringExtra("email"),
+                    FriendStatus.RECEIVED_REQUEST
+            ));
         }
     }
 }

@@ -163,6 +163,9 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<ChatRecyclerVi
 
         private void handleResult(final JSONObject result) {
             Log.i("CHAT", "Deleted user from chat.");
+            new ViewModelProvider((ViewModelStoreOwner) MainActivity.getActivity())
+                    .get(ChatListViewModel.class)
+                    .removeChat(mChat);
         }
 
         private void handleError(final VolleyError error) {

@@ -30,11 +30,14 @@ import edu.uw.tcss450.blynch99.tcss450mobileapp.R;
 
 public class ContactListViewModel extends AndroidViewModel {
     private MutableLiveData<List<Contact>> mContactList;
+    private MutableLiveData<List<Contact>> mPendingList;
 
     public ContactListViewModel(@NonNull Application application) {
         super(application);
         mContactList = new MutableLiveData<>();
         mContactList.setValue(new ArrayList<>());
+        mPendingList = new MutableLiveData<>();
+        mPendingList.setValue(new ArrayList<>());
     }
 
     public void addContactListObserver(@NonNull LifecycleOwner owner,
@@ -42,19 +45,37 @@ public class ContactListViewModel extends AndroidViewModel {
         mContactList.observe(owner,observer);
     }
 
+    public void addPendingListObserver(@NonNull LifecycleOwner owner,
+                                       @Nullable Observer<?super List<Contact>> observer){
+        mPendingList.observe(owner,observer);
+    }
+
+    public void addToContactList(Contact contact) {
+        mContactList.getValue().add(contact);
+        mContactList.setValue(mContactList.getValue());
+    }
+
+    public void addToPendingList(Contact contact) {
+        mPendingList.getValue().add(contact);
+        mPendingList.setValue(mPendingList.getValue());
+    }
+
     protected void handleError(final VolleyError error) {
         throw new IllegalStateException(error.getMessage());
     }
 
     protected void handleResult(final JSONObject result, String type) {
+        MutableLiveData<List<Contact>> list = mContactList;
         try {
             JSONObject response = result;
             FriendStatus status = FriendStatus.FRIENDS;
+
             Log.d("TTT", type);
-            if (type.equals("requests"))
+
+            if (type.equals("requests")) {
                 status = FriendStatus.RECEIVED_REQUEST;
-            else if (type.equals("search"))
-                status = FriendStatus.NOT_FRIENDS;
+                list = mPendingList;
+            }
 
             if (response.has("rows")) {
                 JSONArray rows = response.getJSONArray("rows");
@@ -69,8 +90,8 @@ public class ContactListViewModel extends AndroidViewModel {
                             status
                     );
 
-                    if(!mContactList.getValue().contains(contact))
-                        mContactList.getValue().add(contact);
+                    if(!list.getValue().contains(contact))
+                        list.getValue().add(contact);
                 }
             } else {
                 Log.e("ERROR", "No Friends Provided");
@@ -79,11 +100,7 @@ public class ContactListViewModel extends AndroidViewModel {
             e.printStackTrace();
             Log.e("ERROR",e.getMessage());
         }
-        mContactList.setValue(mContactList.getValue());
-    }
-
-    public void resetContacts(){
-        mContactList.setValue(new ArrayList<>());
+        list.setValue(list.getValue());
     }
 
     public void connectContacts(int memberId, String jwt, String type) {

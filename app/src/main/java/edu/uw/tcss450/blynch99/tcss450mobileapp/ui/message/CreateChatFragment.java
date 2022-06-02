@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStoreOwner;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -69,12 +70,22 @@ public class CreateChatFragment extends Fragment {
 
         ContactListViewModel contacts = new ViewModelProvider(
                 (ViewModelStoreOwner) MainActivity.getActivity()).get(ContactListViewModel.class);
-        contacts.resetContacts();
+        //contacts.resetContacts();
         contacts.addContactListObserver(getViewLifecycleOwner(), this::setAdapter);
         contacts.connectContacts(mUser.getId(), mUser.getJwt(), "current");
 
-        binding.buttonAddPeople.setOnClickListener(button -> Log.d("TTT", mContactAdapter.getGroupList().toString())/*mModel.connectPostChat()*/);
+        binding.buttonAddPeople.setOnClickListener(button -> {
+            mModel.connectPostChat(binding.editChatName.getText().toString(), mContactAdapter.getGroupList(), mUser.getJwt());
+            // Navigate away
+            /*
+            Navigation.findNavController(getView())
+                    .navigate(CreateChatFragmentDirections
+                            .actionCreateChatFragmentToChatListFragment());
+             */
+        });
     }
+
+
 
     private void setAdapter(List<Contact> contacts) {
         HashMap<Integer, Contact> contactMap = new HashMap<>();
@@ -84,6 +95,5 @@ public class CreateChatFragment extends Fragment {
         mContactAdapter = new CreateChatContactsRecyclerView(contactMap,getActivity());
 
         mRecyclerView.setAdapter(mContactAdapter);
-
     }
 }

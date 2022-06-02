@@ -195,8 +195,8 @@ public class PushReceiver extends BroadcastReceiver {
             //Log.d("MESSAGE", message.toString());
             i.putExtra("id", id);
             i.putExtra("username", username);
-            i.putExtra("firstName", firstName);
-            i.putExtra("lastName", lastName);
+            i.putExtra("firstname", firstName);
+            i.putExtra("lastname", lastName);
             i.putExtra("email", email);
             i.putExtra("status", status);
             i.putExtra("type", "friend_request");

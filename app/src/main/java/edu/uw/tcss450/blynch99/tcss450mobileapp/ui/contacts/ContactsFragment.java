@@ -48,7 +48,7 @@ public class ContactsFragment extends Fragment {
                 MainActivity.getActivity()).get(ContactListViewModel.class);
         UserInfoViewModel user = new ViewModelProvider((ViewModelStoreOwner)
                 MainActivity.getActivity()).get(UserInfoViewModel.class);
-        model.resetContacts();
+        //model.resetContacts();
         model.connectContacts(user.getId(),user.getJwt(), "current");
 
         model.addContactListObserver(getViewLifecycleOwner(), this::setAdapter);
