@@ -19,13 +19,13 @@ import edu.uw.tcss450.blynch99.tcss450mobileapp.ui.contacts.Contact;
 
 public class Chat implements Serializable {
 
-    private final String mChatId;
+    private final int mChatId;
     private String mDate;
     private final String mTitle;
     private String mTeaser;
     private List<String> mMembers;
 
-    public Chat(List<String> members, String title, String chatId, String date, String teaser) {
+    public Chat(List<String> members, String title, int chatId, String date, String teaser) {
         mMembers = members;
         mChatId = chatId;
         mDate = date;
@@ -49,7 +49,7 @@ public class Chat implements Serializable {
         mDate = date;
     }
 
-    public String getChatId() { return mChatId; }
+    public int getChatId() { return mChatId; }
 
     public String getDate() { return mDate; }
 
@@ -62,14 +62,17 @@ public class Chat implements Serializable {
             formattedDate += msgDate.toString().split(" ")[0] + " ";
             long msPassed = today.getTime() - msgDate.getTime();
             long daysPassed = TimeUnit.DAYS.convert(msPassed, TimeUnit.MILLISECONDS);
+
+            Log.d("TIME", mDate);
+            String time = mDate.substring(11);
+            String[] times = time.split(":");
+            Log.d("TIME", Arrays.toString(times));
+            formattedDate += times[0] + ":" + times[1];
         } catch (ParseException e) {
             e.printStackTrace();
             Log.e("ERROR", "Error with date: " + mDate);
         }
-        String time = mDate.split(" ")[1];
-        String[] times = time.split(":");
-        Log.d("TIME", Arrays.toString(times));
-        return formattedDate + times[0] + ":" + times[1];
+        return formattedDate;
     }
 
     public String getTeaser() { return mTeaser; }
@@ -96,6 +99,6 @@ public class Chat implements Serializable {
         if (this.getClass() != o.getClass()) return false;
 
         Chat other = (Chat) o;
-        return this.mChatId.equals(other.getChatId());
+        return this.mChatId == other.getChatId();
     }
 }

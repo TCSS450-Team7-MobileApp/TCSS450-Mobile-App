@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class NewMessageCountViewModel extends ViewModel {
-    private MutableLiveData<Map<String, Integer>> mNewMessageCount;
+    private MutableLiveData<Map<Integer, Integer>> mNewMessageCount;
 
     public NewMessageCountViewModel() {
         mNewMessageCount = new MutableLiveData<>();
@@ -18,11 +18,11 @@ public class NewMessageCountViewModel extends ViewModel {
     }
 
     public void addMessageCountObserver(@NonNull LifecycleOwner owner,
-                                        @NonNull Observer<? super Map<String, Integer>> observer) {
+                                        @NonNull Observer<? super Map<Integer, Integer>> observer) {
         mNewMessageCount.observe(owner, observer);
     }
 
-    public void increment(String chatId) {
+    public void increment(int chatId) {
         mNewMessageCount.getValue().put(
                 chatId,
                 mNewMessageCount.getValue().containsKey(chatId) ?
@@ -31,7 +31,7 @@ public class NewMessageCountViewModel extends ViewModel {
         mNewMessageCount.setValue(mNewMessageCount.getValue());
     }
 
-    public void reset(String chatId) {
+    public void reset(int chatId) {
         if (mNewMessageCount.getValue().containsKey(chatId)) {
             mNewMessageCount.getValue().put(chatId, 0);
         }

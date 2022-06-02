@@ -190,6 +190,7 @@ public class ChatViewModel extends AndroidViewModel {
                 if (message.getString("message").trim().isEmpty()) continue;
                 ChatMessage cMessage = new ChatMessage(
                         message.getInt("messageid"),
+                        response.getInt("chatId"),
                         message.getString("message"),
                         message.getString("email"),
                         message.getString("timestamp")

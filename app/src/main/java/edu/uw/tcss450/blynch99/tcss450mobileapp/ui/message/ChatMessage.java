@@ -10,12 +10,14 @@ import java.io.Serializable;
 public class ChatMessage implements Serializable {
 
     private final int mMessageId;
+    private final int mChatId;
     private final String mMessage;
     private final String mSender;
     private final String mTimeStamp;
 
-    public ChatMessage(int messageId, String message, String sender, String timeStamp) {
+    public ChatMessage(int messageId, int chatId, String message, String sender, String timeStamp) {
         mMessageId = messageId;
+        mChatId = chatId;
         mMessage = message;
         mSender = sender;
         mTimeStamp = timeStamp;
@@ -31,6 +33,7 @@ public class ChatMessage implements Serializable {
     public static ChatMessage createFromJsonString(final String cmAsJson) throws JSONException {
         final JSONObject msg = new JSONObject(cmAsJson);
         return new ChatMessage(msg.getInt("messageid"),
+                msg.getInt("chatid"),
                 msg.getString("message"),
                 msg.getString("email"),
                 msg.getString("timestamp"));
@@ -50,6 +53,10 @@ public class ChatMessage implements Serializable {
 
     public int getMessageId() {
         return mMessageId;
+    }
+
+    public int getChatId() {
+        return mChatId;
     }
 
     /**

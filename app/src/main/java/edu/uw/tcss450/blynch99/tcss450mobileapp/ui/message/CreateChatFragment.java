@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -31,6 +32,18 @@ public class CreateChatFragment extends Fragment {
     private FragmentCreateChatBinding mBinding;
     private RecyclerView mRecyclerView;
     private ContactListViewModel mContactListModel;
+    private CreateChatViewModel mModel;
+
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
+        super.onCreate(savedInstanceState);
+        ViewModelProvider provider = new ViewModelProvider(getActivity());
+        mContactListModel = provider.get(ContactListViewModel.class);
+        //mRecyclerView = provider.get(RecyclerView.class);
+        mModel = provider.get(CreateChatViewModel.class);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -44,15 +57,11 @@ public class CreateChatFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         FragmentCreateChatBinding binding = FragmentCreateChatBinding.bind(getView());
 
-        mContactListModel.addContactListObserver(getViewLifecycleOwner(), this::setAdapter);
-    }
-
-    private void setAdapter(List<Contact> contacts) {
-        HashMap<Integer, Contact> contactMap = new HashMap<>();
-        for (Contact contact : contacts){
-            contactMap.put(contacts.indexOf(contact), contact);
-
-        }
-        mRecyclerView.setAdapter(new ContactRecyclerViewAdapter(getActivity(), contactMap));
+        mModel.addContactListObserver(getViewLifecycleOwner(), contacts -> {
+            ContactRecyclerViewAdapter contactViewAdapter = new ContactRecyclerViewAdapter(getActivity(), contacts);
+            binding.listContactsCreate.setAdapter(
+                    contactViewAdapter
+            );
+        });
     }
 }

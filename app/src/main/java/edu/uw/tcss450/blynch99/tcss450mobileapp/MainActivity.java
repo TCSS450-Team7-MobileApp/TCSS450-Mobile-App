@@ -38,6 +38,7 @@ import edu.uw.tcss450.blynch99.tcss450mobileapp.services.PushReceiver;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.ui.message.Chat;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.ui.message.ChatListViewModel;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.ui.message.ChatMessage;
+import edu.uw.tcss450.blynch99.tcss450mobileapp.ui.message.ChatRecyclerViewAdapter;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.ui.message.ChatViewModel;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.ui.settings.SettingsActivity;
 
@@ -89,12 +90,8 @@ public class MainActivity extends AppCompatActivity {
 
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
             if (destination.getId() == R.id.chatFragment) {
-                //When the user navigates to the chats page, reset the new message count.
-                //This will need some extra logic for your project as it should have
-                //multiple chat rooms.
-
-                // arguments.get("chatId") use chatId to reset notifs for that chatroom
-                mNewMessageModel.reset(arguments.getString("chatId"));
+                //Log.d("CHATID", "arguments: " + ((Chat) arguments.get("chat")).getChatId());
+                mNewMessageModel.reset(((Chat) arguments.get("chat")).getChatId());
             }
         });
         mNewMessageModel.addMessageCountObserver(this, counts -> {
@@ -207,7 +204,7 @@ public class MainActivity extends AppCompatActivity {
                     new Chat(
                             members,
                             intent.getStringExtra("name"),
-                            intent.getStringExtra("chatId"),
+                            intent.getIntExtra("chatId", -1),
                             intent.getStringExtra("timestamp"),
                             intent.getStringExtra("recent_message")
                     )
@@ -226,13 +223,14 @@ public class MainActivity extends AppCompatActivity {
                 ChatMessage cm = (ChatMessage) intent.getSerializableExtra("chatMessage");
                 //If the user is not on the chat screen, update the
                 // NewMessageCountView Model
-                if (nd.getId() != R.id.navigation_message && nd.getId() != R.id.chatFragment) {
-                    mNewMessageModel.increment(intent.getStringExtra("chatId"));
+                if (nd.getId() != R.id.chatFragment) {
+                    mNewMessageModel.increment(intent.getIntExtra("chatId", -1));
                 }
                 //Inform the view model holding chatroom messages of the new
                 //message.
                 // TODO: standardize string vs int for chatId
                 int chatId = intent.getIntExtra("chatId", -1);
+
                 mChatModel.addMessage(chatId, cm);
                 mChatListModel.updateChat(cm);
             }

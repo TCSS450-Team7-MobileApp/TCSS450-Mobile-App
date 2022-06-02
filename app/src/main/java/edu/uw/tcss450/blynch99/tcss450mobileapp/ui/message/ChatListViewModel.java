@@ -30,11 +30,16 @@ import edu.uw.tcss450.blynch99.tcss450mobileapp.R;
 public class ChatListViewModel extends AndroidViewModel {
 
     private MutableLiveData<List<Chat>> mChatList;
+    private ChatRecyclerViewAdapter mChatRecyclerViewAdapter;
 
     public ChatListViewModel(@NonNull Application application) {
         super(application);
         mChatList = new MutableLiveData<>();
         mChatList.setValue(new ArrayList<>());
+    }
+
+    public void setChatRecyclerViewAdapter(ChatRecyclerViewAdapter adapter) {
+        mChatRecyclerViewAdapter = adapter;
     }
 
     public void addChatListObserver(@NonNull LifecycleOwner owner,
@@ -43,9 +48,10 @@ public class ChatListViewModel extends AndroidViewModel {
     }
 
     public void updateChat(ChatMessage chatMessage) {
+        Log.d("CHAT", "Updating chatlist with message: " + chatMessage.toString());
         Chat target = null;
         for (Chat existing : mChatList.getValue()) {
-            if (existing.getChatId().equals(chatMessage.getMessage())) {
+            if (existing.getChatId() == chatMessage.getChatId()) {
                 target = existing;
             }
         }
@@ -55,6 +61,7 @@ public class ChatListViewModel extends AndroidViewModel {
                 target.setTeaser(chatMessage.getMessage());
             target.setDate(chatMessage.getTimeStamp());
             mChatList.getValue().add(0, target);
+            mChatRecyclerViewAdapter.markUnread(target);
         }
         mChatList.setValue(mChatList.getValue());
     }
@@ -76,6 +83,7 @@ public class ChatListViewModel extends AndroidViewModel {
                 if (!chat.getTeaser().isEmpty())
                     target.setTeaser(chat.getTeaser());
                 mChatList.getValue().add(0, target);
+                mChatRecyclerViewAdapter.markUnread(target);
             }
         }
         mChatList.setValue(mChatList.getValue());
@@ -129,7 +137,7 @@ public class ChatListViewModel extends AndroidViewModel {
                     Chat chatInfo = new Chat(
                             members,
                             chat.getString("name"),
-                            chat.getInt("chatid") + "",
+                            chat.getInt("chatid"),
                             chat.getString("timestamp"),
                             chat.getString("message").trim());
                     if (!mChatList.getValue().contains(chatInfo)) {

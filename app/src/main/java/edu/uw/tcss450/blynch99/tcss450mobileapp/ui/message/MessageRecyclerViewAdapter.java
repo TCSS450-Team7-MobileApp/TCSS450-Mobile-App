@@ -1,6 +1,7 @@
 package edu.uw.tcss450.blynch99.tcss450mobileapp.ui.message;
 
 import android.content.res.Resources;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -64,6 +65,10 @@ public class MessageRecyclerViewAdapter extends RecyclerView.Adapter<MessageRecy
             int standard = (int) res.getDimension(R.dimen.chat_margin);
             int extended = (int) res.getDimension(R.dimen.chat_margin_sided);
 
+            Log.d("MESSAGE", "message: " + message.getMessage());
+            Log.d("MESSAGE", "mEmail: " + mEmail);
+            Log.d("MESSAGE", "sender: " + message.getSender());
+
             if (mEmail.equals(message.getSender())) {
                 //This message is from the user. Format it as such
                 binding.textMessage.setText(message.getMessage());
@@ -97,7 +102,6 @@ public class MessageRecyclerViewAdapter extends RecyclerView.Adapter<MessageRecy
                                 .setTopRightCornerSize(0)
                                 .build());
 
-                card.requestLayout();
             } else {
                 //This message is from another user. Format it as such
                 binding.textMessage.setText(message.getSender() +
@@ -133,8 +137,8 @@ public class MessageRecyclerViewAdapter extends RecyclerView.Adapter<MessageRecy
                                 .setBottomLeftCornerSize(0)
                                 .setTopLeftCornerSize(0)
                                 .build());
-                card.requestLayout();
             }
+            card.requestLayout();
         }
     }
 }

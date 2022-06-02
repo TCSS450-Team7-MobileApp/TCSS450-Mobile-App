@@ -46,12 +46,13 @@
         android:id="@+id/edit_chat_name"
         android:layout_width="234dp"
         android:layout_height="61dp"
-        android:layout_marginBottom="48dp"
+        android:layout_marginBottom="64dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:text="Name"
         app:layout_constraintBottom_toTopOf="@+id/list_contacts_create"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button

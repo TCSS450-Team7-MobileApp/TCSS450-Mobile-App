@@ -55,10 +55,14 @@ public class ChatListFragment extends Fragment {
         FragmentChatListBinding binding = FragmentChatListBinding.bind(getView());
 
         mModel.addChatListObserver(getViewLifecycleOwner(), chats -> {
+            ChatRecyclerViewAdapter chatViewAdapter = new ChatRecyclerViewAdapter(chats);
             binding.listRoot.setAdapter(
-                    new ChatRecyclerViewAdapter(chats)
+                    chatViewAdapter
             );
+            mModel.setChatRecyclerViewAdapter(chatViewAdapter);
         });
+
+        binding.fabAddChat.setOnClickListener(button -> navigateToCreateChat());
     }
 
     @Override
@@ -72,6 +76,12 @@ public class ChatListFragment extends Fragment {
         navigateToContacts();
         return super.onOptionsItemSelected(item);
 
+    }
+
+    private void navigateToCreateChat() {
+        Navigation.findNavController(getView())
+                .navigate(ChatListFragmentDirections
+                        .actionNavigationMessageToCreateChatFragment());
     }
 
     private void navigateToContacts() {
