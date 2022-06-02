@@ -23,11 +23,14 @@ import edu.uw.tcss450.blynch99.tcss450mobileapp.R;
 
 public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecyclerViewAdapter.myViewHolder> {
 
-    private final HashMap<Integer,Contact> mContacts;
-    private final Context mContext;
-    private ManagerFriendViewModel mManage;
+    protected final HashMap<Integer,Contact> mContacts;
+    protected final Context mContext;
+    protected ManagerFriendViewModel mManage;
+
+
 
     public ContactRecyclerViewAdapter(Context context, HashMap<Integer,Contact> contacts){
+
 
         mContacts = contacts;
         mContext = context;
@@ -124,7 +127,7 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecy
         return mContacts.size();
     }
 
-    public class myViewHolder extends RecyclerView.ViewHolder{
+    public static class myViewHolder extends RecyclerView.ViewHolder{
         TextView nickname, fullName;
         ConstraintLayout cardLayout;
         Button manager, remove;

@@ -52,7 +52,6 @@ public class ContactsFragment extends Fragment {
         model.connectContacts(user.getId(),user.getJwt(), "current");
 
         model.addContactListObserver(getViewLifecycleOwner(), this::setAdapter);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         mBinding.fabAddContact.setOnClickListener(button -> navigateToAddNewFriends());
 
