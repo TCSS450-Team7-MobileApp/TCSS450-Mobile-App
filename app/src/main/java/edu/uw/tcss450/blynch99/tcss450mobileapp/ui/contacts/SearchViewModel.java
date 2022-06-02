@@ -42,7 +42,13 @@ public class SearchViewModel extends AndroidViewModel {
         mSearchList.observe(owner,observer);
     }
 
+    private void resetSearchResults() {
+        mSearchList.setValue(new ArrayList<>());
+    }
+
     public void connectSearch(String jwt, String searched) {
+        resetSearchResults();
+
         String url =
                 getApplication().getResources().getString(R.string.base_url_service)
                         + "search/" + searched;

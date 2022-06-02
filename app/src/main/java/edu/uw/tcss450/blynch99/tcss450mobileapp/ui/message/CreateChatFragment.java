@@ -62,7 +62,6 @@ public class CreateChatFragment extends Fragment {
         FragmentCreateChatBinding binding = FragmentCreateChatBinding.bind(getView());
 
 
-
         mRecyclerView = binding.listContactsCreate;
         mUser = new ViewModelProvider(
                 (ViewModelStoreOwner) getActivity()).get(UserInfoViewModel.class);
@@ -72,6 +71,7 @@ public class CreateChatFragment extends Fragment {
                 (ViewModelStoreOwner) MainActivity.getActivity()).get(ContactListViewModel.class);
         //contacts.resetContacts();
         contacts.addContactListObserver(getViewLifecycleOwner(), this::setAdapter);
+        contacts.resetContacts();
         contacts.connectContacts(mUser.getId(), mUser.getJwt(), "current");
 
         binding.buttonAddPeople.setOnClickListener(button -> {
