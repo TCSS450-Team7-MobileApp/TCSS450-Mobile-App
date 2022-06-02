@@ -60,7 +60,11 @@
     <fragment
         android:id="@+id/createChatFragment"
         android:name="edu.uw.tcss450.blynch99.tcss450mobileapp.ui.message.CreateChatFragment"
-        android:label="@string/title_create_chat" />
+        android:label="@string/title_create_chat" >
+        <action
+            android:id="@+id/action_createChatFragment_to_navigation_message"
+            app:destination="@id/navigation_message" />
+    </fragment>
     <fragment
         android:id="@+id/addFriendsFragment"
         android:name="edu.uw.tcss450.blynch99.tcss450mobileapp.ui.contacts.AddFriendsFragment"
