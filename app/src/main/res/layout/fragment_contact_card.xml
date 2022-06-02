@@ -55,7 +55,7 @@
                 tools:text="full name" />
 
             <Button
-                android:id="@+id/button_message"
+                android:id="@+id/button_friend_manager"
                 android:layout_width="111dp"
                 android:layout_height="77dp"
                 android:layout_below="@+id/text_full_name"
@@ -73,18 +73,8 @@
                 android:layout_below="@+id/text_full_name"
                 android:layout_marginStart="-60dp"
                 android:layout_marginTop="10dp"
-                android:layout_toEndOf="@+id/button_message"
+                android:layout_toEndOf="@+id/button_friend_manager"
                 android:text="@string/action_friend_remove"
-                android:visibility="gone" />
-
-            <Button
-                android:id="@+id/button_friend_manager"
-                android:layout_width="242dp"
-                android:layout_height="71dp"
-                android:layout_below="@+id/text_full_name"
-                android:layout_alignParentEnd="true"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="45dp"
                 android:visibility="gone" />
 
         </RelativeLayout>

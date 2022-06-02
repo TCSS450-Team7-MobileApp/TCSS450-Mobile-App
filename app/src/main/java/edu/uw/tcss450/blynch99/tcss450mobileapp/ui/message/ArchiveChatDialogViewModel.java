@@ -28,7 +28,7 @@ public class ArchiveChatDialogViewModel extends AndroidViewModel {
         super(application);
     }
 
-    public void connectDelete(final String chatId, final String email, String jwt) {
+    public void connectDelete(final int chatId, final String email, String jwt) {
         String url = getApplication().getString(R.string.base_url_service) +
                 chatId + "/" + email;
 

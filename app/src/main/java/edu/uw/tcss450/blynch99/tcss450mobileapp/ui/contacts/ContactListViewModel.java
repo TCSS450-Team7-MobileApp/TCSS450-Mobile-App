@@ -30,11 +30,14 @@ import edu.uw.tcss450.blynch99.tcss450mobileapp.R;
 
 public class ContactListViewModel extends AndroidViewModel {
     private MutableLiveData<List<Contact>> mContactList;
+    private MutableLiveData<List<Contact>> mPendingList;
 
     public ContactListViewModel(@NonNull Application application) {
         super(application);
         mContactList = new MutableLiveData<>();
         mContactList.setValue(new ArrayList<>());
+        mPendingList = new MutableLiveData<>();
+        mPendingList.setValue(new ArrayList<>());
     }
 
     public void addContactListObserver(@NonNull LifecycleOwner owner,
@@ -42,52 +45,78 @@ public class ContactListViewModel extends AndroidViewModel {
         mContactList.observe(owner,observer);
     }
 
-    private void handleError(final VolleyError error) {
+    public void addPendingListObserver(@NonNull LifecycleOwner owner,
+                                       @Nullable Observer<?super List<Contact>> observer){
+        mPendingList.observe(owner,observer);
+    }
+
+    public void addToContactList(Contact contact) {
+        mContactList.getValue().add(contact);
+        mContactList.setValue(mContactList.getValue());
+    }
+
+    public void addToPendingList(Contact contact) {
+        mPendingList.getValue().add(contact);
+        mPendingList.setValue(mPendingList.getValue());
+    }
+
+    protected void handleError(final VolleyError error) {
         throw new IllegalStateException(error.getMessage());
     }
 
-    private void handleResult(final JSONObject result) {
+    protected void handleResult(final JSONObject result, String type) {
+        MutableLiveData<List<Contact>> list = mContactList;
         try {
             JSONObject response = result;
-                if (response.has("rows")) {
-                    JSONArray rows = response.getJSONArray("rows");
-                    for (int i = 0; i< rows.length(); i++){
-                        JSONObject jsonContact = rows.getJSONObject(i);
-                        Contact contact = new Contact(
-                                jsonContact.getString("id"),
-                                jsonContact.getString("username"),
-                                jsonContact.getString("firstname"),
-                                jsonContact.getString("lastname"),
-                                jsonContact.getString("email"),
-                                FriendStatus.FRIENDS
-                        );
+            FriendStatus status = FriendStatus.FRIENDS;
 
-                        if(!mContactList.getValue().contains(contact))
-                            mContactList.getValue().add(contact);
-                    }
-                } else {
-                    Log.e("ERROR", "No Friends Provided");
+            Log.d("TTT", type);
+
+            if (type.equals("requests")) {
+                status = FriendStatus.RECEIVED_REQUEST;
+                list = mPendingList;
+            }
+
+            if (response.has("rows")) {
+                JSONArray rows = response.getJSONArray("rows");
+                for (int i = 0; i< rows.length(); i++){
+                    JSONObject jsonContact = rows.getJSONObject(i);
+                    Contact contact = new Contact(
+                            jsonContact.getString("id"),
+                            jsonContact.getString("username"),
+                            jsonContact.getString("firstname"),
+                            jsonContact.getString("lastname"),
+                            jsonContact.getString("email"),
+                            status
+                    );
+
+                    if(!list.getValue().contains(contact))
+                        list.getValue().add(contact);
                 }
+            } else {
+                Log.e("ERROR", "No Friends Provided");
+            }
         } catch (JSONException e) {
             e.printStackTrace();
             Log.e("ERROR",e.getMessage());
         }
-        mContactList.setValue(mContactList.getValue());
+        list.setValue(list.getValue());
     }
 
-    public void resetContacts(){
-        mContactList.setValue(new ArrayList<>());
-    }
-
-    public void connect(int memberId, String jwt) {
+    public void connectContacts(int memberId, String jwt, String type) {
         String url =
                 getApplication().getResources().getString(R.string.base_url_service)
-                        + "friendsList/" + memberId;
+                        + "friendsList/" + memberId + "/";
+        if (type.equals("requests"))
+            url += 0;
+        else
+            url += 1;
+
         Request request = new JsonObjectRequest(
                 Request.Method.GET,
                 url,
                 null,
-                this::handleResult,
+                result -> handleResult(result, type),
                 this::handleError) {
             @Override
             public Map<String, String> getHeaders() {

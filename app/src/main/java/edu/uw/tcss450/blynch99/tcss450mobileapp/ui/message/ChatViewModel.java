@@ -88,6 +88,7 @@ public class ChatViewModel extends AndroidViewModel {
      * @param jwt the users signed JWT
      */
     public void getFirstMessages(final int chatId, final String jwt) {
+        Log.d("CHAT", "Chat ID = " + chatId);
         String url = getApplication().getResources().getString(R.string.base_url_service) +
                 "messages/" + chatId;
 
@@ -131,6 +132,8 @@ public class ChatViewModel extends AndroidViewModel {
      * @param jwt the users signed JWT
      */
     public void getNextMessages(final int chatId, final String jwt) {
+        if (mMessages.get(chatId).getValue().size() < 1) return;
+
         String url = getApplication().getResources().getString(R.string.base_url_service) +
                 "messages/" +
                 chatId +
@@ -160,8 +163,6 @@ public class ChatViewModel extends AndroidViewModel {
         //Instantiate the RequestQueue and add the request to the queue
         RequestQueueSingleton.getInstance(getApplication().getApplicationContext())
                 .addToRequestQueue(request);
-
-        //code here will run
     }
 
     /**
@@ -186,8 +187,10 @@ public class ChatViewModel extends AndroidViewModel {
             JSONArray messages = response.getJSONArray("rows");
             for(int i = 0; i < messages.length(); i++) {
                 JSONObject message = messages.getJSONObject(i);
+                if (message.getString("message").trim().isEmpty()) continue;
                 ChatMessage cMessage = new ChatMessage(
                         message.getInt("messageid"),
+                        response.getInt("chatId"),
                         message.getString("message"),
                         message.getString("email"),
                         message.getString("timestamp")

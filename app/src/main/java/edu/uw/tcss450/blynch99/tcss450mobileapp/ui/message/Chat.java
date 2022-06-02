@@ -3,6 +3,7 @@ package edu.uw.tcss450.blynch99.tcss450mobileapp.ui.message;
 import android.util.Log;
 
 import java.io.Serializable;
+import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -11,16 +12,20 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import edu.uw.tcss450.blynch99.tcss450mobileapp.ui.contacts.Contact;
 
 public class Chat implements Serializable {
 
-    private final String mChatId, mDate, mTitle, mTeaser;
-    private final List<String> mMembers;
+    private final int mChatId;
+    private String mDate;
+    private final String mTitle;
+    private String mTeaser;
+    private List<String> mMembers;
 
-    public Chat(List<String> members, String chatId, String date, String teaser) {
+    public Chat(List<String> members, String title, int chatId, String date, String teaser) {
         mMembers = members;
         mChatId = chatId;
         mDate = date;
@@ -28,27 +33,46 @@ public class Chat implements Serializable {
 
         // Process members for title
         //List<String> memberNames = members.stream().map(Contact::getNickname).collect(Collectors.toList());
-        mTitle = join(", ", members);
+        //mTitle = join(", ", members);
+        mTitle = title;
     }
 
-    public String getChatId() { return mChatId; }
+    public void setMembers(List<String> members) {
+        mMembers = members;
+    }
+
+    public void setTeaser(String teaser) {
+        mTeaser = teaser;
+    }
+
+    public void setDate(String date) {
+        mDate = date;
+    }
+
+    public int getChatId() { return mChatId; }
 
     public String getDate() { return mDate; }
 
     public String getFormattedDate() {
         String formattedDate = "";
+        Date today = new Date();
         try {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             Date msgDate = dateFormat.parse(mDate.split(" ")[0]);
             formattedDate += msgDate.toString().split(" ")[0] + " ";
+            long msPassed = today.getTime() - msgDate.getTime();
+            long daysPassed = TimeUnit.DAYS.convert(msPassed, TimeUnit.MILLISECONDS);
+
+            Log.d("TIME", mDate);
+            String time = mDate.substring(11);
+            String[] times = time.split(":");
+            Log.d("TIME", Arrays.toString(times));
+            formattedDate += times[0] + ":" + times[1];
         } catch (ParseException e) {
             e.printStackTrace();
             Log.e("ERROR", "Error with date: " + mDate);
         }
-        String time = mDate.split(" ")[1];
-        String[] times = time.split(":");
-        Log.d("TIME", Arrays.toString(times));
-        return formattedDate + times[0] + ":" + times[1];
+        return formattedDate;
     }
 
     public String getTeaser() { return mTeaser; }
@@ -75,6 +99,6 @@ public class Chat implements Serializable {
         if (this.getClass() != o.getClass()) return false;
 
         Chat other = (Chat) o;
-        return this.mChatId.equals(other.getChatId());
+        return this.mChatId == other.getChatId();
     }
 }

@@ -1,6 +1,8 @@
 package edu.uw.tcss450.blynch99.tcss450mobileapp.ui.message;
 
 import android.app.Dialog;
+import android.content.res.ColorStateList;
+import android.graphics.Typeface;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +25,8 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import edu.uw.tcss450.blynch99.tcss450mobileapp.MainActivity;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.R;
@@ -32,9 +36,12 @@ import edu.uw.tcss450.blynch99.tcss450mobileapp.databinding.FragmentChatCardBind
 public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<ChatRecyclerViewAdapter.ChatViewHolder>{
 
     private final List<Chat> mChats;
+    private final Map<Chat, Boolean> mUnreadFlags;
 
     public ChatRecyclerViewAdapter(List<Chat> items) {
         mChats = items;
+        mUnreadFlags = mChats.stream()
+                .collect(Collectors.toMap(Function.identity(), chat -> false));
     }
 
     @NonNull
@@ -55,33 +62,49 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<ChatRecyclerVi
         return mChats.size();
     }
 
+    public void markUnread(Chat chat) {
+        Log.d("UNREAD", "marking unread chatId: " + chat.getChatId());
+        mUnreadFlags.put(chat, true);
+    }
+
+    public void markRead(Chat chat) {
+        mUnreadFlags.put(chat, false);
+    }
+
     public class ChatViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
         public FragmentChatCardBinding binding;
         private Chat mChat;
-        private final int MAX_PREVIEW_LENGTH = 35;
+        private final int MAX_PREVIEW_LENGTH = 30;
 
         public ChatViewHolder(View view) {
             super(view);
             mView = view;
             binding = FragmentChatCardBinding.bind(view);
+
+        }
+
+        private void displayChat() {
+            Log.d("MARK", mChat.getChatId() + "");
+            Log.d("MARK", String.valueOf(mUnreadFlags.get(mChat)));
+            if (mUnreadFlags.get(mChat)) {
+                binding.textPreview.setTypeface(null, Typeface.BOLD);
+            } else {
+                binding.textPreview.setTypeface(null, Typeface.NORMAL);
+            }
         }
 
         void setChat(final Chat chat) {
             mChat = chat;
             binding.cardRoot.setOnClickListener(view -> {
+                Log.d("READ", "marking READ chatId: " + mChat.getChatId());
+                mUnreadFlags.put(mChat, false);
                 Navigation.findNavController(mView).navigate(
                         ChatListFragmentDirections
-                                .actionNavigationMessageToChatFragment(chat));
+                                .actionNavigationMessageToChatFragment(chat.getTitle(), chat));
             });
             binding.textTitle.setText(chat.getTitle());
             binding.textPubdate.setText(chat.getFormattedDate());
-            //Use methods in the HTML class to format the HTML found in the text
-//            final String preview =  Html.fromHtml(
-//                    "Teaser",
-//                    Html.FROM_HTML_MODE_COMPACT)
-//                    .toString().substring(0,100) //just a preview of the teaser
-//                    + "...";
             String latestMessage = chat.getTeaser();
             final String preview = latestMessage.length() < MAX_PREVIEW_LENGTH ?
                     latestMessage
@@ -90,11 +113,12 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<ChatRecyclerVi
             binding.textPreview.setText(preview);
 
             binding.buttonArchive.setOnClickListener(button -> showArchiveDialog(chat));
+            displayChat();
         }
 
         void showArchiveDialog(Chat chat) {
             // Confirmation pop-up
-            ArchiveChatDialogFragment archiveDialog = new ArchiveChatDialogFragment(chat);
+            //ArchiveChatDialogFragment archiveDialog = new ArchiveChatDialogFragment(chat);
             Dialog dialog = new Dialog(mView.getContext());
             dialog.setCancelable(true);
             dialog.setContentView(R.layout.dialog_archive);
@@ -113,7 +137,7 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<ChatRecyclerVi
             //archiveDialog.show(archiveDialog.getChildFragmentManager(), ArchiveChatDialogFragment.TAG);
         }
 
-        public void connectDelete(final String chatId, final String email, String jwt) {
+        public void connectDelete(final int chatId, final String email, String jwt) {
             String url = MainActivity.getActivity().getString(R.string.base_url_service) +
                     "chats/" + chatId + "/" + email;
 
@@ -139,6 +163,9 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<ChatRecyclerVi
 
         private void handleResult(final JSONObject result) {
             Log.i("CHAT", "Deleted user from chat.");
+            new ViewModelProvider((ViewModelStoreOwner) MainActivity.getActivity())
+                    .get(ChatListViewModel.class)
+                    .removeChat(mChat);
         }
 
         private void handleError(final VolleyError error) {

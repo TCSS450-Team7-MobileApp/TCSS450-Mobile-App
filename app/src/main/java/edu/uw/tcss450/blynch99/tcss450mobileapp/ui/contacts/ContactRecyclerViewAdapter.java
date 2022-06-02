@@ -17,17 +17,20 @@ import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.HashMap;
-import java.util.Objects;
 
 import edu.uw.tcss450.blynch99.tcss450mobileapp.MainActivity;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.R;
 
 public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecyclerViewAdapter.myViewHolder> {
 
-    private HashMap<Integer,Contact> mContacts;
-    private Context mContext;
+    protected final HashMap<Integer,Contact> mContacts;
+    protected final Context mContext;
+    protected ManagerFriendViewModel mManage;
+
+
 
     public ContactRecyclerViewAdapter(Context context, HashMap<Integer,Contact> contacts){
+
 
         mContacts = contacts;
         mContext = context;
@@ -40,6 +43,10 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecy
     public myViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(mContext);
         View view = inflater.inflate(R.layout.fragment_contact_card,parent,false);
+
+        mManage = new ViewModelProvider(
+                (ViewModelStoreOwner) MainActivity.getActivity()).get(ManagerFriendViewModel.class);
+
         return new myViewHolder(view);
     }
 
@@ -50,30 +57,35 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecy
             return;
         holder.nickname.setText(mContacts.get(position).getNickname());
         holder.fullName.setText(mContacts.get(position).getFirstname() + " " + mContacts.get(position).getLastname());
-        holder.manager.setText(Objects.requireNonNull(mContacts.get(position)).getStatus().toString());
-        holder.view.setOnClickListener(button -> showButtons(mContacts.get(position).getStatus(), holder));
 
+        switch (mContacts.get(position).getStatus()){
+            case FRIENDS:
+                holder.manager.setText("Message");
+                break;
+            case RECEIVED_REQUEST:
+                holder.manager.setText("Accept Request");
+                holder.manager.setOnClickListener(button-> acceptRequest(mContacts.get(position), position));
+                break;
+            case NOT_FRIENDS:
+                holder.manager.setText("Send Request");
+                holder.manager.setOnClickListener(button-> sendRequest(mContacts.get(position), position));
+                break;
+        }
 
+        holder.view.setOnClickListener(button -> showButtons(holder));
 
         holder.remove.setOnClickListener(button ->
-            showRemoveDialog(mContacts.get(position),holder.view, position));
+                showRemoveDialog(mContacts.get(position),holder.view, position));
     }
 
-    private void showButtons(FriendStatus status, myViewHolder holder){
-        if (status == FriendStatus.FRIENDS) {
-            if (holder.message.getVisibility() == View.VISIBLE) {
-                holder.message.setVisibility(View.GONE);
-                holder.remove.setVisibility(View.GONE);
-            } else {
-                holder.message.setVisibility(View.VISIBLE);
+    private void showButtons(myViewHolder holder){
+        if (holder.manager.getVisibility() == View.VISIBLE) {
+            holder.remove.setVisibility(View.GONE);
+            holder.manager.setVisibility(View.GONE);
+        } else {
+            holder.manager.setVisibility(View.VISIBLE);
+            if (holder.manager.getText() != "Send Request")
                 holder.remove.setVisibility(View.VISIBLE);
-            }
-        }
-        else{
-            if (holder.manager.getVisibility() == View.VISIBLE)
-                holder.manager.setVisibility(View.GONE);
-            else
-                holder.manager.setVisibility(View.VISIBLE);
         }
     }
 
@@ -85,18 +97,29 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecy
         dialog.findViewById(R.id.button_ok).setOnClickListener(button -> {
             Log.d("ARCHIVE", "CLICK OK");
             dialog.dismiss();
-            RemoveFriendViewModel remove = new ViewModelProvider(
-                    (ViewModelStoreOwner) MainActivity.getActivity()).get(RemoveFriendViewModel.class);
-            remove.connect(contact.getId());
+            mManage.connectRemoveFriend(contact.getId());
 
-            mContacts.remove(position);
-            notifyItemRemoved(position);
-            notifyItemChanged(position, mContacts.size());
-
-
+            removeFromView(position);
         });
         dialog.findViewById(R.id.button_cancel).setOnClickListener(button -> dialog.dismiss());
         dialog.show();
+    }
+
+    private void acceptRequest(Contact contact, int position){
+        mManage.connectAcceptRequest(contact.getId());
+
+        removeFromView(position);
+    }
+
+    private void sendRequest(Contact contact, int position){
+        mManage.connectSendRequest(contact.getId());
+        removeFromView(position);
+    }
+
+    private void removeFromView(int position){
+        mContacts.remove(position);
+        notifyItemRemoved(position);
+        notifyItemChanged(position, mContacts.size());
     }
 
     @Override
@@ -104,10 +127,10 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecy
         return mContacts.size();
     }
 
-    public class myViewHolder extends RecyclerView.ViewHolder{
+    public static class myViewHolder extends RecyclerView.ViewHolder{
         TextView nickname, fullName;
         ConstraintLayout cardLayout;
-        Button manager, message, remove;
+        Button manager, remove;
         View view;
         public myViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -115,7 +138,6 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecy
             fullName = itemView.findViewById(R.id.text_full_name);
             cardLayout = itemView.findViewById(R.id.layout_card);
             manager = itemView.findViewById(R.id.button_friend_manager);
-            message = itemView.findViewById(R.id.button_message);
             remove = itemView.findViewById(R.id.button_friend_remove);
             view = itemView.getRootView();
         }

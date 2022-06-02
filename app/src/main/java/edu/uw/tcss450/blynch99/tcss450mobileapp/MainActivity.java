@@ -18,6 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
@@ -34,12 +35,26 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+
 import edu.uw.tcss450.blynch99.tcss450mobileapp.model.LocationViewModel;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.auth.model.UserInfoViewModel;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.databinding.ActivityMainBinding;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.model.NewMessageCountViewModel;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.services.PushReceiver;
+import edu.uw.tcss450.blynch99.tcss450mobileapp.ui.contacts.Contact;
+import edu.uw.tcss450.blynch99.tcss450mobileapp.ui.contacts.ContactListViewModel;
+import edu.uw.tcss450.blynch99.tcss450mobileapp.ui.contacts.FriendStatus;
+import edu.uw.tcss450.blynch99.tcss450mobileapp.ui.message.Chat;
+import edu.uw.tcss450.blynch99.tcss450mobileapp.ui.message.ChatListViewModel;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.ui.message.ChatMessage;
+import edu.uw.tcss450.blynch99.tcss450mobileapp.ui.message.ChatRecyclerViewAdapter;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.ui.message.ChatViewModel;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.ui.settings.SettingsActivity;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.ui.weather.WeatherViewModel;
@@ -71,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
     //The ViewModel that will store the current location
     private LocationViewModel mLocationModel;
     private ActivityMainBinding binding;
-    private MainPushMessageReceiver mPushMessageReceiver;
+    private MainPushReceiver mPushReceiver;
     private NewMessageCountViewModel mNewMessageModel;
 
     @Override
@@ -79,7 +94,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         mMainActivity = this;
-
 
         MainActivityArgs args = MainActivityArgs.fromBundle(getIntent().getExtras());
         //Import com.auth0.android.jwt.JWT
@@ -114,19 +128,19 @@ public class MainActivity extends AppCompatActivity {
         mNewMessageModel = new ViewModelProvider(this).get(NewMessageCountViewModel.class);
 
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
-            if (destination.getId() == R.id.navigation_message) {
-                //When the user navigates to the chats page, reset the new message count.
-                //This will need some extra logic for your project as it should have
-                //multiple chat rooms.
-                mNewMessageModel.reset();
+            if (destination.getId() == R.id.chatFragment) {
+                //Log.d("CHATID", "arguments: " + ((Chat) arguments.get("chat")).getChatId());
+                mNewMessageModel.reset(((Chat) arguments.get("chat")).getChatId());
             }
         });
-        mNewMessageModel.addMessageCountObserver(this, count -> {
+        mNewMessageModel.addMessageCountObserver(this, counts -> {
             BadgeDrawable badge = binding.navView.getOrCreateBadge(R.id.navigation_message);
             badge.setMaxCharacterCount(2);
-            if (count > 0) {
+            int totalCount = counts.values().stream().mapToInt(v -> v).sum();
+            Log.d("NOTIFICATION", "totalCount = " + totalCount);
+            if (totalCount > 0) {
                 //new messages! update and show the notification badge.
-                badge.setNumber(count);
+                badge.setNumber(totalCount);
                 badge.setVisible(true);
             } else {
                 //user did some action to clear the new messages, remove the badge
@@ -299,45 +313,109 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        if (mPushMessageReceiver == null) {
-            mPushMessageReceiver = new MainPushMessageReceiver();
+        if (mPushReceiver == null) {
+            mPushReceiver = new MainPushReceiver();
         }
         IntentFilter iFilter = new IntentFilter(PushReceiver.RECEIVED_NEW_MESSAGE);
-        registerReceiver(mPushMessageReceiver, iFilter);
+        registerReceiver(mPushReceiver, iFilter);
     }
+
     @Override
     public void onPause() {
         super.onPause();
-        if (mPushMessageReceiver != null){
-            unregisterReceiver(mPushMessageReceiver);
+        if (mPushReceiver != null){
+            unregisterReceiver(mPushReceiver);
         }
         stopLocationUpdates();
     }
 
     /**
-     * A BroadcastReceiver that listens for messages sent from PushReceiver
+     * A BroadcastReceiver that listens for messages, chats, and friend requests sent from PushReceiver
      */
-    private class MainPushMessageReceiver extends BroadcastReceiver {
-        private ChatViewModel mModel =
+    private class MainPushReceiver extends BroadcastReceiver {
+        private final ChatViewModel mChatModel =
                 new ViewModelProvider(MainActivity.this)
                         .get(ChatViewModel.class);
+        private final ChatListViewModel mChatListModel =
+                new ViewModelProvider(MainActivity.this)
+                        .get(ChatListViewModel.class);
+        private final ContactListViewModel mContactListModel =
+                new ViewModelProvider(MainActivity.this)
+                        .get(ContactListViewModel.class);
         @Override
         public void onReceive(Context context, Intent intent) {
+            if (intent.hasExtra("type")) {
+                switch(intent.getStringExtra("type")) {
+                    case "chat":
+                        processNewChat(intent);
+                        break;
+                    case "msg":
+                        processNewMessage(intent);
+                        break;
+                    case "friend_request":
+                        processNewFriendRequest(intent);
+                        break;
+                }
+            }
+        }
+
+        private void processNewChat(Intent intent) {
+            List<String> members = new ArrayList<>();
+            JSONArray usernames = (JSONArray) intent.getSerializableExtra("usernames");
+            for (int j = 0; j < usernames.length(); j++) {
+                try {
+                    members.add(usernames.getString(j));
+                } catch (JSONException e) {
+                    Log.d("JSON ERROR", e.getMessage());
+                }
+            }
+
+            mChatListModel.addChat(
+                    new Chat(
+                            members,
+                            intent.getStringExtra("name"),
+                            intent.getIntExtra("chatId", -1),
+                            intent.getStringExtra("timestamp"),
+                            intent.getStringExtra("recent_message")
+                    )
+            );
+        }
+
+        private void processNewMessage(Intent intent) {
             NavController nc =
                     Navigation.findNavController(
                             MainActivity.this, R.id.nav_host_fragment);
             NavDestination nd = nc.getCurrentDestination();
+
             if (intent.hasExtra("chatMessage")) {
+                //Log.d("CHAT", intent.toString());
+                //Log.d("CHAT", intent.getSerializableExtra("message").toString());
                 ChatMessage cm = (ChatMessage) intent.getSerializableExtra("chatMessage");
                 //If the user is not on the chat screen, update the
                 // NewMessageCountView Model
-                if (nd.getId() != R.id.navigation_message && nd.getId() != R.id.chatFragment) {
-                    mNewMessageModel.increment();
+                if (nd.getId() != R.id.chatFragment) {
+                    mNewMessageModel.increment(intent.getIntExtra("chatId", -1));
                 }
                 //Inform the view model holding chatroom messages of the new
                 //message.
-                mModel.addMessage(intent.getIntExtra("chatid", -1), cm);
+
+                int chatId = intent.getIntExtra("chatId", -1);
+
+                mChatModel.addMessage(chatId, cm);
+                mChatListModel.updateChat(cm);
             }
+        }
+
+        private void processNewFriendRequest(Intent intent) {
+
+            mContactListModel.addToPendingList(new Contact(
+                    intent.getStringExtra("id"),
+                    intent.getStringExtra("username"),
+                    intent.getStringExtra("firstname"),
+                    intent.getStringExtra("lastname"),
+                    intent.getStringExtra("email"),
+                    FriendStatus.RECEIVED_REQUEST
+            ));
         }
     }
 }

@@ -27,12 +27,12 @@ import edu.uw.tcss450.blynch99.tcss450mobileapp.MainActivity;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.R;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.auth.model.UserInfoViewModel;
 
-public class RemoveFriendViewModel extends AndroidViewModel {
+public class ManagerFriendViewModel extends AndroidViewModel {
 
     private MutableLiveData<JSONObject> mResponse;
     private UserInfoViewModel mUser;
 
-    public RemoveFriendViewModel(@NonNull Application application) {
+    public ManagerFriendViewModel(@NonNull Application application) {
         super(application);
         mResponse = new MutableLiveData<>();
         mResponse.setValue(new JSONObject());
@@ -65,7 +65,7 @@ public class RemoveFriendViewModel extends AndroidViewModel {
         }
     }
 
-    public void connect(String friendId) {
+    public void connectRemoveFriend(String friendId) {
         String url = getApplication().getResources().getString(R.string.base_url_service) +
                 "friendsList/delete/" + mUser.getId() + "/" + friendId;
         Request request = new JsonObjectRequest(
@@ -91,4 +91,71 @@ public class RemoveFriendViewModel extends AndroidViewModel {
         Volley.newRequestQueue(getApplication().getApplicationContext())
                 .add(request);
     }
+
+    public void connectAcceptRequest(String friendId) {
+        String url = getApplication().getResources().getString(R.string.base_url_service) +
+                "friendsList/verify/" + mUser.getId();
+        JSONObject body = new JSONObject();
+        try {
+            body.put("memberid",friendId);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Request request = new JsonObjectRequest(
+                Request.Method.POST,
+                url,
+                body,
+                mResponse::setValue,
+                this::handleError){
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                // add headers <key,value>
+                // anything works for the jwt for now
+                headers.put("Authorization", mUser.getJwt());
+                return headers;
+            }
+        };
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                10_000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        //Instantiate the RequestQueue and add the request to the queue
+        Volley.newRequestQueue(getApplication().getApplicationContext())
+                .add(request);
+    }
+
+    public void connectSendRequest(String friendId) {
+        String url = getApplication().getResources().getString(R.string.base_url_service) +
+                "friendsList/request/" + mUser.getId();
+        JSONObject body = new JSONObject();
+        try {
+            body.put("memberid",friendId);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Request request = new JsonObjectRequest(
+                Request.Method.POST,
+                url,
+                body,
+                mResponse::setValue,
+                this::handleError){
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                // add headers <key,value>
+                // anything works for the jwt for now
+                headers.put("Authorization", mUser.getJwt());
+                return headers;
+            }
+        };
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                10_000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        //Instantiate the RequestQueue and add the request to the queue
+        Volley.newRequestQueue(getApplication().getApplicationContext())
+                .add(request);
+    }
+
 }

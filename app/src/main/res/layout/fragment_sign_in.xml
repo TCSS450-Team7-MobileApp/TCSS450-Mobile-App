@@ -84,11 +84,24 @@
         android:id="@+id/app_logo"
         android:layout_width="376dp"
         android:layout_height="352dp"
-        android:src="@mipmap/ic_app_logo_coral"
+        android:src="@mipmap/ic_launcher_high_res_coral_foreground"
         app:layout_constraintBottom_toTopOf="@+id/edit_email"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Switch
+        android:id="@+id/switch_signin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:checked="true"
+        android:text="@string/switch_sign_in"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_sign_in"
+        tools:text="@string/switch_sign_in"
+        tools:ignore="UseSwitchCompatOrMaterialXml" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout_wait"
@@ -111,6 +124,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

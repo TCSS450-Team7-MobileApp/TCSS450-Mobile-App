@@ -42,7 +42,7 @@ public class ContactCardFragment extends Fragment {
         switch (status){
             case "FRIENDS":
                 mBinding.buttonFriendRemove.setVisibility(View.VISIBLE);
-                mBinding.buttonMessage.setVisibility(View.VISIBLE);
+                mBinding.buttonFriendManager.setVisibility(View.VISIBLE);
                 break;
 
         }

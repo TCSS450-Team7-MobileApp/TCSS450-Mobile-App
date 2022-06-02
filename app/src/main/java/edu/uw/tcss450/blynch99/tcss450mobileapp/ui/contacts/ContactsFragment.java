@@ -2,6 +2,7 @@ package edu.uw.tcss450.blynch99.tcss450mobileapp.ui.contacts;
 
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +30,6 @@ public class ContactsFragment extends Fragment {
     private FragmentContactsBinding mBinding;
     private RecyclerView mRecyclerView;
 
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -48,11 +48,10 @@ public class ContactsFragment extends Fragment {
                 MainActivity.getActivity()).get(ContactListViewModel.class);
         UserInfoViewModel user = new ViewModelProvider((ViewModelStoreOwner)
                 MainActivity.getActivity()).get(UserInfoViewModel.class);
-        model.resetContacts();
-        model.connect(user.getId(),user.getJwt());
+        //model.resetContacts();
+        model.connectContacts(user.getId(),user.getJwt(), "current");
 
         model.addContactListObserver(getViewLifecycleOwner(), this::setAdapter);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         mBinding.fabAddContact.setOnClickListener(button -> navigateToAddNewFriends());
 

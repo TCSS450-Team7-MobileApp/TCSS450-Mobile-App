@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/text_add_people_create"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="2dp"
+        android:text="@string/title_create_chat_members"
+        app:layout_constraintBottom_toTopOf="@+id/list_contacts_create"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.017"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/list_contacts_create"
+        android:name="edu.uw.tcss450.blynch99.tcss450mobileapp.ui.contacts.ContactCardFragment"
+        android:layout_width="0dp"
+        android:layout_height="341dp"
+        android:layout_marginTop="45dp"
+        android:orientation="vertical"
+        app:layoutManager="LinearLayoutManager"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        tools:context="edu.uw.tcss450.blynch99.tcss450mobileapp.ui.contacts.ContactsFragment"
+        tools:listitem="@layout/fragment_contact_card" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <EditText
+            android:id="@+id/edit_chat_name"
+            android:layout_width="234dp"
+            android:layout_height="61dp"
+            android:layout_marginTop="10dp"
+            android:ems="10"
+            android:hint="@string/hint_chat_name"
+            android:inputType="textPersonName" />
+
+        <Button
+            android:id="@+id/button_add_people"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="25dp"
+            android:text="@string/button_create_chat" />
+
+        <TextView
+            android:id="@+id/text_current_members"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="visible" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -31,7 +31,6 @@ import edu.uw.tcss450.blynch99.tcss450mobileapp.databinding.FragmentChatListBind
 public class ChatListFragment extends Fragment {
 
     private ChatListViewModel mModel;
-    RecyclerView mRecyclerView;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -55,24 +54,15 @@ public class ChatListFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         FragmentChatListBinding binding = FragmentChatListBinding.bind(getView());
 
-//        List<Chat> chatList = new ArrayList<>();
-//
-//        chatList.add(new Chat());
-//        chatList.add(new Chat());
-//        chatList.add(new Chat());
-//        chatList.add(new Chat());
-//        chatList.add(new Chat());
-//        chatList.add(new Chat());
-//        chatList.add(new Chat());
-
-        //binding.listRoot.setAdapter(new ChatRecyclerViewAdapter(chatList));
-        //binding.listRoot.setLayoutManager(new LinearLayoutManager(getActivity()));
-
         mModel.addChatListObserver(getViewLifecycleOwner(), chats -> {
+            ChatRecyclerViewAdapter chatViewAdapter = new ChatRecyclerViewAdapter(chats);
             binding.listRoot.setAdapter(
-                    new ChatRecyclerViewAdapter(chats)
+                    chatViewAdapter
             );
+            mModel.setChatRecyclerViewAdapter(chatViewAdapter);
         });
+
+        binding.fabAddChat.setOnClickListener(button -> navigateToCreateChat());
     }
 
     @Override
@@ -86,6 +76,12 @@ public class ChatListFragment extends Fragment {
         navigateToContacts();
         return super.onOptionsItemSelected(item);
 
+    }
+
+    private void navigateToCreateChat() {
+        Navigation.findNavController(getView())
+                .navigate(ChatListFragmentDirections
+                        .actionNavigationMessageToCreateChatFragment());
     }
 
     private void navigateToContacts() {

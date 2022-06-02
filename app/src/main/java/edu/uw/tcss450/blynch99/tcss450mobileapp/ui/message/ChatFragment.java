@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -48,7 +49,7 @@ public class ChatFragment extends Fragment {
                              Bundle savedInstanceState) {
         mArgs = ChatFragmentArgs.fromBundle(getArguments());
         mChatModel.getFirstMessages(
-                Integer.parseInt(mArgs.getChat().getChatId()),
+                mArgs.getChat().getChatId(),
                 mUserModel.getJwt());
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_chat, container, false);
@@ -64,12 +65,16 @@ public class ChatFragment extends Fragment {
         //SetRefreshing shows the internal Swiper view progress bar. Show this until messages load
         binding.swipeContainer.setRefreshing(true);
 
+//        Toast.makeText(getActivity().getApplicationContext(),
+//                String.format(getString(R.string.title_chat), mArgs.getChat().getTitle()),
+//                Toast.LENGTH_SHORT).show();
+        
         Objects.requireNonNull(((AppCompatActivity) requireActivity())
                 .getSupportActionBar())
-                .setTitle(mArgs.getChat().getTitle());
+                .setTitle(String.format(getString(R.string.title_chat), mArgs.getChat().getTitle()));
 
         final RecyclerView rv = binding.recyclerMessages;
-        int chatId = Integer.parseInt(mArgs.getChat().getChatId());
+        int chatId = mArgs.getChat().getChatId();
         //Set the Adapter to hold a reference to the list FOR THIS chat ID that the ViewModel
         //holds.
         rv.setAdapter(new MessageRecyclerViewAdapter(
