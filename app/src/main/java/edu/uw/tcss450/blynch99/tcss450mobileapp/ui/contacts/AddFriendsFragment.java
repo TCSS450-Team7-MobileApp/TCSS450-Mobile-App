@@ -1,6 +1,7 @@
 package edu.uw.tcss450.blynch99.tcss450mobileapp.ui.contacts;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +26,8 @@ import edu.uw.tcss450.blynch99.tcss450mobileapp.databinding.FragmentAddFriendsBi
  */
 public class AddFriendsFragment extends Fragment {
     private FragmentAddFriendsBinding mBinding;
-    private RecyclerView mRecyclerView;
+    private RecyclerView mRecievedRecyclerView, mSearchedRecyclerView;
+    UserInfoViewModel mUser;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -39,29 +41,57 @@ public class AddFriendsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mRecyclerView = mBinding.listReceivedRequests;
+        mRecievedRecyclerView = mBinding.listReceivedRequests;
+        mSearchedRecyclerView = mBinding.listSearchPeople;
 
+
+        mBinding.buttonSearch.setOnClickListener(button -> displaySearched());
+
+        mUser = new ViewModelProvider(
+                (ViewModelStoreOwner) MainActivity.getActivity()).get(UserInfoViewModel.class);
         
 
-        ContactListViewModel model = new ViewModelProvider(
+        ContactListViewModel getRequests = new ViewModelProvider(
                 (ViewModelStoreOwner) MainActivity.getActivity()).get(ContactListViewModel.class);
-        UserInfoViewModel user = new ViewModelProvider(
-                (ViewModelStoreOwner) MainActivity.getActivity()).get(UserInfoViewModel.class);
-        model.resetContacts();
-        model.connectContacts(user.getId(), user.getJwt(), "requests");
+        getRequests.resetContacts();
+        getRequests.addContactListObserver(getViewLifecycleOwner(), this::setAdapterForRequests);
+        getRequests.connectContacts(mUser.getId(), mUser.getJwt(), "requests");
 
-
-        model.addContactListObserver(getViewLifecycleOwner(), this::setAdapter);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mRecievedRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
     }
 
-    private void setAdapter(List<Contact> contacts) {
-        HashMap<Integer, Contact> contactMap = new HashMap<>();
-        for (Contact contact : contacts){
-            contactMap.put(contacts.indexOf(contact), contact);
-
+    private void displaySearched(){
+            mBinding.editSearchUsers.setError(null);
+        if (mBinding.editSearchUsers.getText().toString().equals("")) {
+            mBinding.editSearchUsers.setError("Cannot be Empty");
+            return;
         }
-        mRecyclerView.setAdapter(new ContactRecyclerViewAdapter(getActivity(), contactMap));
+
+
+        SearchViewModel searchResult = new ViewModelProvider(
+                (ViewModelStoreOwner) MainActivity.getActivity()).get(SearchViewModel.class);
+
+        searchResult.resetContacts();
+        Log.d("TTT", mBinding.editSearchUsers.getText().toString());
+        searchResult.connectSearch(mUser.getJwt(), mBinding.editSearchUsers.getText().toString());
+
+        searchResult.addContactListObserver(getViewLifecycleOwner(), this::setAdapterForSearch);
+
+    }
+
+    private void setAdapterForSearch(List<Contact> contacts){
+        HashMap<Integer, Contact> contactMap = new HashMap<>();
+        for (Contact contact : contacts)
+            contactMap.put(contacts.indexOf(contact), contact);
+        mSearchedRecyclerView.setAdapter(new ContactRecyclerViewAdapter(getActivity(), contactMap));
+    }
+
+
+    private void setAdapterForRequests(List<Contact> contacts) {
+        HashMap<Integer, Contact> contactMap = new HashMap<>();
+        for (Contact contact : contacts)
+            contactMap.put(contacts.indexOf(contact), contact);
+        mRecievedRecyclerView.setAdapter(new ContactRecyclerViewAdapter(getActivity(), contactMap));
     }
 }

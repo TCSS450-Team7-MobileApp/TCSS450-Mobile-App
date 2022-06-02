@@ -2,6 +2,7 @@ package edu.uw.tcss450.blynch99.tcss450mobileapp.ui.contacts;
 
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
