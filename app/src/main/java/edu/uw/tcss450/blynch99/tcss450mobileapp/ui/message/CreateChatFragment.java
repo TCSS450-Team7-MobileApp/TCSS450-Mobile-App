@@ -77,11 +77,9 @@ public class CreateChatFragment extends Fragment {
         binding.buttonAddPeople.setOnClickListener(button -> {
             mModel.connectPostChat(binding.editChatName.getText().toString(), mContactAdapter.getGroupList(), mUser.getJwt());
             // Navigate away
-            /*
             Navigation.findNavController(getView())
                     .navigate(CreateChatFragmentDirections
-                            .actionCreateChatFragmentToChatListFragment());
-             */
+                        .actionCreateChatFragmentToNavigationMessage());
         });
     }
 
