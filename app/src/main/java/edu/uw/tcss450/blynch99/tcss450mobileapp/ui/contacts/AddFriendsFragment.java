@@ -57,7 +57,6 @@ public class AddFriendsFragment extends Fragment {
         getRequests.addContactListObserver(getViewLifecycleOwner(), this::setAdapterForRequests);
         getRequests.connectContacts(mUser.getId(), mUser.getJwt(), "requests");
 
-        mRecievedRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
     }
 
