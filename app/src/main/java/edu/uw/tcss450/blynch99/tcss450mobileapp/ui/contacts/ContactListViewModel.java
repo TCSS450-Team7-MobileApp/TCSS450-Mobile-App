@@ -42,37 +42,40 @@ public class ContactListViewModel extends AndroidViewModel {
         mContactList.observe(owner,observer);
     }
 
-    private void handleError(final VolleyError error) {
+    protected void handleError(final VolleyError error) {
         throw new IllegalStateException(error.getMessage());
     }
 
-    private void handleResult(final JSONObject result, String type) {
+    protected void handleResult(final JSONObject result, String type) {
         try {
             JSONObject response = result;
             FriendStatus status = FriendStatus.FRIENDS;
+            Log.d("TTT", type);
             if (type.equals("requests"))
                 status = FriendStatus.RECEIVED_REQUEST;
+            else if (type.equals("search"))
+                status = FriendStatus.NOT_FRIENDS;
 
-                if (response.has("rows")) {
-                    JSONArray rows = response.getJSONArray("rows");
-                    for (int i = 0; i< rows.length(); i++){
-                        JSONObject jsonContact = rows.getJSONObject(i);
-                        Contact contact = new Contact(
-                                jsonContact.getString("id"),
-                                jsonContact.getString("username"),
-                                jsonContact.getString("firstname"),
-                                jsonContact.getString("lastname"),
-                                jsonContact.getString("email"),
-                                status
+            if (response.has("rows")) {
+                JSONArray rows = response.getJSONArray("rows");
+                for (int i = 0; i< rows.length(); i++){
+                    JSONObject jsonContact = rows.getJSONObject(i);
+                    Contact contact = new Contact(
+                            jsonContact.getString("id"),
+                            jsonContact.getString("username"),
+                            jsonContact.getString("firstname"),
+                            jsonContact.getString("lastname"),
+                            jsonContact.getString("email"),
+                            status
 
-                        );
+                    );
 
-                        if(!mContactList.getValue().contains(contact))
-                            mContactList.getValue().add(contact);
-                    }
-                } else {
-                    Log.e("ERROR", "No Friends Provided");
+                    if(!mContactList.getValue().contains(contact))
+                        mContactList.getValue().add(contact);
                 }
+            } else {
+                Log.e("ERROR", "No Friends Provided");
+            }
         } catch (JSONException e) {
             e.printStackTrace();
             Log.e("ERROR",e.getMessage());
@@ -97,7 +100,7 @@ public class ContactListViewModel extends AndroidViewModel {
                 Request.Method.GET,
                 url,
                 null,
-                result -> handleResult(result, type ),
+                result -> handleResult(result, type),
                 this::handleError) {
             @Override
             public Map<String, String> getHeaders() {
@@ -116,6 +119,4 @@ public class ContactListViewModel extends AndroidViewModel {
         Volley.newRequestQueue(getApplication().getApplicationContext())
                 .add(request);
     }
-
-
 }

@@ -54,39 +54,35 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecy
             return;
         holder.nickname.setText(mContacts.get(position).getNickname());
         holder.fullName.setText(mContacts.get(position).getFirstname() + " " + mContacts.get(position).getLastname());
-        holder.manager.setText(mContacts.get(position).getStatus().toString());
-        holder.view.setOnClickListener(button -> showButtons(mContacts.get(position).getStatus(), holder));
 
-        holder.manager.setOnClickListener(button-> {
-            if (holder.manager.getText() == "Accept Request")
-                acceptRequest(mContacts.get(position), position);
-        });
+        switch (mContacts.get(position).getStatus()){
+            case FRIENDS:
+                holder.manager.setText("Message");
+                break;
+            case RECEIVED_REQUEST:
+                holder.manager.setText("Accept Request");
+                holder.manager.setOnClickListener(button-> acceptRequest(mContacts.get(position), position));
+                break;
+            case NOT_FRIENDS:
+                holder.manager.setText("Send Request");
+                holder.manager.setOnClickListener(button-> sendRequest(mContacts.get(position), position));
+                break;
+        }
+
+        holder.view.setOnClickListener(button -> showButtons(holder));
 
         holder.remove.setOnClickListener(button ->
-            showRemoveDialog(mContacts.get(position),holder.view, position));
+                showRemoveDialog(mContacts.get(position),holder.view, position));
     }
 
-    private void showButtons(FriendStatus status, myViewHolder holder){
-        if (status == FriendStatus.FRIENDS) {
-            if (holder.manager.getVisibility() == View.VISIBLE) {
-                holder.remove.setVisibility(View.GONE);
-                holder.manager.setVisibility(View.GONE);
-            } else {
-                holder.manager.setText("Message");
-                holder.manager.setVisibility(View.VISIBLE);
+    private void showButtons(myViewHolder holder){
+        if (holder.manager.getVisibility() == View.VISIBLE) {
+            holder.remove.setVisibility(View.GONE);
+            holder.manager.setVisibility(View.GONE);
+        } else {
+            holder.manager.setVisibility(View.VISIBLE);
+            if (holder.manager.getText() != "Send Request")
                 holder.remove.setVisibility(View.VISIBLE);
-            }
-        }
-        else if (status == FriendStatus.RECEIVED_REQUEST){
-            if (holder.manager.getVisibility() == View.VISIBLE) {
-                holder.manager.setVisibility(View.GONE);
-                holder.remove.setVisibility(View.GONE);
-            }
-            else {
-                holder.manager.setText("Accept Request");
-                holder.manager.setVisibility(View.VISIBLE);
-                holder.remove.setVisibility(View.VISIBLE);
-            }
         }
     }
 
@@ -109,8 +105,11 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecy
     private void acceptRequest(Contact contact, int position){
         mManage.connectAcceptRequest(contact.getId());
 
+        removeFromView(position);
+    }
 
-
+    private void sendRequest(Contact contact, int position){
+        mManage.connectSendRequest(contact.getId());
         removeFromView(position);
     }
 

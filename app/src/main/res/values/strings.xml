@@ -25,6 +25,7 @@
     <string name="title_message">Message</string>
     <string name="title_home">Home</string>
     <string name="title_weather">Weather</string>
+    <string name="title_location">Location</string>
     <string name="title_contacts">Contacts</string>
     <string name="title_friend">Friend</string>
     <string name="title_chat">%1$s</string>
@@ -46,6 +47,7 @@
     <string name="button_change_password">Change Password</string>
 
     <string name="text_delete_account">Enter your email to delete your account</string>
+    <string name="title_activity_maps">MapsActivity</string>
 
     <string name="dialog_archive_chat">Archive chat?</string>
     <string name="ok">OK</string>

@@ -3,37 +3,40 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fragment_weather_daily_card"
-    android:layout_width="wrap_content"
+    android:layout_width="60dp"
     android:layout_height="match_parent"
     android:layout_margin="5dp"
-    app:cardBackgroundColor="@android:color/transparent"
-    app:cardCornerRadius="5dp">
+    app:cardBackgroundColor="@color/grey_1"
+    app:cardCornerRadius="12dp">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="60dp"
-        android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="6dp"
+        android:gravity="center"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/hourly_timeHr"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:text="0 XX"
             android:textAlignment="center"
-            android:textSize="12sp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:textSize="12sp" />
+
+        <ImageView
+            android:id="@+id/hourly_icon"
+            android:layout_width="match_parent"
+            android:layout_height="40dp" />
 
         <TextView
             android:id="@+id/hourly_temp"
-            android:layout_width="45dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
+            android:text="__ F"
             android:textAlignment="center"
-            android:textSize="15sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            android:textSize="15sp" />
+
+    </LinearLayout>
 
 </androidx.cardview.widget.CardView>

@@ -129,7 +129,7 @@ public class SignInFragment extends Fragment {
                         "Error Authenticating on Push Token. Please contact support");
             } else {
                 navigateToSuccess(
-                        binding.editEmail.getText().toString(),
+                        mUserViewModel.getEmail(),
                         mUserViewModel.getJwt(),
                         mUserViewModel.getFirst(),
                         mUserViewModel.getLast(),

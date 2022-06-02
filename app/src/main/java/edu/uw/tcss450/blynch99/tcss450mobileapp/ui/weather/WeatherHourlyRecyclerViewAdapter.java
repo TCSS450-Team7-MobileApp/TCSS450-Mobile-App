@@ -53,6 +53,7 @@ public class WeatherHourlyRecyclerViewAdapter extends RecyclerView.Adapter<Weath
 
         private void display() {
             mBinding.hourlyTimeHr.setText(mData.getmDayHour());
+            mBinding.hourlyIcon.setImageResource(WeatherIcons.getInstance().getIcon(mData.getmIcon()));
             mBinding.hourlyTemp.setText(mData.getmTemperature() + "°F");
         }
     }
