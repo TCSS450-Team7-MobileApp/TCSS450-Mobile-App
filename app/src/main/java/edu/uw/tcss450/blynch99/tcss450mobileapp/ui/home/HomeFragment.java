@@ -11,13 +11,22 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStoreOwner;
+import androidx.recyclerview.widget.RecyclerView;
 
 import org.json.JSONObject;
 
+import java.util.HashMap;
+import java.util.List;
+
+import edu.uw.tcss450.blynch99.tcss450mobileapp.MainActivity;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.R;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.auth.model.UserInfoViewModel;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.model.LocationViewModel;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.databinding.FragmentHomeBinding;
+import edu.uw.tcss450.blynch99.tcss450mobileapp.ui.contacts.Contact;
+import edu.uw.tcss450.blynch99.tcss450mobileapp.ui.contacts.ContactListViewModel;
+import edu.uw.tcss450.blynch99.tcss450mobileapp.ui.contacts.ContactRecyclerViewAdapter;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.ui.weather.WeatherHourlyRecyclerViewAdapter;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.ui.weather.WeatherIcons;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.ui.weather.WeatherViewModel;
@@ -31,6 +40,7 @@ public class HomeFragment extends Fragment {
     private WeatherViewModel mWeatherViewModel;
     private LocationViewModel mLocationModel;
     private UserInfoViewModel mUserInfoViewModel;
+    private RecyclerView mReceivedRecyclerView;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -60,7 +70,25 @@ public class HomeFragment extends Fragment {
         });
 
         mWeatherViewModel.addResponseObserver(getViewLifecycleOwner(), this::observeResponse);
+
+        mReceivedRecyclerView = mBinding.listReceivedRequests;
+
+        ContactListViewModel getRequests = new ViewModelProvider(
+                (ViewModelStoreOwner) MainActivity.getActivity()).get(ContactListViewModel.class);
+        getRequests.addPendingListObserver(getViewLifecycleOwner(), this::setAdapterForRequests);
+        getRequests.resetRequests();
+        getRequests.connectContacts(mUserInfoViewModel.getId(), mUserInfoViewModel.getJwt(), "requests");
     }
+
+    private void setAdapterForRequests(List<Contact> contacts) {
+        HashMap<Integer, Contact> contactMap = new HashMap<>();
+        for (Contact contact : contacts)
+            contactMap.put(contacts.indexOf(contact), contact);
+        mReceivedRecyclerView.setAdapter(new ContactRecyclerViewAdapter(getActivity(), contactMap));
+        Log.d("FRIEND", "Friend request adapter set");
+    }
+
+
 
     private void observeResponse(final JSONObject response) {
         if (response.has("code")) {

@@ -54,7 +54,6 @@ public class AddFriendsFragment extends Fragment {
 
         ContactListViewModel getRequests = new ViewModelProvider(
                 (ViewModelStoreOwner) MainActivity.getActivity()).get(ContactListViewModel.class);
-        //getRequests.resetContacts();
         getRequests.addPendingListObserver(getViewLifecycleOwner(), this::setAdapterForRequests);
         getRequests.resetRequests();
         getRequests.connectContacts(mUser.getId(), mUser.getJwt(), "requests");

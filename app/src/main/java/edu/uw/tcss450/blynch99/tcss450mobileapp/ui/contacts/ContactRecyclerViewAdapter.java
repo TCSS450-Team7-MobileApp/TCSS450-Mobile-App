@@ -79,11 +79,12 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecy
     }
 
     private void showButtons(myViewHolder holder){
-        if (holder.manager.getVisibility() == View.VISIBLE) {
+        if (holder.remove.getVisibility() == View.VISIBLE || holder.manager.getVisibility() == View.VISIBLE) {
             holder.remove.setVisibility(View.GONE);
             holder.manager.setVisibility(View.GONE);
         } else {
-            holder.manager.setVisibility(View.VISIBLE);
+            if (holder.manager.getText() != "Message")
+                holder.manager.setVisibility(View.VISIBLE);
             if (holder.manager.getText() != "Send Request")
                 holder.remove.setVisibility(View.VISIBLE);
         }

@@ -22,7 +22,6 @@
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
@@ -71,9 +70,9 @@
                 android:layout_width="111dp"
                 android:layout_height="77dp"
                 android:layout_below="@+id/text_full_name"
-                android:layout_marginStart="-60dp"
+                android:layout_alignParentEnd="true"
                 android:layout_marginTop="10dp"
-                android:layout_toEndOf="@+id/button_friend_manager"
+                android:layout_marginEnd="20dp"
                 android:text="@string/action_friend_remove"
                 android:visibility="gone" />
 
