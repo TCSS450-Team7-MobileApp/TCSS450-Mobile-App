@@ -9,6 +9,7 @@
     tools:context=".ui.weather.WeatherFragment">
 
     <ScrollView
+        android:id="@+id/scrollView2"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -92,18 +93,6 @@
 
                 </LinearLayout>
 
-                <ImageButton
-                    android:id="@+id/location_search_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginTop="16dp"
-                    android:background="@drawable/location_search_button"
-                    android:padding="10dp"
-                    android:src="@drawable/ic_weather_map_black_24dp"
-                    app:layout_constraintLeft_toRightOf="@id/main_temp"
-                    app:layout_constraintTop_toTopOf="parent" />
-
                 <LinearLayout
                     android:id="@+id/current_details"
                     android:layout_width="wrap_content"
@@ -183,7 +172,7 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/daily_list"
                 android:layout_width="match_parent"
-                android:layout_height="630dp"
+                android:layout_height="690dp"
                 android:layout_margin="5dp"
                 android:orientation="vertical"
                 android:padding="10dp"
@@ -192,5 +181,16 @@
 
         </LinearLayout>
     </ScrollView>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/location_search_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:clickable="true"
+        android:src="@drawable/ic_weather_map_black_24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
