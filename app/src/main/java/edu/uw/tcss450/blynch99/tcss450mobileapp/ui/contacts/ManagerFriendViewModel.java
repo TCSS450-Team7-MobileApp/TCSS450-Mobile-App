@@ -182,28 +182,4 @@ public class ManagerFriendViewModel extends AndroidViewModel {
         Volley.newRequestQueue(getApplication().getApplicationContext())
                 .add(request);
     }
-
-    private void handleError(final VolleyError error) {
-        if (Objects.isNull(error.networkResponse)) {
-            try {
-                mResponse.setValue(new JSONObject("{" +
-                        "error:\"" + error.getMessage() +
-                        "\"}"));
-            } catch (JSONException e) {
-                Log.e("JSON PARSE", "JSON Parse Error in handleError");
-            }
-        }
-        else {
-            String data = new String(error.networkResponse.data, Charset.defaultCharset())
-                    .replace('\"', '\'');
-            try {
-                JSONObject response = new JSONObject();
-                response.put("code", error.networkResponse.statusCode);
-                response.put("data", new JSONObject(data));
-                mResponse.setValue(response);
-            } catch (JSONException e) {
-                Log.e("JSON PARSE", "JSON Parse Error in handleError");
-            }
-        }
-    }
 }
