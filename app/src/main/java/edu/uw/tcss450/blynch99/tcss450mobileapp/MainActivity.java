@@ -300,6 +300,7 @@ public class MainActivity extends AppCompatActivity {
                     null /* Looper */);
         }
     }
+
     /**
      * Removes location updates from the FusedLocationApi.
      */
@@ -316,7 +317,7 @@ public class MainActivity extends AppCompatActivity {
         if (mPushReceiver == null) {
             mPushReceiver = new MainPushReceiver();
         }
-        IntentFilter iFilter = new IntentFilter(PushReceiver.RECEIVED_NEW_MESSAGE);
+        IntentFilter iFilter = new IntentFilter(PushReceiver.RECEIVED_PUSHY_MESSAGE);
         registerReceiver(mPushReceiver, iFilter);
     }
 
@@ -344,7 +345,9 @@ public class MainActivity extends AppCompatActivity {
                         .get(ContactListViewModel.class);
         @Override
         public void onReceive(Context context, Intent intent) {
+            Log.d("PUSHY", "Type: " + intent.hasExtra("type"));
             if (intent.hasExtra("type")) {
+                Log.d("PUSHY", "Type: " + intent.getStringExtra("type"));
                 switch(intent.getStringExtra("type")) {
                     case "chat":
                         processNewChat(intent);
@@ -360,25 +363,27 @@ public class MainActivity extends AppCompatActivity {
         }
 
         private void processNewChat(Intent intent) {
+            Log.d("PUSHY", "Processing new chat");
+            Log.d("PUSHY", intent.getStringExtra("usernames"));
             List<String> members = new ArrayList<>();
-            JSONArray usernames = (JSONArray) intent.getSerializableExtra("usernames");
-            for (int j = 0; j < usernames.length(); j++) {
-                try {
+            try {
+                JSONArray usernames = new JSONArray(intent.getStringExtra("usernames"));
+                for (int j = 0; j < usernames.length(); j++) {
                     members.add(usernames.getString(j));
-                } catch (JSONException e) {
-                    Log.d("JSON ERROR", e.getMessage());
                 }
+            } catch (JSONException e) {
+                Log.d("JSON ERROR", e.getMessage());
             }
 
-            mChatListModel.addChat(
-                    new Chat(
-                            members,
-                            intent.getStringExtra("name"),
-                            intent.getIntExtra("chatId", -1),
-                            intent.getStringExtra("timestamp"),
-                            intent.getStringExtra("recent_message")
-                    )
+            Chat chat = new Chat(
+                    members,
+                    intent.getStringExtra("name"),
+                    Integer.parseInt(intent.getStringExtra("chatId")),
+                    intent.getStringExtra("timestamp"),
+                    intent.getStringExtra("recent_message")
             );
+            Log.d("PUSHY", "Create chat: " + chat.getTitle());
+            mChatListModel.addChat(chat);
         }
 
         private void processNewMessage(Intent intent) {
@@ -408,8 +413,10 @@ public class MainActivity extends AppCompatActivity {
 
         private void processNewFriendRequest(Intent intent) {
 
+            Log.d("FR", "New friend request: " + intent.getStringExtra("username"));
+
             mContactListModel.addToPendingList(new Contact(
-                    intent.getStringExtra("id"),
+                    "" + intent.getIntExtra("id", -1),
                     intent.getStringExtra("username"),
                     intent.getStringExtra("firstname"),
                     intent.getStringExtra("lastname"),

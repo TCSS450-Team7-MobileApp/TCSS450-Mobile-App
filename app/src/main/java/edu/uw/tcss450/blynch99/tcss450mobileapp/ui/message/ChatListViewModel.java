@@ -68,6 +68,7 @@ public class ChatListViewModel extends AndroidViewModel {
 
     public void addChat(Chat chat) {
         if (!mChatList.getValue().contains(chat)) {
+            Log.d("CHAT", "adding chat: " + chat.getTitle());
             mChatList.getValue().add(0, chat);
         } else {
             // If the chat already exists, update the members list and recent message
@@ -87,6 +88,7 @@ public class ChatListViewModel extends AndroidViewModel {
             }
         }
         mChatList.setValue(mChatList.getValue());
+        Log.d("CHAT", "chat added: " + chat.getTitle());
     }
 
     public void removeChat(Chat chat) {

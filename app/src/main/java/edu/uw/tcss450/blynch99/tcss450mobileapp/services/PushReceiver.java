@@ -6,12 +6,14 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Parcelable;
 import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStoreOwner;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 
 import edu.uw.tcss450.blynch99.tcss450mobileapp.AuthActivity;
@@ -27,7 +29,7 @@ import static android.app.ActivityManager.RunningAppProcessInfo.IMPORTANCE_VISIB
 
 public class PushReceiver extends BroadcastReceiver {
 
-    public static final String RECEIVED_NEW_MESSAGE = "new message from pushy";
+    public static final String RECEIVED_PUSHY_MESSAGE = "new message from pushy";
     private static final String MSG_CHANNEL_ID = "msg";
     private static final String CHAT_CHANNEL_ID = "chat";
     private static final String FRIEND_REQ_CHANNEL_ID = "fr";
@@ -35,6 +37,7 @@ public class PushReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
+        Log.d("PUSHY", "Received Pushy Message");
         //the following variables are used to store the information sent from Pushy
         //In the WS, you define what gets sent. You can change it there to suit your needs
         //Then here on the Android side, decide what to do with the message you got
@@ -56,6 +59,7 @@ public class PushReceiver extends BroadcastReceiver {
                 broadcastNewMessage(context, intent, appProcessInfo);
                 break;
             case "friend_request":
+                Log.d("FR", "Friend request received from Pushy");
                 broadcastNewFriendRequest(context, intent, appProcessInfo);
                 break;
         }
@@ -70,19 +74,23 @@ public class PushReceiver extends BroadcastReceiver {
         String usernames = intent.getStringExtra("usernames");
         String recentMessage = intent.getStringExtra("recent_message");
         String timestamp = intent.getStringExtra("timestamp");
+        String type = intent.getStringExtra("type");
 
         if (appProcessInfo.importance == IMPORTANCE_FOREGROUND || appProcessInfo.importance == IMPORTANCE_VISIBLE) {
             //app is in the foreground so send the message to the active Activities
 
             //create an Intent to broadcast a message to other parts of the app.
-            Intent i = new Intent();
+            Intent i = new Intent(RECEIVED_PUSHY_MESSAGE);
             i.putExtra("chatId", chatId);
+            i.putExtra("name", chatName);
             i.putExtra("usernames", usernames);
             i.putExtra("recent_messages", recentMessage);
             i.putExtra("timestamp", timestamp);
-            i.putExtra("type", "chat");
+            i.putExtra("type", type);
             i.putExtras(intent.getExtras());
 
+            Log.d("PUSHY", "Sending broadcast: " + chatName);
+            Log.d("PUSHY", "Context: " + context.toString());
             context.sendBroadcast(i);
 
         } else {
@@ -135,7 +143,7 @@ public class PushReceiver extends BroadcastReceiver {
             //Log.d("PUSHY", "Message received in foreground: " + message);
 
             //create an Intent to broadcast a message to other parts of the app.
-            Intent i = new Intent(RECEIVED_NEW_MESSAGE);
+            Intent i = new Intent(RECEIVED_PUSHY_MESSAGE);
             //Log.d("MESSAGE", message.toString());
             i.putExtra("chatMessage", message);
             i.putExtra("chatId", chatId);
@@ -179,11 +187,12 @@ public class PushReceiver extends BroadcastReceiver {
     private void broadcastNewFriendRequest(Context context,
                                            Intent intent,
                                            ActivityManager.RunningAppProcessInfo appProcessInfo) {
-        String id = intent.getStringExtra("id");
+        int id = intent.getIntExtra("id", -1);
         String username = intent.getStringExtra("username");
         String firstName = intent.getStringExtra("firstname");
         String lastName = intent.getStringExtra("lastname");
         String email = intent.getStringExtra("email");
+        String type = intent.getStringExtra("type");
         FriendStatus status = FriendStatus.RECEIVED_REQUEST;
 
         if (appProcessInfo.importance == IMPORTANCE_FOREGROUND || appProcessInfo.importance == IMPORTANCE_VISIBLE) {
@@ -191,7 +200,7 @@ public class PushReceiver extends BroadcastReceiver {
             //Log.d("PUSHY", "Message received in foreground: " + message);
 
             //create an Intent to broadcast a message to other parts of the app.
-            Intent i = new Intent(RECEIVED_NEW_MESSAGE);
+            Intent i = new Intent(RECEIVED_PUSHY_MESSAGE);
             //Log.d("MESSAGE", message.toString());
             i.putExtra("id", id);
             i.putExtra("username", username);
@@ -199,9 +208,10 @@ public class PushReceiver extends BroadcastReceiver {
             i.putExtra("lastname", lastName);
             i.putExtra("email", email);
             i.putExtra("status", status);
-            i.putExtra("type", "friend_request");
+            i.putExtra("type", type);
             i.putExtras(intent.getExtras());
 
+            Log.d("PUSHY", "Sending friend request broadcast");
             context.sendBroadcast(i);
 
         } else {

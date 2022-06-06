@@ -77,7 +77,7 @@ public class SearchViewModel extends AndroidViewModel {
     }
 
     protected void handleError(final VolleyError error) {
-        throw new IllegalStateException(error.getMessage());
+        Log.e("ERROR", error.getLocalizedMessage());
     }
 
     protected void handleResult(final JSONObject result) {

@@ -96,7 +96,6 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecy
 
         dialog.setContentView(R.layout.dialog_remove);
         dialog.findViewById(R.id.button_ok).setOnClickListener(button -> {
-            Log.d("ARCHIVE", "CLICK OK");
             dialog.dismiss();
             mManage.connectRemoveFriend(contact.getId());
 
