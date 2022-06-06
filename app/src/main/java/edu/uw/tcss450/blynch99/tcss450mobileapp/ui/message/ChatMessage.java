@@ -35,7 +35,7 @@ public class ChatMessage implements Serializable {
         return new ChatMessage(msg.getInt("messageid"),
                 msg.getInt("chatid"),
                 msg.getString("message"),
-                msg.getString("email"),
+                msg.getString("username"),
                 msg.getString("timestamp"));
     }
 
