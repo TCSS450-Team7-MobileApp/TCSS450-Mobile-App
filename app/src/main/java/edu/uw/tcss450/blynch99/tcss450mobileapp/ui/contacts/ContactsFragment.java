@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.navigation.Navigation;
@@ -24,7 +25,7 @@ import edu.uw.tcss450.blynch99.tcss450mobileapp.auth.model.UserInfoViewModel;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.databinding.FragmentContactsBinding;
 
 /**
- * create an instance of this fragment.
+ * A simple {@link Fragment} subclass.
  */
 public class ContactsFragment extends Fragment {
     private FragmentContactsBinding mBinding;
@@ -57,6 +58,10 @@ public class ContactsFragment extends Fragment {
 
     }
 
+    /**
+     * Set Adapter for the contacts
+     * @param contacts list of users contacts
+     */
     private void setAdapter(List<Contact> contacts) {
         HashMap<Integer, Contact> contactMap = new HashMap<>();
         for (Contact contact : contacts){
@@ -66,6 +71,9 @@ public class ContactsFragment extends Fragment {
         mRecyclerView.setAdapter(new ContactRecyclerViewAdapter(getActivity(), contactMap));
     }
 
+    /**
+     * Navigate to adding friends
+     */
     private void navigateToAddNewFriends() {
         Navigation.findNavController(getView())
                 .navigate(ContactsFragmentDirections

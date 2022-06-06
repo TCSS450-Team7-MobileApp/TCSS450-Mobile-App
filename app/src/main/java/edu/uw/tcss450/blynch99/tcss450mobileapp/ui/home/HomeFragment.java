@@ -1,5 +1,6 @@
 package edu.uw.tcss450.blynch99.tcss450mobileapp.ui.home;
 
+import android.opengl.Visibility;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,9 +10,11 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStoreOwner;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.json.JSONObject;
@@ -32,7 +35,7 @@ import edu.uw.tcss450.blynch99.tcss450mobileapp.ui.weather.WeatherIcons;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.ui.weather.WeatherViewModel;
 
 /**
- * create an instance of this fragment.
+ * A simple {@link Fragment} subclass.
  */
 public class HomeFragment extends Fragment {
 
@@ -75,21 +78,54 @@ public class HomeFragment extends Fragment {
 
         ContactListViewModel getRequests = new ViewModelProvider(
                 (ViewModelStoreOwner) MainActivity.getActivity()).get(ContactListViewModel.class);
-        getRequests.addPendingListObserver(getViewLifecycleOwner(), this::setAdapterForRequests);
         getRequests.resetRequests();
         getRequests.connectContacts(mUserInfoViewModel.getId(), mUserInfoViewModel.getJwt(), "requests");
+        getRequests.addPendingListObserver(getViewLifecycleOwner(), this::setAdapterForRequests);
+
+
     }
 
+    /**
+     * Set adapter for current requests user recieved
+     * @param contacts list of friend requests
+     */
     private void setAdapterForRequests(List<Contact> contacts) {
         HashMap<Integer, Contact> contactMap = new HashMap<>();
+        if (contacts.isEmpty())
+            showNoFriends(View.VISIBLE);
+        else
+            showNoFriends(View.GONE);
+
         for (Contact contact : contacts)
             contactMap.put(contacts.indexOf(contact), contact);
         mReceivedRecyclerView.setAdapter(new ContactRecyclerViewAdapter(getActivity(), contactMap));
         Log.d("FRIEND", "Friend request adapter set");
     }
 
+    /**
+     * if no friends display button letting user name
+     * @param visible visibility of buttons
+     */
+    private void showNoFriends(int visible){
+        mBinding.buttonNoFriendsRq.setVisibility(visible);
+        mBinding.textNoFriendRq.setVisibility(visible);
+
+        mBinding.buttonNoFriendsRq.setOnClickListener(button -> navigateToAddFriends());
+    }
+
+    /**
+     * Navigate to add friends
+     */
+    private void navigateToAddFriends(){
+        Navigation.findNavController(getView())
+                .navigate(HomeFragmentDirections.actionNavigationHomeToAddFriendsFragment());
+    }
 
 
+    /**
+     * Observe response from the server
+     * @param response response from ther server
+     */
     private void observeResponse(final JSONObject response) {
         if (response.has("code")) {
             Log.e("WEATHER REQUEST ERROR", response.toString());
@@ -100,7 +136,7 @@ public class HomeFragment extends Fragment {
             Log.e("RECEIVED NO RESPONSE", response.toString());
         }
     }
-
+    
     private void setViewComponents() {
         mBinding.hourlyList.setAdapter(new WeatherHourlyRecyclerViewAdapter(mWeatherViewModel.getmHourlyForecast()));
         mBinding.locationTitle.setText(mLocationModel.getCity());

@@ -26,30 +26,46 @@ import java.util.Objects;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.R;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.io.RequestQueueSingleton;
 
+/**
+ * Connect to server for sign in
+ * A simple {@link AndroidViewModel} subclass.
+ */
 public class SignInViewModel extends AndroidViewModel {
 
     private MutableLiveData<JSONObject> mResponse;
 
+    /**
+     * Constructor
+     * @param application current application
+     */
     public SignInViewModel(@NonNull Application application) {
         super(application);
         mResponse = new MutableLiveData<>();
         mResponse.setValue(new JSONObject());
     }
 
+    /**
+     * reset response
+     */
     public void resetResponse(){
         mResponse.setValue(new JSONObject());
     }
 
+    /**
+     * Add observer for the response
+     * @param owner owner
+     * @param observer observer
+     */
     public void addResponseObserver(@NonNull LifecycleOwner owner,
                                     @NonNull Observer<? super JSONObject> observer) {
         mResponse.observe(owner, observer);
 
     }
 
-
-
-
-
+    /**
+     * Handle error from the server
+     * @param error error from the server
+     */
     private void handleError(final VolleyError error) {
         if (Objects.isNull(error.networkResponse)) {
             try {
@@ -74,6 +90,11 @@ public class SignInViewModel extends AndroidViewModel {
         }
     }
 
+    /**
+     * Connect to the server
+     * @param email email
+     * @param password password
+     */
     public void connect(final String email, final String password) {
         String url = getApplication().getResources().getString(R.string.base_url_service) +
                 "signin";

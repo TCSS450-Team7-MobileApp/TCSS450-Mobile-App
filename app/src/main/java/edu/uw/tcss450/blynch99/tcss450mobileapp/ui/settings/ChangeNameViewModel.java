@@ -23,15 +23,26 @@ import java.util.Objects;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.R;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.io.RequestQueueSingleton;
 
+/**
+ * A simple {@link AndroidViewModel} subclass.
+ */
 public class ChangeNameViewModel extends AndroidViewModel {
     MutableLiveData<JSONObject> mResponse;
 
+    /**
+     * Constructor
+     * @param application current application
+     */
     public ChangeNameViewModel(@NonNull Application application) {
         super(application);
         mResponse = new MutableLiveData<>();
         mResponse.setValue(new JSONObject());
     }
 
+    /**
+     * Handle error from the server
+     * @param error error from the server
+     */
     private void handleError(final VolleyError error) {
         if (Objects.isNull(error.networkResponse)) {
             try {
@@ -56,6 +67,13 @@ public class ChangeNameViewModel extends AndroidViewModel {
         }
     }
 
+    /**
+     * connect to the server and change the name
+     * @param change nwe name
+     * @param nameType which name to change
+     * @param jwt jwt of the user
+     * @param id id of the user
+     */
     public void connect(final String change, final String nameType, final String jwt, final int id) {
         String url = getApplication().getResources().getString(R.string.base_url_service) +
                 "account/change/" + id + "/";

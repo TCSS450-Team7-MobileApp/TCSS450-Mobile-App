@@ -123,4 +123,30 @@
         tools:context="edu.uw.tcss450.uiandnavigationlab.ui.blog.BlogListFragment"
         tools:listitem="@layout/fragment_contact_card" />
 
+    <Button
+        android:id="@+id/button_no_friends_rq"
+        android:layout_width="221dp"
+        android:layout_height="76dp"
+        android:layout_marginTop="24dp"
+        android:text="@string/button_no_friends"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_no_friend_rq"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/text_no_friend_rq"
+        android:visibility="gone"
+        android:layout_width="294dp"
+        android:layout_height="63dp"
+        android:layout_marginTop="8dp"
+        android:textSize="20sp"
+        android:text="@string/text_no_friends"
+        android:gravity="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
