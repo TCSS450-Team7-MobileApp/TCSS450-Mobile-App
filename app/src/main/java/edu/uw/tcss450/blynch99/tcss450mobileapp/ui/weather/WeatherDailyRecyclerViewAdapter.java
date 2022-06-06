@@ -12,10 +12,21 @@ import java.util.List;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.databinding.FragmentWeatherDailyCardBinding;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.R;
 
+/**
+ * This class provides functionality for the daily forecast recyclerview in WeatherFragment.
+ *
+ * @author Group 7
+ * @version 1.0
+ */
 public class WeatherDailyRecyclerViewAdapter extends RecyclerView.Adapter<WeatherDailyRecyclerViewAdapter.WeatherDailyViewHolder> {
 
     private final List<Weather> mDailyForecast;
 
+    /**
+     * Construct a recycler view with the provided list of data
+     *
+     * @param data The list of daily forecast data
+     */
     public WeatherDailyRecyclerViewAdapter(final List<Weather> data) {
         mDailyForecast = data;
     }
@@ -38,20 +49,39 @@ public class WeatherDailyRecyclerViewAdapter extends RecyclerView.Adapter<Weathe
         return mDailyForecast.size();
     }
 
+    /**
+     * This class describe the single component in a recycler view
+     *
+     * @author Group 7
+     * @version 1.0
+     */
     public class WeatherDailyViewHolder extends RecyclerView.ViewHolder {
         private final FragmentWeatherDailyCardBinding mBinding;
         private Weather mData;
 
+        /**
+         * Constructs a view holder with the provided item view
+         *
+         * @param itemView The view to be used
+         */
         public WeatherDailyViewHolder(@NonNull View itemView) {
             super(itemView);
             mBinding = FragmentWeatherDailyCardBinding.bind(itemView);
         }
 
+        /**
+         * Provides the weather data to this view holder
+         *
+         * @param data The weather forecast data
+         */
         public void setWeatherData(final Weather data) {
             mData = data;
             display();
         }
 
+        /**
+         * Binds the data to its corresponding UI elements
+         */
         private void display() {
             mBinding.titleDay.setText(mData.getmDayHour());
             mBinding.dailyIcon.setImageResource(WeatherIcons.getInstance().getIcon(mData.getmIcon()));

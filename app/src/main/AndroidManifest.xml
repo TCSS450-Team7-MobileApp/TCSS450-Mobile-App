@@ -40,10 +40,6 @@
             android:value="${MAPS_API_KEY}" />
 
         <activity
-            android:name=".MapsActivity"
-            android:exported="false"
-            android:label="@string/title_activity_maps" />
-        <activity
             android:name=".ui.settings.SettingsActivity"
             android:exported="false" />
         <activity android:name=".MainActivity" />

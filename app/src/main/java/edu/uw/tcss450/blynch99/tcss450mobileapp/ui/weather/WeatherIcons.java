@@ -5,22 +5,47 @@ import java.util.Map;
 
 import edu.uw.tcss450.blynch99.tcss450mobileapp.R;
 
+/**
+ * This class provides a look up for strings of icon names and the drawable resources.
+ *
+ * @author Group 7
+ * @version 1.0
+ */
 public class WeatherIcons {
     private static WeatherIcons mIcons;
     private static Map<String, Integer> mIconsLookup;
 
+    /**
+     * Constructs the hashmap with icon names and its corresponding resource files.
+     */
     private WeatherIcons() {
         mIconsLookup = getIconsHashMap();
     }
 
+    /**
+     * Gets the instance of this class
+     *
+     * @return The instance of WeatherIcons
+     */
     public static synchronized WeatherIcons getInstance() {
         return mIcons == null ? mIcons = new WeatherIcons() : mIcons;
     }
 
+    /**
+     * Gets the icon resource file based on the provided icon name.
+     *
+     * @param iconName The icon name to look up
+     * @return The icon resource file
+     */
     public int getIcon(final String iconName) {
         return mIconsLookup.get(iconName);
     }
 
+    /**
+     * Inserts icon names and resource files mapping to the hashmap
+     *
+     * @return The populated hashmap
+     */
     private static Map<String, Integer> getIconsHashMap() {
         Map<String, Integer> map = new HashMap<>();
         map.put("01d", R.drawable.weather_icon_01d);

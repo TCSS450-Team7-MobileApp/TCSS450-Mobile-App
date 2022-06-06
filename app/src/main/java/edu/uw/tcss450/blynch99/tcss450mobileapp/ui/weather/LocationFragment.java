@@ -44,6 +44,12 @@ import edu.uw.tcss450.blynch99.tcss450mobileapp.model.LocationViewModel;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.auth.model.UserInfoViewModel;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.databinding.FragmentLocationBinding;
 
+/**
+ * Location Fragment provides functionality to the location selection map.
+ *
+ * @author Group 7
+ * @version 1.0
+ */
 public class LocationFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnCameraIdleListener {
 
     private LocationViewModel mModel;
@@ -148,6 +154,11 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Go
         mBinding.locationSearchbar.clearFocus();
     }
 
+    /**
+     * Place a new marker on the map, clear any previously placed markers.
+     *
+     * @param latLng The coordinates position of the marker to be placed.
+     */
     private void placeNewMarker(@NonNull LatLng latLng) {
         if (!mIsLocationReady) {
             mIsLocationReady = true;
@@ -189,6 +200,12 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Go
         mMap.setOnCameraIdleListener(this);
     }
 
+    /**
+     * Set the location view model's coordinates by the specified coordinates.
+     * Use to update the current location.
+     *
+     * @param latLng The new coordinates to update view model
+     */
     private void setLocationViewModel(LatLng latLng) {
         Log.d("LOCATION_MAP", latLng.toString());
         Location temp = new Location(LocationManager.GPS_PROVIDER);
