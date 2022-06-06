@@ -63,10 +63,10 @@ public class Chat implements Serializable {
             long msPassed = today.getTime() - msgDate.getTime();
             long daysPassed = TimeUnit.DAYS.convert(msPassed, TimeUnit.MILLISECONDS);
 
-            Log.d("TIME", mDate);
+            //Log.d("TIME", mDate);
             String time = mDate.substring(11);
             String[] times = time.split(":");
-            Log.d("TIME", Arrays.toString(times));
+            //Log.d("TIME", Arrays.toString(times));
             formattedDate += times[0] + ":" + times[1];
         } catch (ParseException e) {
             e.printStackTrace();

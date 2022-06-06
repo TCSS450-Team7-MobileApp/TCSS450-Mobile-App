@@ -150,13 +150,15 @@ public class ManagerFriendViewModel extends AndroidViewModel {
      */
     public void connectSendRequest(String friendId) {
         String url = getApplication().getResources().getString(R.string.base_url_service) +
-                "friendsList/request/" + mUser.getId();
+                "friendsList/request";
         JSONObject body = new JSONObject();
         try {
             body.put("memberid",friendId);
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        Log.d("FRIEND REQUEST", "Request from " + mUser.getNick() + " to " + friendId);
+        Log.d("FR", "Request Body: " + body);
         Request request = new JsonObjectRequest(
                 Request.Method.POST,
                 url,
@@ -181,4 +183,27 @@ public class ManagerFriendViewModel extends AndroidViewModel {
                 .add(request);
     }
 
+    private void handleError(final VolleyError error) {
+        if (Objects.isNull(error.networkResponse)) {
+            try {
+                mResponse.setValue(new JSONObject("{" +
+                        "error:\"" + error.getMessage() +
+                        "\"}"));
+            } catch (JSONException e) {
+                Log.e("JSON PARSE", "JSON Parse Error in handleError");
+            }
+        }
+        else {
+            String data = new String(error.networkResponse.data, Charset.defaultCharset())
+                    .replace('\"', '\'');
+            try {
+                JSONObject response = new JSONObject();
+                response.put("code", error.networkResponse.statusCode);
+                response.put("data", new JSONObject(data));
+                mResponse.setValue(response);
+            } catch (JSONException e) {
+                Log.e("JSON PARSE", "JSON Parse Error in handleError");
+            }
+        }
+    }
 }

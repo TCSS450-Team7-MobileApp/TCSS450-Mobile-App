@@ -63,7 +63,7 @@ public class PushyTokenViewModel extends AndroidViewModel {
             new RegisterForPushNotificationsAsync().execute();
 
         } else {
-            Log.d("PUSH VIEW MODEL", "USING OLD TOKEN");
+            Log.d("PUSH VIEW MODEL", "USING OLD TOKEN: " + Pushy.getDeviceCredentials(getApplication().getApplicationContext()).token);
             mPushyToken.setValue(
                     Pushy.getDeviceCredentials(getApplication().getApplicationContext()).token);
         }

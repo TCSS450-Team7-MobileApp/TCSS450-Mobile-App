@@ -84,7 +84,7 @@
         android:id="@+id/app_logo"
         android:layout_width="376dp"
         android:layout_height="352dp"
-        android:src="@mipmap/ic_launcher_high_res_coral_foreground"
+        android:src="@mipmap/ic_launcher_foreground"
         app:layout_constraintBottom_toTopOf="@+id/edit_email"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

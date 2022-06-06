@@ -101,7 +101,7 @@ public class SearchViewModel extends AndroidViewModel {
      * @param error error from the server
      */
     protected void handleError(final VolleyError error) {
-        throw new IllegalStateException(error.getMessage());
+        Log.e("ERROR", error.getLocalizedMessage());
     }
 
     /**
