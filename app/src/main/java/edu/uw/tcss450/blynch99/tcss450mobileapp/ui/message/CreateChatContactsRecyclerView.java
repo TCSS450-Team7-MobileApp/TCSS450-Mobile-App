@@ -61,6 +61,11 @@ public class CreateChatContactsRecyclerView extends RecyclerView.Adapter<CreateC
 
     }
 
+    /**
+     * Adds the given Contact to the list of Contacts.
+     * @param contact Contact to add.
+     * @param holder ViewHolder for the Contacts in the CreateChatRecyclerView.
+     */
     private void addToContactList(Contact contact,  myViewHolder holder){
         if (mGroupList.contains(contact)){
             holder.nickname.setTextColor(MainActivity.getActivity().getColor(R.color.black));
@@ -82,6 +87,7 @@ public class CreateChatContactsRecyclerView extends RecyclerView.Adapter<CreateC
         ConstraintLayout cardLayout;
         Button manager, remove;
         View view;
+
         public myViewHolder(@NonNull View itemView) {
             super(itemView);
             nickname = itemView.findViewById(R.id.text_nickname);
@@ -93,6 +99,10 @@ public class CreateChatContactsRecyclerView extends RecyclerView.Adapter<CreateC
         }
     }
 
+    /**
+     * Gets the Contacts that are selected in the ViewHolder.
+     * @return List of Contacts
+     */
     public List<Contact> getGroupList(){
         return mGroupList;
     }

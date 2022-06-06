@@ -17,6 +17,9 @@ import java.util.stream.Collectors;
 
 import edu.uw.tcss450.blynch99.tcss450mobileapp.ui.contacts.Contact;
 
+/**
+ * Represents a Chat with multiple members
+ */
 public class Chat implements Serializable {
 
     private final int mChatId;
@@ -25,6 +28,14 @@ public class Chat implements Serializable {
     private String mTeaser;
     private List<String> mMembers;
 
+    /**
+     *
+     * @param members List of usernames of members in the chat.
+     * @param title The title/name of the chat.
+     * @param chatId The ID of the chat.
+     * @param date The date of the most recently sent message in the chat.
+     * @param teaser The teaser/preview of the most recently sent message in the chat.
+     */
     public Chat(List<String> members, String title, int chatId, String date, String teaser) {
         mMembers = members;
         mChatId = chatId;
@@ -53,6 +64,11 @@ public class Chat implements Serializable {
 
     public String getDate() { return mDate; }
 
+    /**
+     * Returns the date of the most recent message in the chat in the format:
+     *  - [DAY OF THE WEEK] [TIME]
+     * @return String representation of formatted date.
+     */
     public String getFormattedDate() {
         String formattedDate = "";
         Date today = new Date();
