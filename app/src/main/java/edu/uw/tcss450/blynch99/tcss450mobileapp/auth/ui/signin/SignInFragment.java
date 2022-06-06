@@ -32,6 +32,7 @@ import edu.uw.tcss450.blynch99.tcss450mobileapp.model.PushyTokenViewModel;
 ;
 
 /**
+ * Sign in Fragment
  * A simple {@link Fragment} subclass.
  */
 public class SignInFragment extends Fragment {
@@ -48,10 +49,6 @@ public class SignInFragment extends Fragment {
 
     private PasswordValidator mPassWordValidator = checkPwdLength(1)
             .and(checkExcludeWhiteSpace());
-
-    public SignInFragment() {
-        // Required empty public constructor
-    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -140,10 +137,17 @@ public class SignInFragment extends Fragment {
         }
     }
 
+    /**
+     * Begin verification
+     * @param button button clicked to start verification
+     */
     private void attemptSignIn(final View button) {
         validateEmail();
     }
 
+    /**
+     * Validate Email
+     */
     private void validateEmail() {
         mEmailValidator.processResult(
                 mEmailValidator.apply(binding.editEmail.getText().toString().trim()),
@@ -151,6 +155,9 @@ public class SignInFragment extends Fragment {
                 result -> binding.editEmail.setError("Please enter a valid Email address."));
     }
 
+    /**
+     * Validate Password
+     */
     private void validatePassword() {
         mPassWordValidator.processResult(
                 mPassWordValidator.apply(binding.editPassword.getText().toString()),
@@ -158,6 +165,9 @@ public class SignInFragment extends Fragment {
                 result -> binding.editPassword.setError("Please enter a valid Password."));
     }
 
+    /**
+     * verify info with server
+     */
     private void verifyAuthWithServer() {
         binding.layoutWait.setVisibility(View.VISIBLE);
         mSignInModel.connect(
@@ -186,8 +196,7 @@ public class SignInFragment extends Fragment {
 
             Log.d("TTT", Boolean.toString(jwt.isExpired(0)));
             if(!jwt.isExpired(0)) {
-                String email = jwt.getClaim("email").asString();
-                mGetInfo.connect(email,token);
+                mGetInfo.connect(token);
             }
         }
     }

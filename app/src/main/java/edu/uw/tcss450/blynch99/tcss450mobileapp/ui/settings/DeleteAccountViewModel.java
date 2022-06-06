@@ -23,16 +23,27 @@ import java.util.Objects;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.R;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.io.RequestQueueSingleton;
 
+/**
+ * A simple {@link AndroidViewModel} subclass.
+ */
 public class DeleteAccountViewModel extends AndroidViewModel {
 
     private MutableLiveData<JSONObject> mResponse;
 
+    /**
+     * Constructor
+     * @param application current application
+     */
     public DeleteAccountViewModel(@NonNull Application application) {
         super(application);
         mResponse = new MutableLiveData<>();
         mResponse.setValue(new JSONObject());
     }
 
+    /**
+     * Handle error from the server
+     * @param error error from the server
+     */
     private void handleError(final VolleyError error) {
         if (Objects.isNull(error.networkResponse)) {
             try {
@@ -57,6 +68,12 @@ public class DeleteAccountViewModel extends AndroidViewModel {
         }
     }
 
+
+    /**
+     * connect and delete account from server
+     * @param email email of the user
+     * @param jwt jwt of the user
+     */
     public void connect(final String email, final String jwt) {
         String url = getApplication().getResources().getString(R.string.base_url_service) +
                 "account/delete/" + email;

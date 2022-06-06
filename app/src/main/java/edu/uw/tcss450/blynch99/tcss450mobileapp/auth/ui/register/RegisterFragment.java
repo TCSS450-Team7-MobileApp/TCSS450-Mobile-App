@@ -55,10 +55,6 @@ public class RegisterFragment extends Fragment {
                     .and(checkPwdLowerCase())
                     .and(checkPwdUpperCase());
 
-    public RegisterFragment() {
-        // Required empty public constructor
-    }
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,10 +78,18 @@ public class RegisterFragment extends Fragment {
                 this::observeResponse);
     }
 
+    /**
+     * Start verifying all the info user inputted from register
+     *
+     * @param button button that was clicked to get here
+     */
     private void attemptRegister(final View button) {
         validateNick();
     }
 
+    /**
+     * Validate Nickname
+     */
     private void validateNick() {
         mNameValidator.processResult(
                 mNickValidator.apply(binding.editNick.getText().toString().trim()),
@@ -93,6 +97,9 @@ public class RegisterFragment extends Fragment {
                 result -> binding.editNick.setError("Please enter a nickname with at least 2 characters."));
     }
 
+    /**
+     * Validate First Name
+     */
     private void validateFirst() {
         mNameValidator.processResult(
                 mNameValidator.apply(binding.editFirst.getText().toString().trim()),
@@ -100,6 +107,9 @@ public class RegisterFragment extends Fragment {
                 result -> binding.editFirst.setError("Please enter a first name with at least 1 character."));
     }
 
+    /**
+     * Validate Last Name
+     */
     private void validateLast() {
         mNickValidator.processResult(
                 mNickValidator.apply(binding.editLast.getText().toString().trim()),
@@ -107,6 +117,9 @@ public class RegisterFragment extends Fragment {
                 result -> binding.editLast.setError("Please enter a last name with at least 2 characters."));
     }
 
+    /**
+     * Validate Email
+     */
     private void validateEmail() {
         mEmailValidator.processResult(
                 mEmailValidator.apply(binding.editEmail.getText().toString().trim()),
@@ -114,6 +127,9 @@ public class RegisterFragment extends Fragment {
                 result -> binding.editEmail.setError("Please enter a valid Email address."));
     }
 
+    /**
+     * Make sure passwords match
+     */
     private void validatePasswordsMatch() {
         PasswordValidator matchValidator =
                 checkClientPredicate(
@@ -125,6 +141,9 @@ public class RegisterFragment extends Fragment {
                 result -> binding.editPassword1.setError("Passwords must match."));
     }
 
+    /**
+     *  Validate Password
+     */
     private void validatePassword() {
         mPassWordValidator.processResult(
                 mPassWordValidator.apply(binding.editPassword1.getText().toString()),
@@ -133,6 +152,9 @@ public class RegisterFragment extends Fragment {
                         " contain at least 1 letter, 1 special character, and 1 digit."));
     }
 
+    /**
+     * Verify all info with server
+     */
     private void verifyAuthWithServer() {
         binding.layoutWait.setVisibility(View.VISIBLE);
         mRegisterModel.connect(
@@ -145,6 +167,9 @@ public class RegisterFragment extends Fragment {
         //result of connect().
     }
 
+    /**
+     * Navigate to the verification screen
+     */
     private void navigateToVerification() {
         RegisterFragmentDirections.ActionRegisterFragmentToEmailVerificationFragment directions =
                 RegisterFragmentDirections.actionRegisterFragmentToEmailVerificationFragment(

@@ -1,14 +1,10 @@
 package edu.uw.tcss450.blynch99.tcss450mobileapp.ui.contacts;
 
-import static androidx.core.content.ContextCompat.getSystemService;
-
-import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,7 +21,7 @@ import edu.uw.tcss450.blynch99.tcss450mobileapp.auth.model.UserInfoViewModel;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.databinding.FragmentAddFriendsBinding;
 
 /**
- * create an instance of this fragment.
+ * A simple {@link Fragment} subclass.
  */
 public class AddFriendsFragment extends Fragment {
     private FragmentAddFriendsBinding mBinding;
@@ -59,6 +55,9 @@ public class AddFriendsFragment extends Fragment {
         getRequests.connectContacts(mUser.getId(), mUser.getJwt(), "requests");
     }
 
+    /**
+     * display searched info
+     */
     private void displaySearched(){
         mBinding.editSearchUsers.setError(null);
         if (mBinding.editSearchUsers.getText().toString().equals("")) {
@@ -77,6 +76,10 @@ public class AddFriendsFragment extends Fragment {
 //                .hideSoftInputFromWindow(getView().getWindowToken(), 0);
     }
 
+    /**
+     * set adapter for searches
+     * @param contacts all the searched contacts
+     */
     private void setAdapterForSearch(List<Contact> contacts) {
         Log.d("SEARCH", contacts.toString());
         HashMap<Integer, Contact> contactMap = new HashMap<>();
@@ -85,7 +88,10 @@ public class AddFriendsFragment extends Fragment {
         mSearchedRecyclerView.setAdapter(new ContactRecyclerViewAdapter(getActivity(), contactMap));
     }
 
-
+    /**
+     * set adapter for requests
+     * @param contacts all the requests the user recieved
+     */
     private void setAdapterForRequests(List<Contact> contacts) {
         HashMap<Integer, Contact> contactMap = new HashMap<>();
         for (Contact contact : contacts)

@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,6 +22,9 @@ import java.util.HashMap;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.MainActivity;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.R;
 
+/**
+ * A simple {@link RecyclerView.Adapter<ContactRecyclerViewAdapter.myViewHolder>} subclass.
+ */
 public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecyclerViewAdapter.myViewHolder> {
 
     protected final HashMap<Integer,Contact> mContacts;
@@ -28,7 +32,11 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecy
     protected ManagerFriendViewModel mManage;
 
 
-
+    /**
+     * Constructor
+     * @param context current context
+     * @param contacts current contacts
+     */
     public ContactRecyclerViewAdapter(Context context, HashMap<Integer,Contact> contacts){
 
 
@@ -78,6 +86,10 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecy
                 showRemoveDialog(mContacts.get(position),holder.view, position));
     }
 
+    /**
+     * show buttons
+     * @param holder holder that hold the buttons
+     */
     private void showButtons(myViewHolder holder){
         if (holder.remove.getVisibility() == View.VISIBLE || holder.manager.getVisibility() == View.VISIBLE) {
             holder.remove.setVisibility(View.GONE);
@@ -90,6 +102,12 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecy
         }
     }
 
+    /**
+     * Show Remove Dialog for removing friends
+     * @param contact the contact
+     * @param view the view for it to appear
+     * @param position position of the contact
+     */
     void showRemoveDialog(Contact contact, View view, int position) {
         Dialog dialog = new Dialog(view.getContext());
         dialog.setCancelable(true);
@@ -106,17 +124,31 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecy
         dialog.show();
     }
 
+    /**
+     * Accept Friend Request
+     * @param contact Contact of the request to accept
+     * @param position position of the contact
+     */
     private void acceptRequest(Contact contact, int position){
         mManage.connectAcceptRequest(contact.getId());
 
         removeFromView(position);
     }
 
+    /**
+     * Send a friend request
+     * @param contact contact to send the request
+     * @param position position of the contact
+     */
     private void sendRequest(Contact contact, int position){
         mManage.connectSendRequest(contact.getId());
         removeFromView(position);
     }
 
+    /**
+     * Remove contact from list
+     * @param position position of the contact
+     */
     private void removeFromView(int position){
         mContacts.remove(position);
         notifyItemRemoved(position);

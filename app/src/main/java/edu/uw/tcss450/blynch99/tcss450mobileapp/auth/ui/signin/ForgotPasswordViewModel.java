@@ -4,6 +4,7 @@ import android.app.Application;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.MutableLiveData;
@@ -21,22 +22,38 @@ import java.nio.charset.Charset;
 import java.util.Objects;
 
 import edu.uw.tcss450.blynch99.tcss450mobileapp.io.RequestQueueSingleton;
-
+/**
+ * Connect to server for forgot password
+ * A simple {@link AndroidViewModel} subclass.
+ */
 public class ForgotPasswordViewModel extends AndroidViewModel {
     private MutableLiveData<JSONObject> mResponse;
 
+    /**
+     * Constructor
+     * @param application current application
+     */
     public ForgotPasswordViewModel(@NonNull Application application) {
         super(application);
         mResponse = new MutableLiveData<>();
         mResponse.setValue(new JSONObject());
     }
 
+    /**
+     * Add observer for the response
+     * @param owner owner
+     * @param observer observer
+     */
     public void addResponseObserver(@NonNull LifecycleOwner owner,
                                     @NonNull Observer<? super JSONObject> observer) {
         mResponse.observe(owner, observer);
 
     }
 
+    /**
+     * Handle error from the server
+     * @param error error from the server
+     */
     private void handleError(final VolleyError error) {
         if (Objects.isNull(error.networkResponse)) {
             try {
@@ -61,6 +78,10 @@ public class ForgotPasswordViewModel extends AndroidViewModel {
         }
     }
 
+    /**
+     * Connect to the server
+     * @param email email
+     */
     public void connect(final String email) {
         String url = "https://tcss450-team7.herokuapp.com/signin"; //Replace with new resetpass endpoint
         JSONObject body = new JSONObject();

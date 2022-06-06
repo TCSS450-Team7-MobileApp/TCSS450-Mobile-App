@@ -18,7 +18,8 @@ import org.json.JSONObject;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.databinding.FragmentForgotPasswordBinding;
 
 /**
- * create an instance of this fragment.
+ * Fragment for forgot password
+ * A simple {@link Fragment} subclass.
  */
 public class ForgotPasswordFragment extends Fragment {
 
@@ -59,6 +60,10 @@ public class ForgotPasswordFragment extends Fragment {
 
     }
 
+    /**
+     * Navigate back to sign in
+     * @param email email of the user
+     */
     private void navigateToSignIn(final String email){
         Log.d("CLICK", "Click happened");
         ForgotPasswordFragmentDirections.ActionForgotPasswordFragmentToSignInFragment directions =
@@ -70,6 +75,10 @@ public class ForgotPasswordFragment extends Fragment {
 
     }
 
+    /**
+     * Observe the response from the server
+     * @param response the response from the server
+     */
     private void observeResponse(final JSONObject response) {
         if (response.length() > 0) {
             if (response.has("code")) {

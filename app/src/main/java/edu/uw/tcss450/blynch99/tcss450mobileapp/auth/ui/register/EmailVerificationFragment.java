@@ -13,7 +13,9 @@ import androidx.navigation.Navigation;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.databinding.FragmentEmailVerificationBinding;
 
 /**
- * create an instance of this fragment.
+ * Fragment for email verification
+ *
+ * A simple {@link Fragment} subclass.
  */
 public class EmailVerificationFragment extends Fragment {
 
@@ -34,6 +36,9 @@ public class EmailVerificationFragment extends Fragment {
         mBinding.buttonVerified.setOnClickListener(button -> navigateToLogin());
     }
 
+    /**
+     * Navigate the user back to login
+     */
     private void navigateToLogin() {
         EmailVerificationFragmentDirections.ActionEmailVerificationFragment2ToSignInFragment directions =
                 EmailVerificationFragmentDirections.actionEmailVerificationFragment2ToSignInFragment();
