@@ -25,6 +25,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * This class provides the data for all weather related components, which includes
+ * Current weather forecast, hourly forecast, and daily forecast.
+ *
+ * @author Group 7
+ * @version 1.0
+ */
 public class WeatherViewModel extends AndroidViewModel {
 
     private final MutableLiveData<JSONObject> mResponse;
@@ -34,6 +41,11 @@ public class WeatherViewModel extends AndroidViewModel {
     private List<Weather> mHourlyForecast;
     private List<Weather> mDailyForecast;
 
+    /**
+     * Constructs the weather data
+     *
+     * @param application The application
+     */
     public WeatherViewModel(@NonNull Application application) {
         super(application);
         mResponse = new MutableLiveData<>();
@@ -42,32 +54,62 @@ public class WeatherViewModel extends AndroidViewModel {
         mDailyForecast = new ArrayList<>();
     }
 
+    /**
+     * Observe changes to the JSON response
+     *
+     * @param theOwner The lifecycle owner
+     * @param theObserver The observer
+     */
     public void addResponseObserver(@NonNull final LifecycleOwner theOwner,
                                     @NonNull final Observer<? super JSONObject> theObserver) {
         mResponse.observe(theOwner, theObserver);
     }
 
+    /**
+     * Gets the current weather forecast information
+     *
+     * @return The current weather
+     */
     public WeatherCurrent getmCurrentWeatherData() {
         return mCurrentWeatherData;
     }
 
+    /**
+     * Gets the hourly forecast information
+     *
+     * @return The list of hourly forecast
+     */
     public List<Weather> getmHourlyForecast() {
         return mHourlyForecast;
     }
 
+    /**
+     * Gets the daily forecast information
+     *
+     * @return The list of daily forecast
+     */
     public List<Weather> getmDailyForecast() {
         return mDailyForecast;
     }
 
+    /**
+     * Empty the JSON response
+     */
     public void clearResponse() {
         mResponse.setValue(new JSONObject());
     }
 
+    /**
+     * Make a request to the weather endpoint with
+     * the JWT, Latitude, and Longitude
+     *
+     * @param jwt The JWT of the user
+     * @param latitude The latitude to get weather information from
+     * @param longitude The longitude to get weather information from
+     */
     public void connectGet(final String jwt, final String latitude, final String longitude) {
-//        String tempCoords = "?lat=47.246950&lng=-122.436277";
         String coordinates = String.format("?lat=%s&lng=%s", latitude, longitude);
         String url = "https://tcss450-team7.herokuapp.com/weather" + coordinates;
-//        String url = "http://192.168.0.13:5000/weather" + tempCoords;
 
         Request request = new JsonObjectRequest(
                 Request.Method.GET,
@@ -92,6 +134,12 @@ public class WeatherViewModel extends AndroidViewModel {
                 .add(request);
     }
 
+    /**
+     * Handles the response from the weather endpoint by
+     * parsing through the response object and grab the data
+     *
+     * @param theResult The JSON response object
+     */
     private void handleResult(final JSONObject theResult) {
         Log.d("WEATHER_API", "Handling result " + theResult.toString());
         WeatherCurrent currentWeatherData = null;
@@ -143,9 +191,9 @@ public class WeatherViewModel extends AndroidViewModel {
     }
 
     /**
-     * Handles errors generated when requesting weather data from the server
+     * Handles the errors that may come up from requesting weather information
      *
-     * @param theError the resulting Volley error to be handled
+     * @param theError The error to be handled
      */
     private void handleError(final VolleyError theError) {
         Map<String, Object> map = new HashMap<>();

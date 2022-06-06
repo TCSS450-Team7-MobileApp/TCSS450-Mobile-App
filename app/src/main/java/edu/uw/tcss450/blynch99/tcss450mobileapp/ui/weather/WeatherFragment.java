@@ -23,7 +23,10 @@ import edu.uw.tcss450.blynch99.tcss450mobileapp.auth.model.UserInfoViewModel;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.databinding.FragmentWeatherBinding;
 
 /**
- * create an instance of this fragment.
+ * This class provides functionality to the weather page
+ *
+ * @author Group 7
+ * @version 1.0
  */
 public class WeatherFragment extends Fragment {
 
@@ -34,6 +37,9 @@ public class WeatherFragment extends Fragment {
     private FragmentWeatherBinding mBinding;
     private LocationViewModel mLocationModel;
 
+    /**
+     * Required empty constructor
+     */
     public WeatherFragment() {}
 
     @Override
@@ -70,6 +76,11 @@ public class WeatherFragment extends Fragment {
         });
     }
 
+    /**
+     * Observe changes in weather request response.
+     *
+     * @param response The response in JSON format
+     */
     private void observeResponse(final JSONObject response) {
         if (response.has("code")) {
             Log.e("WEATHER REQUEST ERROR",  response.toString());
@@ -79,6 +90,10 @@ public class WeatherFragment extends Fragment {
             Log.e("RECEIVED NO RESPONSE", response.toString());
         }
     }
+
+    /**
+     * Binds the data to its corresponding UI elements
+     */
     private void setViewComponents() {
         mBinding.locationTitle.setText(mLocationModel.getCity());
         mBinding.currentTemp.setText(mModel.getmCurrentWeatherData().getmTemperature() + degreeFarenheit);

@@ -15,12 +15,16 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -28,17 +32,25 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.uw.tcss450.blynch99.tcss450mobileapp.MainActivity;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.R;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.model.LocationViewModel;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.auth.model.UserInfoViewModel;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.databinding.FragmentLocationBinding;
 
-public class LocationFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMapClickListener {
+/**
+ * Location Fragment provides functionality to the location selection map.
+ *
+ * @author Group 7
+ * @version 1.0
+ */
+public class LocationFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnCameraIdleListener {
 
     private LocationViewModel mModel;
 
@@ -142,6 +154,11 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Go
         mBinding.locationSearchbar.clearFocus();
     }
 
+    /**
+     * Place a new marker on the map, clear any previously placed markers.
+     *
+     * @param latLng The coordinates position of the marker to be placed.
+     */
     private void placeNewMarker(@NonNull LatLng latLng) {
         if (!mIsLocationReady) {
             mIsLocationReady = true;
@@ -175,17 +192,34 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Go
                 final LatLng c = new LatLng(location.getLatitude(), location.getLongitude());
                 //Zoom levels are from 2.0f (zoomed out) to 21.f (zoomed in)
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(c, 10.0f));
+                setLocationViewModel(c);
                 mIsLocationReady = true;
             }
         });
         mMap.setOnMapClickListener(this);
+        mMap.setOnCameraIdleListener(this);
     }
 
+    /**
+     * Set the location view model's coordinates by the specified coordinates.
+     * Use to update the current location.
+     *
+     * @param latLng The new coordinates to update view model
+     */
     private void setLocationViewModel(LatLng latLng) {
         Log.d("LOCATION_MAP", latLng.toString());
         Location temp = new Location(LocationManager.GPS_PROVIDER);
         temp.setLongitude(latLng.longitude);
         temp.setLatitude(latLng.latitude);
+        this.longitude = String.valueOf(latLng.longitude);
+        this.latitude = String.valueOf(latLng.latitude);
         mModel.setLocation(temp, getActivity());
+    }
+
+    @Override
+    public void onCameraIdle() {
+        double lat = mMap.getCameraPosition().target.latitude;
+        double lng = mMap.getCameraPosition().target.longitude;
+        setLocationViewModel(new LatLng(lat, lng));
     }
 }
