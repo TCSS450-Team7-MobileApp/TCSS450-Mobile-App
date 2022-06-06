@@ -29,6 +29,9 @@ import edu.uw.tcss450.blynch99.tcss450mobileapp.ui.contacts.Contact;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.ui.contacts.ContactListViewModel;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.ui.contacts.ContactRecyclerViewAdapter;
 
+/**
+ * Fragment for Creating a new Chat with the selected Contacts
+ */
 public class CreateChatFragment extends Fragment {
 
     private RecyclerView mRecyclerView;
@@ -36,7 +39,6 @@ public class CreateChatFragment extends Fragment {
     private CreateChatViewModel mModel;
     private UserInfoViewModel mUser;
     private CreateChatContactsRecyclerView mContactAdapter;
-
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -83,8 +85,10 @@ public class CreateChatFragment extends Fragment {
         });
     }
 
-
-
+    /**
+     * Sets the adapter for the ContactRecyclerView with the given list of contacts
+     * @param contacts - List of Contacts
+     */
     private void setAdapter(List<Contact> contacts) {
         HashMap<Integer, Contact> contactMap = new HashMap<>();
         for (Contact contact : contacts){

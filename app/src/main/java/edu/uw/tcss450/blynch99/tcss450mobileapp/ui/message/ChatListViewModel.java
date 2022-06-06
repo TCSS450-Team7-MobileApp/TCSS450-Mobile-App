@@ -47,6 +47,10 @@ public class ChatListViewModel extends AndroidViewModel {
         mChatList.observe(owner, observer);
     }
 
+    /**
+     * Updates the Chat with a matching Chat ID with the information in the given ChatMessage.
+     * @param chatMessage Updated ChatMessage to populate an existing Chat.
+     */
     public void updateChat(ChatMessage chatMessage) {
         Log.d("CHAT", "Updating chatlist with message: " + chatMessage.toString());
         Chat target = null;
@@ -66,6 +70,11 @@ public class ChatListViewModel extends AndroidViewModel {
         mChatList.setValue(mChatList.getValue());
     }
 
+    /**
+     * Adds the given Chat to the list of Chats if it doesn't already exist. If it does exist,
+     * But with different information, that information is overrided.
+     * @param chat
+     */
     public void addChat(Chat chat) {
         if (!mChatList.getValue().contains(chat)) {
             Log.d("CHAT", "adding chat: " + chat.getTitle());
@@ -91,6 +100,10 @@ public class ChatListViewModel extends AndroidViewModel {
         Log.d("CHAT", "chat added: " + chat.getTitle());
     }
 
+    /**
+     * Removes the given Chat from the list of chats if it exists.
+     * @param chat Chat to be removed
+     */
     public void removeChat(Chat chat) {
         if (mChatList.getValue().contains(chat)) {
             mChatList.getValue().remove(chat);
@@ -98,6 +111,12 @@ public class ChatListViewModel extends AndroidViewModel {
         mChatList.setValue(mChatList.getValue());
     }
 
+    /**
+     * Makes a request to the webservice to get a list of all the chats that include the user
+     * with the given Member ID.
+     * @param memberId ID of the member whose chats to retrieve.
+     * @param jwt JWT of the user making the request.
+     */
     public void connectGet(int memberId, String jwt) {
         Log.d("CONNECT", "" + memberId);
         Log.d("CONNECT", "JWT: " + jwt);

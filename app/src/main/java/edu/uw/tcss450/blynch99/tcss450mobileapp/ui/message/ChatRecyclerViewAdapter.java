@@ -33,6 +33,9 @@ import edu.uw.tcss450.blynch99.tcss450mobileapp.R;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.auth.model.UserInfoViewModel;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.databinding.FragmentChatCardBinding;
 
+/**
+ * RecyclerViewAdapter for a list of Chats
+ */
 public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<ChatRecyclerViewAdapter.ChatViewHolder>{
 
     private final List<Chat> mChats;
@@ -116,6 +119,10 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<ChatRecyclerVi
             displayChat();
         }
 
+        /**
+         * Shows the dialog to archive the given Chat.
+         * @param chat Chat to be archived.
+         */
         void showArchiveDialog(Chat chat) {
             // Confirmation pop-up
             //ArchiveChatDialogFragment archiveDialog = new ArchiveChatDialogFragment(chat);
@@ -137,6 +144,13 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<ChatRecyclerVi
             //archiveDialog.show(archiveDialog.getChildFragmentManager(), ArchiveChatDialogFragment.TAG);
         }
 
+        /**
+         * Makes a request to the webservice to delete the user with the given email from the
+         * Chat with the given chatId.
+         * @param chatId ID of the Chat to remove the user from.
+         * @param email Email of the user to be removed from the chat.
+         * @param jwt JWT of the user making the request.
+         */
         public void connectDelete(final int chatId, final String email, String jwt) {
             String url = MainActivity.getActivity().getString(R.string.base_url_service) +
                     "chats/" + chatId + "/" + email;
@@ -160,7 +174,7 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<ChatRecyclerVi
                     .add(request);
             Log.d("ARCHIVE", request.toString());
         }
-
+        
         private void handleResult(final JSONObject result) {
             Log.i("CHAT", "Deleted user from chat.");
             new ViewModelProvider((ViewModelStoreOwner) MainActivity.getActivity())

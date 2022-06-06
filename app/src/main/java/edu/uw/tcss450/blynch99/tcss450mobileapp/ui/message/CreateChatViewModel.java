@@ -58,6 +58,12 @@ public class CreateChatViewModel  extends AndroidViewModel {
         mAdapter = adapter;
     }
 
+    /**
+     * Makes a request to the webservice to create a  chat with the given name and the given people.
+     * @param chatName Name of the chat to be created.
+     * @param people Contacts to add to the chat.
+     * @param jwt JWT of the user making the request.
+     */
     public void connectPostChat(String chatName, List<Contact> people, String jwt) {
         toAdd = people;
         String url =
@@ -119,6 +125,12 @@ public class CreateChatViewModel  extends AndroidViewModel {
         }
     }
 
+    /**
+     * Makes a request to the webservice to add the selected users in the CreateChatFragment to the
+     * given chatId.
+     * @param chatId Id of the chat to add the users to.
+     * @param jwt JWT of the user making the request.
+     */
     public void connectAddToChat(int chatId, String jwt) {
         String url =
                 getApplication().getResources().getString(R.string.base_url_service)
