@@ -4,6 +4,7 @@ import android.app.Application;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.MutableLiveData;
@@ -23,21 +24,39 @@ import java.util.Objects;
 
 import edu.uw.tcss450.blynch99.tcss450mobileapp.R;
 
+/**
+ * Connect to server
+ *
+ * A simple {@link AndroidViewModel} subclass.
+ */
 public class RegisterViewModel extends AndroidViewModel {
 
     private MutableLiveData<JSONObject> mResponse;
 
+    /**
+     * Constructor
+     * @param application current application
+     */
     public RegisterViewModel(@NonNull Application application) {
         super(application);
         mResponse = new MutableLiveData<>();
         mResponse.setValue(new JSONObject());
     }
 
+    /**
+     * Add observer to response
+     * @param owner owner
+     * @param observer observer
+     */
     public void addResponseObserver(@NonNull LifecycleOwner owner,
                                     @NonNull Observer<? super JSONObject> observer) {
         mResponse.observe(owner, observer);
     }
 
+    /**
+     * handle error from server
+     * @param error error
+     */
     private void handleError(final VolleyError error) {
         if (Objects.isNull(error.networkResponse)) {
             try {
@@ -62,6 +81,14 @@ public class RegisterViewModel extends AndroidViewModel {
         }
     }
 
+    /**
+     * Connect to the server
+     * @param nickname nickname
+     * @param first first name
+     * @param last last name
+     * @param email email
+     * @param password password
+     */
     public void connect(final String nickname,
                         final String first,
                         final String last,

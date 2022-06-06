@@ -21,6 +21,9 @@
     <string name="action_friend_accept_request">Accept Friend Request</string>
     <string name="action_friend_unsend_request">Unsend Friend Request</string>
 
+    <string name="text_no_friends">You have no friend requests</string>
+    <string name="button_no_friends">Click Here to Add Friends</string>
+
 
     <string name="title_message">Message</string>
     <string name="title_home">Home</string>

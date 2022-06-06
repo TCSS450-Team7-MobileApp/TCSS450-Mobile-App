@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.preference.EditTextPreference;
@@ -17,6 +18,9 @@ import edu.uw.tcss450.blynch99.tcss450mobileapp.MainActivity;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.R;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.auth.model.UserInfoViewModel;
 
+/**
+ * A simple {@link PreferenceFragmentCompat} subclass.
+ */
 public class SettingsFragment extends PreferenceFragmentCompat {
     private UserInfoViewModel model;
 
@@ -59,10 +63,14 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             return true;
         });
         deleteAccount.setOnPreferenceChangeListener(this::promptForPassword);
-
-
     }
 
+    /**
+     * Change name of user
+     * @param preference which preference was clicked
+     * @param object string of the new name
+     * @return success
+     */
     private boolean changeName(Preference preference, Object object){
         ChangeNameViewModel change = new ViewModelProvider(getActivity())
                 .get(ChangeNameViewModel.class);

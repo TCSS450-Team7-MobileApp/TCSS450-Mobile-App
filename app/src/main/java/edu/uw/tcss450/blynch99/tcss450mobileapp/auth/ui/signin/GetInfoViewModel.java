@@ -4,6 +4,7 @@ import android.app.Application;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.MutableLiveData;
@@ -25,9 +26,17 @@ import java.util.Objects;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.R;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.io.RequestQueueSingleton;
 
+/**
+ * Get info about user from server
+ * A simple {@link AndroidViewModel} subclass.
+ */
 public class GetInfoViewModel extends AndroidViewModel {
     private MutableLiveData<JSONObject> mResponse;
 
+    /**
+     * constructor
+     * @param application current application
+     */
     public GetInfoViewModel(@NonNull Application application) {
         super(application);
         mResponse = new MutableLiveData<>();
@@ -35,11 +44,20 @@ public class GetInfoViewModel extends AndroidViewModel {
 
     }
 
+    /**
+     * Add observer for the response
+     * @param owner owner
+     * @param observer observer
+     */
     public void addResponseObserver(@NonNull LifecycleOwner owner,
                                     @NonNull Observer<? super JSONObject> observer) {
         mResponse.observe(owner, observer);
     }
 
+    /**
+     * Handle error from the server
+     * @param error error from the server
+     */
     private void handleError(final VolleyError error) {
         if (Objects.isNull(error.networkResponse)) {
             try {
@@ -64,8 +82,11 @@ public class GetInfoViewModel extends AndroidViewModel {
         }
     }
 
-
-    public void connect(final String email, final String jwt) {
+    /**
+     * Connect to the server
+     * @param jwt jwt
+     */
+    public void connect(final String jwt) {
         String url = getApplication().getResources().getString(R.string.base_url_service) + "account";
 
         Request request = new JsonObjectRequest(

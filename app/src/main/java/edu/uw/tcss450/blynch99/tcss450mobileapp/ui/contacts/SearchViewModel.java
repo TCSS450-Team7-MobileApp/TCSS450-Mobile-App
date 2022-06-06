@@ -28,24 +28,44 @@ import java.util.Map;
 
 import edu.uw.tcss450.blynch99.tcss450mobileapp.R;
 
+/**
+ * A simple {@link AndroidViewModel} subclass.
+ */
 public class SearchViewModel extends AndroidViewModel {
     private MutableLiveData<List<Contact>> mSearchList;
 
+    /**
+     * Constructor
+     * @param application current application
+     */
     public SearchViewModel(@NonNull Application application) {
         super(application);
         mSearchList = new MutableLiveData<>();
         mSearchList.setValue(new ArrayList<>());
     }
 
+    /**
+     * Add observer for searched contacts list
+     * @param owner owner
+     * @param observer observer
+     */
     public void addSearchListObserver(@NonNull LifecycleOwner owner,
                                        @Nullable Observer<?super List<Contact>> observer){
         mSearchList.observe(owner,observer);
     }
 
+    /**
+     * Reset the searched list
+     */
     private void resetSearchResults() {
         mSearchList.setValue(new ArrayList<>());
     }
 
+    /**
+     * Search add members
+     * @param jwt jwt of the user
+     * @param searched starting username of the members
+     */
     public void connectSearch(String jwt, String searched) {
         resetSearchResults();
 
@@ -76,10 +96,18 @@ public class SearchViewModel extends AndroidViewModel {
                 .add(request);
     }
 
+    /**
+     * Handle error from the server
+     * @param error error from the server
+     */
     protected void handleError(final VolleyError error) {
         Log.e("ERROR", error.getLocalizedMessage());
     }
 
+    /**
+     * Handle result from the server
+     * @param result result from the server
+     */
     protected void handleResult(final JSONObject result) {
         try {
             JSONObject response = result;

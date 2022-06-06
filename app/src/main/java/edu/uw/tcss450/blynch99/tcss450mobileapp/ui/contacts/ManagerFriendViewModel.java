@@ -27,11 +27,18 @@ import edu.uw.tcss450.blynch99.tcss450mobileapp.MainActivity;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.R;
 import edu.uw.tcss450.blynch99.tcss450mobileapp.auth.model.UserInfoViewModel;
 
+/**
+ * A simple {@link AndroidViewModel} subclass.
+ */
 public class ManagerFriendViewModel extends AndroidViewModel {
 
     private MutableLiveData<JSONObject> mResponse;
     private UserInfoViewModel mUser;
 
+    /**
+     * Constructor
+     * @param application current application
+     */
     public ManagerFriendViewModel(@NonNull Application application) {
         super(application);
         mResponse = new MutableLiveData<>();
@@ -41,6 +48,38 @@ public class ManagerFriendViewModel extends AndroidViewModel {
                 .get(UserInfoViewModel.class);
     }
 
+    /**
+     * Handle error from server
+     * @param error error from server
+     */
+    private void handleError(final VolleyError error) {
+        if (Objects.isNull(error.networkResponse)) {
+            try {
+                mResponse.setValue(new JSONObject("{" +
+                        "error:\"" + error.getMessage() +
+                        "\"}"));
+            } catch (JSONException e) {
+                Log.e("JSON PARSE", "JSON Parse Error in handleError");
+            }
+        }
+        else {
+            String data = new String(error.networkResponse.data, Charset.defaultCharset())
+                    .replace('\"', '\'');
+            try {
+                JSONObject response = new JSONObject();
+                response.put("code", error.networkResponse.statusCode);
+                response.put("data", new JSONObject(data));
+                mResponse.setValue(response);
+            } catch (JSONException e) {
+                Log.e("JSON PARSE", "JSON Parse Error in handleError");
+            }
+        }
+    }
+
+    /**
+     * remove friend
+     * @param friendId id of friend
+     */
     public void connectRemoveFriend(String friendId) {
         String url = getApplication().getResources().getString(R.string.base_url_service) +
                 "friendsList/delete/" + mUser.getId() + "/" + friendId;
@@ -68,6 +107,10 @@ public class ManagerFriendViewModel extends AndroidViewModel {
                 .add(request);
     }
 
+    /**
+     * accept request
+     * @param friendId id of the friend
+     */
     public void connectAcceptRequest(String friendId) {
         String url = getApplication().getResources().getString(R.string.base_url_service) +
                 "friendsList/verify/" + mUser.getId();
@@ -101,6 +144,10 @@ public class ManagerFriendViewModel extends AndroidViewModel {
                 .add(request);
     }
 
+    /**
+     * send request
+     * @param friendId id of the friend
+     */
     public void connectSendRequest(String friendId) {
         String url = getApplication().getResources().getString(R.string.base_url_service) +
                 "friendsList/request";

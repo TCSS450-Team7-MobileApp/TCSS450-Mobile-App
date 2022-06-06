@@ -5,6 +5,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.MutableLiveData;
@@ -27,11 +28,17 @@ import java.util.Map;
 
 import edu.uw.tcss450.blynch99.tcss450mobileapp.R;
 
-
+/**
+ * A simple {@link AndroidViewModel} subclass.
+ */
 public class ContactListViewModel extends AndroidViewModel {
     private MutableLiveData<List<Contact>> mContactList;
     private MutableLiveData<List<Contact>> mPendingList;
 
+    /**
+     * Constructor
+     * @param application current Application
+     */
     public ContactListViewModel(@NonNull Application application) {
         super(application);
         mContactList = new MutableLiveData<>();
@@ -40,39 +47,62 @@ public class ContactListViewModel extends AndroidViewModel {
         mPendingList.setValue(new ArrayList<>());
     }
 
+    /**
+     * Add observer for contacts
+     * @param owner owner
+     * @param observer observer
+     */
     public void addContactListObserver(@NonNull LifecycleOwner owner,
                                        @Nullable Observer<?super List<Contact>> observer){
         mContactList.observe(owner,observer);
     }
 
+    /**
+     * Add observer for requests
+     * @param owner owner
+     * @param observer observer
+     */
     public void addPendingListObserver(@NonNull LifecycleOwner owner,
                                        @Nullable Observer<?super List<Contact>> observer){
         mPendingList.observe(owner,observer);
     }
 
+    /**
+     * reset contacts list
+     */
     public void resetContacts(){
         mContactList.setValue(new ArrayList<>());
     }
 
+    /**
+     * reset requests list
+     */
     public void resetRequests() {
         mPendingList.setValue(new ArrayList<>());
     }
 
-
-    public void addToContactList(Contact contact) {
-        mContactList.getValue().add(contact);
-        mContactList.setValue(mContactList.getValue());
-    }
-
+    /**
+     * Add to pending requests list
+     * @param contact contact to be added
+     */
     public void addToPendingList(Contact contact) {
         mPendingList.getValue().add(contact);
         mPendingList.setValue(mPendingList.getValue());
     }
 
+    /**
+     * handle error from server
+     * @param error error
+     */
     protected void handleError(final VolleyError error) {
         throw new IllegalStateException(error.getMessage());
     }
 
+    /**
+     * Handle result from the server
+     * @param result result from server
+     * @param type the type or data
+     */
     protected void handleResult(final JSONObject result, String type) {
         MutableLiveData<List<Contact>> list = mContactList;
         try {
@@ -112,6 +142,12 @@ public class ContactListViewModel extends AndroidViewModel {
         list.setValue(list.getValue());
     }
 
+    /**
+     * Connect to server for contacts
+     * @param memberId member ID
+     * @param jwt jwt of the user
+     * @param type type of contacts
+     */
     public void connectContacts(int memberId, String jwt, String type) {
         String url =
                 getApplication().getResources().getString(R.string.base_url_service)
@@ -130,8 +166,6 @@ public class ContactListViewModel extends AndroidViewModel {
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
-                // add headers <key,value>
-                // anything works for the jwt for now
                 headers.put("Authorization", jwt);
                 return headers;
             }
